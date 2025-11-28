@@ -90,6 +90,12 @@
 
             <dependency>
                 <groupId>com.dekra.service.foundation</groupId>
+                <artifactId>integration</artifactId>
+                <version>${service.foundation.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dekra.service.foundation</groupId>
                 <artifactId>architecture-tests</artifactId>
                 <version>${service.foundation.version}</version>
                 <scope>test</scope>
