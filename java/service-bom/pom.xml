@@ -5,11 +5,11 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.dekra.platform</groupId>
-    <artifactId>service-bom</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
+    <parent>
+        <groupId>com.dekra.platform</groupId>
+        <artifactId>platform-bom</artifactId>
+        <version>1.0.0</version>
+    </parent>
 
     <name>DEKRA Platform :: Service BOM</name>
     <description>Central dependency versions for all DEKRA Shared Services (DDD + Hexagonal + WebFlux + gRPC).</description>
