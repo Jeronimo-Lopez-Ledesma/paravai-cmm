@@ -10,7 +10,7 @@
         <artifactId>platform-bom</artifactId>
         <version>1.0.0</version>
     </parent>
-
+    <artifactId>service-bom</artifactId>
     <name>DEKRA Platform :: Service BOM</name>
     <description>Central dependency versions for all DEKRA Shared Services (DDD + Hexagonal + WebFlux + gRPC).</description>
 
