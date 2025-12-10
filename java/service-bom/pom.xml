@@ -9,6 +9,7 @@
         <groupId>com.dekra.platform</groupId>
         <artifactId>platform-bom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>service-bom</artifactId>
     <name>DEKRA Platform :: Service BOM</name>
