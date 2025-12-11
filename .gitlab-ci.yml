@@ -1,60 +1,14 @@
+image: maven:3.9.9-amazoncorretto-21-alpine
+
 stages:
-  - validate-java
-  - deploy
-  #- validate-dotnet
-  #- validate-python
+  - build
 
-variables:
-  MAVEN_CLI_OPTS: "-B -ntp"
-
-cache:
-  key: "${CI_PROJECT_NAME}"
-  paths:
-    - .m2/repository
-
-validate_java_bom:
-  stage: validate-java
-  image: maven:3.9-eclipse-temurin-21
-  script:
-    - mvn $MAVEN_CLI_OPTS -f java/service-bom/pom.xml clean verify
-  only:
-    - merge_requests
-    - branches
-    - tags
-
-#validate_dotnet_bom:
-#  stage: validate-dotnet
-#  image: mcr.microsoft.com/dotnet/sdk:8.0
-#  script:
-#    - cd dotnet/tests
-#    - dotnet restore
-#    - dotnet test
-#  only:
-#    - merge_requests
-#    - branches
-#    - tags
-#
-#validate_python_bom:
-#  stage: validate-python
-#  image: python:3.12
-#  before_script:
-#    - pip install pytest
-#  script:
-#    - cd python
-#    - pytest
-#  only:
-#    - merge_requests
-#    - branches
-#    - tags
-
-Deploy BOM to Reposilite:
-  stage: deploy
+Build and push to Reposilite:
+  stage: build
   script:
     - mvn --settings settings.xml clean deploy -DskipTests
   tags:
     - docker
   rules:
-    # Ejecutar solo en tags semánticos tipo 1.0.0, 1.0.1, 2.3.7...
+  # Ejecutar solo en tags semánticos tipo 1.0.0, 1.0.1, 2.3.7...
     - if: '$CI_COMMIT_TAG =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)$/'
-      when: always
-    - when: never
