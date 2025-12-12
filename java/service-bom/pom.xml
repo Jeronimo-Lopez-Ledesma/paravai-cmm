@@ -18,6 +18,7 @@
     <!-- ========================= VERSION PROPERTIES ========================= -->
     <properties>
         <spring.boot.version>3.5.8</spring.boot.version>
+        <spring.cloud.version>2025.0.0</spring.cloud.version>
         <junit.jupiter.version>5.11.2</junit.jupiter.version>
         <service.foundation.version>2.0.0</service.foundation.version>
         <resilience4j.version>2.2.0</resilience4j.version>
@@ -109,6 +110,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- ========================= SPRING CLOUD  ========================= -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
