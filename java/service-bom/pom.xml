@@ -5,35 +5,37 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>com.dekra.platform</groupId>
-        <artifactId>platform-bom</artifactId>
+        <groupId>com.paravai</groupId>
+        <artifactId>platform-build-parent</artifactId>
         <version>1.0.1</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../platform-build-parent</relativePath>
     </parent>
+
+
     <artifactId>service-bom</artifactId>
-    <name>DEKRA Platform :: Service BOM</name>
-    <description>Central dependency versions for all DEKRA Shared Services (DDD + Hexagonal + WebFlux + gRPC).</description>
+    <name>Paravai Platform :: Service BOM</name>
+    <description>Central dependency versions for all Paravai Services (DDD + Hexagonal + WebFlux + gRPC).</description>
 
     <!-- ========================= VERSION PROPERTIES ========================= -->
     <properties>
         <spring.boot.version>3.5.8</spring.boot.version>
         <spring.cloud.version>2025.0.0</spring.cloud.version>
         <junit.jupiter.version>5.11.2</junit.jupiter.version>
-        <service.foundation.version>2.0.0</service.foundation.version>
+        <service.foundation.version>2.1.0</service.foundation.version>
         <resilience4j.version>2.2.0</resilience4j.version>
         <logstash.encoder.version>7.4</logstash.encoder.version>
         <micrometer.version>1.13.4</micrometer.version>
-        <grpc.version>1.66.0</grpc.version>
-        <protobuf.version>3.25.5</protobuf.version>
-        <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
+        <grpc.spring.boot.starter.version>3.1.0.RELEASE</grpc.spring.boot.starter.version>
+
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
 
-            <!-- ========================= DEKRA SERVICE FOUNDATION ========================= -->
+            <!-- ========================= FOUNDATION ========================= -->
             <dependency>
                 <groupId>com.dekra.service.foundation</groupId>
                 <artifactId>domain-core</artifactId>
@@ -132,28 +134,7 @@
                 <scope>import</scope>
             </dependency>
 
-
-            <!-- ========================= WEB / JSON / SERIALIZATION ========================= -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-                <version>2.5.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.15.2</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>jakarta.ws.rs</groupId>
-                <artifactId>jakarta.ws.rs-api</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-
-            <!-- ========================= gRPC / Protobuf ========================= -->
+            <!-- ========================= GRPC  ========================= -->
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-bom</artifactId>
@@ -171,7 +152,50 @@
             </dependency>
 
 
+            <!-- ========================= WEB / JSON / SERIALIZATION ========================= -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>2.5.0</version>
+            </dependency>
 
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+
+            <!-- ========================= gRPC / Protobuf ========================= -->
+
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-stub</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-protobuf</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-netty-shaded</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+
+            <!-- ========================= gRPC Spring Boot ========================= -->
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-server-spring-boot-starter</artifactId>
+                <version>${grpc.spring.boot.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-client-spring-boot-starter</artifactId>
+                <version>${grpc.spring.boot.starter.version}</version>
+            </dependency>
 
 
             <!-- ========================= MESSAGING / KAFKA ========================= -->

@@ -6,17 +6,19 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dekra.platform</groupId>
-    <artifactId>platform-bom</artifactId>
+    <groupId>com.paravai</groupId>
+    <artifactId>platform</artifactId>
     <version>1.0.1</version>
     <packaging>pom</packaging>
 
-    <name>DEKRA Platform :: BOM Repository</name>
-    <description>Polyglot platform BOM (Java, .NET, Python) for all DEKRA Shared Services.</description>
+    <name>Paravai Platform</name>
+    <description>Polyglot platform BOM (Java, .NET, Python) for all Paravai modules.</description>
 
     <!-- Maven modules -->
     <modules>
         <module>java/service-bom</module>
+        <module>java/platform-build-parent</module>
+
     </modules>
     <properties>
         <java.version>21</java.version>
@@ -24,6 +26,15 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Protobuf / gRPC toolchain (build-time) -->
+        <grpc.version>1.74.0</grpc.version>
+        <protobuf.version>3.25.5</protobuf.version>
+
+        <grpc.codegen.version>${grpc.version}</grpc.codegen.version>
+        <protobuf.codegen.version>${protobuf.version}</protobuf.codegen.version>
+
+        <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
+        <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
     </properties>
     <build>
         <pluginManagement>
@@ -49,10 +60,5 @@
             </plugins>
         </pluginManagement>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>DEKRA-SD-PT-Reposilite</id>
-            <url>http://10.206.14.24:8018/releases</url>
-        </repository>
-    </distributionManagement>
+
 </project>
