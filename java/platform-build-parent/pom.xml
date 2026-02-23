@@ -6,14 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.dekra.platform</groupId>
-        <artifactId>platform-bom</artifactId>
-        <version>1.0.1</version>
+        <groupId>com.paravai.platform</groupId>
+        <artifactId>platform</artifactId>
+        <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>platform-build-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <name>DEKRA Platform :: Build Parent</name>
@@ -92,12 +92,4 @@
         </pluginManagement>
     </build>
 
-    <!-- Your internal repo (optional here; usually in settings.xml, but keeping consistent with your current style) -->
-    <repositories>
-        <repository>
-            <id>DEKRA-SD-PT-Reposilite-releases</id>
-            <url>http://10.206.14.24:8018/releases</url>
-        </repository>
-    </repositories>
-
-</project>
+ </project>

@@ -7,9 +7,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.paravai</groupId>
+        <groupId>com.paravai.platform</groupId>
         <artifactId>platform-build-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.0</version>
         <relativePath>../platform-build-parent</relativePath>
     </parent>
 
