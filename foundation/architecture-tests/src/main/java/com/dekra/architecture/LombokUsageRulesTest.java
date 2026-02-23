@@ -11,7 +11,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
  * The rules will be applied only to services that import this module.
  */
 @AnalyzeClasses(
-    packages = "com.dekra.service",
+    packages = "com.paravai",
     importOptions = {
         com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests.class,
         com.dekra.architecture.ExcludeFoundationImportOption.class

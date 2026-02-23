@@ -28,7 +28,7 @@ public class ArchitectureComplianceTest {
             noClasses()
                     .that().resideInAPackage("com.paravai.foundation.snapshot..")
                     .should().dependOnClassesThat()
-                    .resideInAPackage("com.dekra.service..domain..")
+                    .resideInAPackage("com.paravai..domain..")
                     .because("snapshot-support must remain infrastructure-agnostic and independent of service domain models.");
 
     /**

@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.domaincore.persistence.mongo;
+package com.paravai.foundation.domaincore.persistence.mongo;
 
-import com.dekra.service.foundation.domaincore.value.SourceSystemValue;
+import com.paravai.foundation.domaincore.value.SourceSystemValue;
 
 public record SourceSystemDocument(String sourceSystemId, String sourceId) {
 

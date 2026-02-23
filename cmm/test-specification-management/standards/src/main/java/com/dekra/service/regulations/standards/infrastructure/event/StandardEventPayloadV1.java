@@ -1,9 +1,9 @@
-package com.dekra.service.regulations.standards.infrastructure.event;
+package com.paravai.regulations.standards.infrastructure.event;
 
-import com.dekra.service.foundation.domain.organization.value.OrganizationAssociationValue;
-import com.dekra.service.regulations.standards.domain.model.Standard;
-import com.dekra.service.regulations.standards.domain.model.StandardVersion;
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.foundation.domain.organization.value.OrganizationAssociationValue;
+import com.paravai.regulations.standards.domain.model.Standard;
+import com.paravai.regulations.standards.domain.model.StandardVersion;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.Instant;
@@ -120,7 +120,7 @@ public record StandardEventPayloadV1(
             String endOfValidityDate  // ISO date (nullable)
     ) {
         public static ApplicabilityContextPayloadV1 from(
-                com.dekra.service.regulations.standards.domain.model.ApplicabilityContext c
+                com.paravai.regulations.standards.domain.model.ApplicabilityContext c
         ) {
             return new ApplicabilityContextPayloadV1(
                     c.id().toString(),

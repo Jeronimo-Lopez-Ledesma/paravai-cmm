@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.persistence.mongo;
+package com.paravai.foundation.persistence.mongo;
 
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 

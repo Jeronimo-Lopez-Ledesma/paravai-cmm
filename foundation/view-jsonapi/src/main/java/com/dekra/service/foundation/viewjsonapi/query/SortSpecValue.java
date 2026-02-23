@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.viewjsonapi.query;
+package com.paravai.foundation.viewjsonapi.query;
 
 import java.util.ArrayList;
 import java.util.Collections;

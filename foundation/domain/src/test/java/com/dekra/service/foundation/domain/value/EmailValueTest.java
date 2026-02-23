@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.value;
+package com.paravai.foundation.domain.value;
 
 import org.junit.jupiter.api.Test;
 

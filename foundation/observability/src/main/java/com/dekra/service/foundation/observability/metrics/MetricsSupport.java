@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.observability.metrics;
+package com.paravai.foundation.observability.metrics;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

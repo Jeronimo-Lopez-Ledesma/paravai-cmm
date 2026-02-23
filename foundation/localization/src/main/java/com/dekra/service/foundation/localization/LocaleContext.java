@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.localization;
+package com.paravai.foundation.localization;
 
 import reactor.core.publisher.Mono;
 import reactor.util.context.ContextView;

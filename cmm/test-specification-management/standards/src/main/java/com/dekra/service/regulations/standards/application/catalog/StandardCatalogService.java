@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.application.catalog;
+package com.paravai.regulations.standards.application.catalog;
 
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionStatusValue;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionStatusValue;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 

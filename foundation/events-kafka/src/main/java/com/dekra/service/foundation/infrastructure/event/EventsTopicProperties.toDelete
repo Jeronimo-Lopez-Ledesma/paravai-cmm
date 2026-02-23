@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.infrastructure.event;
+package com.paravai.foundation.infrastructure.event;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

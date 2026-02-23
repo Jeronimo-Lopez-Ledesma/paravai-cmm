@@ -16,7 +16,7 @@
     <!-- ========================================================= -->
     <!--                  PROJECT COORDINATES                      -->
     <!-- ========================================================= -->
-    <groupId>com.dekra.service.regulations</groupId>
+    <groupId>com.paravai.regulations</groupId>
     <artifactId>test-specification-management</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>

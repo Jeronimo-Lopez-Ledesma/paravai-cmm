@@ -2,7 +2,7 @@
 // source: standards_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 /**
  * Protobuf type {@code dekra.regulations.standards.v1.ApplicabilityContext}
@@ -33,15 +33,15 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
+    return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_fieldAccessorTable
+    return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.class, com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.Builder.class);
+            com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.class, com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.Builder.class);
   }
 
   private int bitField0_;
@@ -327,10 +327,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext)) {
+    if (!(obj instanceof com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext)) {
       return super.equals(obj);
     }
-    com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext other = (com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext) obj;
+    com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext other = (com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext) obj;
 
     if (!getId()
         .equals(other.getId())) return false;
@@ -373,44 +373,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(byte[] data)
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -418,26 +418,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseDelimitedFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseDelimitedFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -450,7 +450,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext prototype) {
+  public static Builder newBuilder(com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -471,21 +471,21 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:dekra.regulations.standards.v1.ApplicabilityContext)
-      com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder {
+      com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_fieldAccessorTable
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.class, com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.Builder.class);
+              com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.class, com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.Builder.class);
     }
 
-    // Construct using com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.newBuilder()
+    // Construct using com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.newBuilder()
     private Builder() {
 
     }
@@ -510,17 +510,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_ApplicabilityContext_descriptor;
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstanceForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.getDefaultInstance();
+    public com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstanceForType() {
+      return com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext build() {
-      com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext result = buildPartial();
+    public com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext build() {
+      com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -528,14 +528,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext buildPartial() {
-      com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext result = new com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext(this);
+    public com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext buildPartial() {
+      com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext result = new com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext result) {
+    private void buildPartial0(com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
@@ -591,16 +591,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext) {
-        return mergeFrom((com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext)other);
+      if (other instanceof com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext) {
+        return mergeFrom((com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext other) {
-      if (other == com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext other) {
+      if (other == com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext.getDefaultInstance()) return this;
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         bitField0_ |= 0x00000001;
@@ -1117,12 +1117,12 @@ private static final long serialVersionUID = 0L;
   }
 
   // @@protoc_insertion_point(class_scope:dekra.regulations.standards.v1.ApplicabilityContext)
-  private static final com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext DEFAULT_INSTANCE;
+  private static final com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext();
+    DEFAULT_INSTANCE = new com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext();
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstance() {
+  public static com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
@@ -1158,7 +1158,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstanceForType() {
+  public com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

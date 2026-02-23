@@ -10,6 +10,8 @@
         <option value="$PROJECT_DIR$/cmm/test-specification-management/pom.xml" />
         <option value="$PROJECT_DIR$/cmm/community-management/pom.xml" />
         <option value="$PROJECT_DIR$/cmm/community-management/community-management-bom/pom.xml" />
+        <option value="$PROJECT_DIR$/edge-service/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
       </list>
     </option>
   </component>

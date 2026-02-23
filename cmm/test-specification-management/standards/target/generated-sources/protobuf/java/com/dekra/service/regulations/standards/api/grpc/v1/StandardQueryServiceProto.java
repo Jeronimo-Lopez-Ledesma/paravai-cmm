@@ -2,7 +2,7 @@
 // source: standard_query_service_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public final class StandardQueryServiceProto {
   private StandardQueryServiceProto() {}
@@ -70,14 +70,14 @@ public final class StandardQueryServiceProto {
       "nse\022\202\001\n\017SearchStandards\0226.dekra.regulati" +
       "ons.standards.v1.SearchStandardsRequest\032" +
       "7.dekra.regulations.standards.v1.SearchS" +
-      "tandardsResponseBR\n3com.dekra.service.re" +
+      "tandardsResponseBR\n3com.paravai.re" +
       "gulations.standards.api.grpc.v1B\031Standar" +
       "dQueryServiceProtoP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.getDescriptor(),
+          com.paravai.regulations.standards.api.grpc.v1.StandardsProto.getDescriptor(),
         });
     internal_static_dekra_regulations_standards_v1_GetStandardByIdRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -109,7 +109,7 @@ public final class StandardQueryServiceProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_dekra_regulations_standards_v1_SearchStandardsResponse_descriptor,
         new java.lang.String[] { "Items", "Total", "Page", "Size", });
-    com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.getDescriptor();
+    com.paravai.regulations.standards.api.grpc.v1.StandardsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

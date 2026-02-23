@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.securityutils.security.cors;
+package com.paravai.foundation.securityutils.security.cors;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

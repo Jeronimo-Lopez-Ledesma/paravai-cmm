@@ -1,10 +1,10 @@
-package com.dekra.service.foundation.viewjsonapi.exception;
+package com.paravai.foundation.viewjsonapi.exception;
 
-import com.dekra.service.foundation.domaincore.exception.CustomException;
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.DetailsError;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiErrorFactory;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiErrorResponse;
+import com.paravai.foundation.domaincore.exception.CustomException;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.foundation.viewjsonapi.jsonapi.DetailsError;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiErrorFactory;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiErrorResponse;
 import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

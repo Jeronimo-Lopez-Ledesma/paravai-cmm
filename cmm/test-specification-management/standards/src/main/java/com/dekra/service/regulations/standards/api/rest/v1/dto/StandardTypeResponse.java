@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
 
 import java.util.Locale;
 

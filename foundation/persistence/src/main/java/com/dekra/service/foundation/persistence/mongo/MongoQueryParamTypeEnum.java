@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.persistence.mongo;
+package com.paravai.foundation.persistence.mongo;
 
 /**
  * Tipos de datos manejados por el sistema.

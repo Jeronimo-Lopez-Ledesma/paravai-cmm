@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.regulations.standards.domain.model.Standard;
-import com.dekra.service.regulations.standards.domain.model.StandardVersion;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.regulations.standards.domain.model.Standard;
+import com.paravai.regulations.standards.domain.model.StandardVersion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -122,7 +122,7 @@ public class StandardResponse {
         private Instant createdAt;
 
         public static ApplicabilityContextResponse fromDomain(
-                com.dekra.service.regulations.standards.domain.model.ApplicabilityContext c
+                com.paravai.regulations.standards.domain.model.ApplicabilityContext c
         ) {
             return ApplicabilityContextResponse.builder()
                     .id(c.id().getValue())

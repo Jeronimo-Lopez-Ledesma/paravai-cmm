@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.viewjsonapi.query;
+package com.paravai.foundation.viewjsonapi.query;
 
 public record SearchTextValue(String value) {
     public static final SearchTextValue EMPTY = new SearchTextValue(null);

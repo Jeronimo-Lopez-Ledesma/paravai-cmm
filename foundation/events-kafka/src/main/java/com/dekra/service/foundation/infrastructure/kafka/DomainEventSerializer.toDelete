@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.infrastructure.kafka;
+package com.paravai.foundation.infrastructure.kafka;
 
-import com.dekra.service.foundation.domaincore.event.DomainEvent;
+import com.paravai.foundation.domaincore.event.DomainEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Serializer;
 

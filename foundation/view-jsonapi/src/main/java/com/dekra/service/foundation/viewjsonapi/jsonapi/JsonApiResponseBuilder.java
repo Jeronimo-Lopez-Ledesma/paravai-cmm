@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.viewjsonapi.jsonapi;
+package com.paravai.foundation.viewjsonapi.jsonapi;
 
-import com.dekra.service.foundation.domaincore.model.Identifiable;
-import com.dekra.service.foundation.viewjsonapi.pagination.PaginationRequest;
+import com.paravai.foundation.domaincore.model.Identifiable;
+import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.core.publisher.Flux;

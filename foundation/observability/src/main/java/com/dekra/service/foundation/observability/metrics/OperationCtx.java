@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.observability.metrics;
+package com.paravai.foundation.observability.metrics;
 
 import java.util.Map;
 import java.util.Objects;

@@ -1,12 +1,12 @@
-package com.dekra.service.regulations.standards.domain.model;
+package com.paravai.regulations.standards.domain.model;
 
-import com.dekra.service.foundation.domaincore.value.DateValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.regulations.standards.domain.value.PublicationDateValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionStatusValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionValue;
-import com.dekra.service.regulations.standards.domain.value.VisibilityStatusValue;
+import com.paravai.foundation.domaincore.value.DateValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.regulations.standards.domain.value.PublicationDateValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionStatusValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionValue;
+import com.paravai.regulations.standards.domain.value.VisibilityStatusValue;
 
 import java.util.ArrayList;
 import java.util.Collections;

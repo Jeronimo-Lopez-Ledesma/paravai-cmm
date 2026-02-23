@@ -1,9 +1,9 @@
-package com.dekra.service.regulations.standards.relationships.infrastructure.event;
+package com.paravai.regulations.standards.relationships.infrastructure.event;
 
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardVersionRefValue;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardVersionRefValue;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.Instant;

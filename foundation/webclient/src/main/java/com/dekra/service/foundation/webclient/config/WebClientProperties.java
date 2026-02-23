@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.webclient.config;
+package com.paravai.foundation.webclient.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

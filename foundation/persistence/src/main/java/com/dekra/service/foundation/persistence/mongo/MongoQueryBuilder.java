@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.persistence.mongo;
+package com.paravai.foundation.persistence.mongo;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

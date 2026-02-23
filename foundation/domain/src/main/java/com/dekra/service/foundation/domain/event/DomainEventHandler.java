@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domaincore.event;
+package com.paravai.foundation.domaincore.event;
 
 import reactor.core.publisher.Mono;
 

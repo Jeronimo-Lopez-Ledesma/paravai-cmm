@@ -17,7 +17,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
  * The rules will be applied only to services that import this module.
  */
 @AnalyzeClasses(
-    packages = "com.dekra.service",
+    packages = "com.paravai",
     importOptions = {
         com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests.class,
         com.dekra.architecture.ExcludeFoundationImportOption.class
@@ -52,6 +52,6 @@ public class PackageNamingRulesTest {
 
     @ArchTest
     static final ArchRule package_structure_should_follow_convention =
-        noClasses().should().resideOutsideOfPackage("com.dekra.service..*..")
+        noClasses().should().resideOutsideOfPackage("com.paravai..*..")
             .allowEmptyShould(true);
 }

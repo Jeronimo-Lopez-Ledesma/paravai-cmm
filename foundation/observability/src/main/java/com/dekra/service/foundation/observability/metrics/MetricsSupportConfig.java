@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.observability.metrics;
+package com.paravai.foundation.observability.metrics;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

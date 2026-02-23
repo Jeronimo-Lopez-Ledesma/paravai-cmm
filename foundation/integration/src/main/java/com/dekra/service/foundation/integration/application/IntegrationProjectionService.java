@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.integration.application;
+package com.paravai.foundation.integration.application;
 
-import com.dekra.service.foundation.integration.domain.event.DomainEventEnvelope;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
 import reactor.core.publisher.Mono;
 
 /**

@@ -1,12 +1,12 @@
-package com.dekra.service.regulations.standards.api.grpc;
+package com.paravai.regulations.standards.api.grpc;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest;
-import com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse;
-import com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceGrpc;
-import com.dekra.service.regulations.standards.application.query.find.FindStandardByIdService;
-import com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest;
-import com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest;
+import com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse;
+import com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceGrpc;
+import com.paravai.regulations.standards.application.query.find.FindStandardByIdService;
+import com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest;
+import com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;

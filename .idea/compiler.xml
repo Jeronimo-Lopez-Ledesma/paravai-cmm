@@ -12,6 +12,7 @@
         <module name="webclient" />
         <module name="test-cases" />
         <module name="view-jsonapi" />
+        <module name="eureka-server" />
         <module name="standards" />
         <module name="security" />
         <module name="test-specifications" />
@@ -29,6 +30,16 @@
         <module name="governance" />
         <module name="standard-relationships" />
       </profile>
+      <profile name="Annotation profile for edge-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="edge-service" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="paravai" target="21" />
@@ -37,6 +48,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="edge-service" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
       <module name="test-specification-management-common" options="-parameters" />
     </option>
   </component>

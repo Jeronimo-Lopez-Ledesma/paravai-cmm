@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.integration.domain.event;
+package com.paravai.foundation.integration.domain.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

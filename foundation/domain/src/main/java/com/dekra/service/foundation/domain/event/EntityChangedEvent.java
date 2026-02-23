@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.domaincore.event;
+package com.paravai.foundation.domaincore.event;
 
-import com.dekra.service.foundation.domain.value.ResourceTypeValue;
-import com.dekra.service.foundation.domaincore.value.*;
+import com.paravai.foundation.domain.value.ResourceTypeValue;
+import com.paravai.foundation.domaincore.value.*;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

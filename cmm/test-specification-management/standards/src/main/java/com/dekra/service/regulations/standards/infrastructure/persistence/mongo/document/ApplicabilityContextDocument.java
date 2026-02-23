@@ -1,9 +1,9 @@
-package com.dekra.service.regulations.standards.infrastructure.persistence.mongo.document;
+package com.paravai.regulations.standards.infrastructure.persistence.mongo.document;
 
-import com.dekra.service.foundation.domaincore.value.DateValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.regulations.standards.domain.model.ApplicabilityContext;
+import com.paravai.foundation.domaincore.value.DateValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.regulations.standards.domain.model.ApplicabilityContext;
 
 import java.time.Instant;
 import java.time.LocalDate;

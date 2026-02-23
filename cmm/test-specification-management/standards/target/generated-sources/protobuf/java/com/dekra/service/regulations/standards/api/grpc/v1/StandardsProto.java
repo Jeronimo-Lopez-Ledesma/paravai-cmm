@@ -2,7 +2,7 @@
 // source: standards_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public final class StandardsProto {
   private StandardsProto() {}
@@ -59,7 +59,7 @@ public final class StandardsProto {
       "\t\022\022\n\ncreated_at\030\010 \001(\t\022\022\n\nupdated_at\030\t \001(" +
       "\t\022A\n\010versions\030\n \003(\0132/.dekra.regulations." +
       "standards.v1.StandardVersionB\016\n\014_descrip" +
-      "tionBG\n3com.dekra.service.regulations.st" +
+      "tionBG\n3com.paravai.regulations.st" +
       "andards.api.grpc.v1B\016StandardsProtoP\001b\006p" +
       "roto3"
     };

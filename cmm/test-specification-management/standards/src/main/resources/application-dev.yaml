@@ -106,7 +106,7 @@ resilience4j:
           - java.io.IOException
           - reactor.netty.http.client.PrematureCloseException
         ignoreExceptions:
-          - com.dekra.service.regulations.standards.domain.exception.DuplicateStandardVersionException
+          - com.paravai.regulations.standards.domain.exception.DuplicateStandardVersionException
 
 # Custom decorator order (used in WebClient config)
 resilience:
@@ -135,7 +135,7 @@ logging:
     root: INFO
     org.springframework.web: INFO
     reactor.netty: INFO
-    com.dekra.service.regulations.standards: DEBUG
+    com.paravai.regulations.standards: DEBUG
 
 
 # ============================================================

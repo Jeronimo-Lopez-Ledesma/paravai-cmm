@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.value;
+package com.paravai.foundation.domain.value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

@@ -2,7 +2,7 @@
 // source: standards_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 /**
  * Protobuf type {@code dekra.regulations.standards.v1.Standard}
@@ -38,15 +38,15 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
+    return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_fieldAccessorTable
+    return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.dekra.service.regulations.standards.api.grpc.v1.Standard.class, com.dekra.service.regulations.standards.api.grpc.v1.Standard.Builder.class);
+            com.paravai.regulations.standards.api.grpc.v1.Standard.class, com.paravai.regulations.standards.api.grpc.v1.Standard.Builder.class);
   }
 
   private int bitField0_;
@@ -411,19 +411,19 @@ private static final long serialVersionUID = 0L;
 
   public static final int VERSIONS_FIELD_NUMBER = 10;
   @SuppressWarnings("serial")
-  private java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> versions_;
+  private java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion> versions_;
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
   @java.lang.Override
-  public java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> getVersionsList() {
+  public java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion> getVersionsList() {
     return versions_;
   }
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> 
+  public java.util.List<? extends com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>
       getVersionsOrBuilderList() {
     return versions_;
   }
@@ -438,14 +438,14 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
   @java.lang.Override
-  public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index) {
+  public com.paravai.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index) {
     return versions_.get(index);
   }
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
   @java.lang.Override
-  public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
+  public com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
       int index) {
     return versions_.get(index);
   }
@@ -544,10 +544,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.dekra.service.regulations.standards.api.grpc.v1.Standard)) {
+    if (!(obj instanceof com.paravai.regulations.standards.api.grpc.v1.Standard)) {
       return super.equals(obj);
     }
-    com.dekra.service.regulations.standards.api.grpc.v1.Standard other = (com.dekra.service.regulations.standards.api.grpc.v1.Standard) obj;
+    com.paravai.regulations.standards.api.grpc.v1.Standard other = (com.paravai.regulations.standards.api.grpc.v1.Standard) obj;
 
     if (!getId()
         .equals(other.getId())) return false;
@@ -612,44 +612,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(byte[] data)
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -657,26 +657,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseDelimitedFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseDelimitedFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -689,7 +689,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.dekra.service.regulations.standards.api.grpc.v1.Standard prototype) {
+  public static Builder newBuilder(com.paravai.regulations.standards.api.grpc.v1.Standard prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -710,21 +710,21 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:dekra.regulations.standards.v1.Standard)
-      com.dekra.service.regulations.standards.api.grpc.v1.StandardOrBuilder {
+      com.paravai.regulations.standards.api.grpc.v1.StandardOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_fieldAccessorTable
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.dekra.service.regulations.standards.api.grpc.v1.Standard.class, com.dekra.service.regulations.standards.api.grpc.v1.Standard.Builder.class);
+              com.paravai.regulations.standards.api.grpc.v1.Standard.class, com.paravai.regulations.standards.api.grpc.v1.Standard.Builder.class);
     }
 
-    // Construct using com.dekra.service.regulations.standards.api.grpc.v1.Standard.newBuilder()
+    // Construct using com.paravai.regulations.standards.api.grpc.v1.Standard.newBuilder()
     private Builder() {
 
     }
@@ -760,17 +760,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardsProto.internal_static_dekra_regulations_standards_v1_Standard_descriptor;
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.Standard getDefaultInstanceForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.Standard.getDefaultInstance();
+    public com.paravai.regulations.standards.api.grpc.v1.Standard getDefaultInstanceForType() {
+      return com.paravai.regulations.standards.api.grpc.v1.Standard.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.Standard build() {
-      com.dekra.service.regulations.standards.api.grpc.v1.Standard result = buildPartial();
+    public com.paravai.regulations.standards.api.grpc.v1.Standard build() {
+      com.paravai.regulations.standards.api.grpc.v1.Standard result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -778,15 +778,15 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.Standard buildPartial() {
-      com.dekra.service.regulations.standards.api.grpc.v1.Standard result = new com.dekra.service.regulations.standards.api.grpc.v1.Standard(this);
+    public com.paravai.regulations.standards.api.grpc.v1.Standard buildPartial() {
+      com.paravai.regulations.standards.api.grpc.v1.Standard result = new com.paravai.regulations.standards.api.grpc.v1.Standard(this);
       buildPartialRepeatedFields(result);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartialRepeatedFields(com.dekra.service.regulations.standards.api.grpc.v1.Standard result) {
+    private void buildPartialRepeatedFields(com.paravai.regulations.standards.api.grpc.v1.Standard result) {
       if (versionsBuilder_ == null) {
         if (((bitField0_ & 0x00000200) != 0)) {
           versions_ = java.util.Collections.unmodifiableList(versions_);
@@ -798,7 +798,7 @@ private static final long serialVersionUID = 0L;
       }
     }
 
-    private void buildPartial0(com.dekra.service.regulations.standards.api.grpc.v1.Standard result) {
+    private void buildPartial0(com.paravai.regulations.standards.api.grpc.v1.Standard result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
@@ -866,16 +866,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.dekra.service.regulations.standards.api.grpc.v1.Standard) {
-        return mergeFrom((com.dekra.service.regulations.standards.api.grpc.v1.Standard)other);
+      if (other instanceof com.paravai.regulations.standards.api.grpc.v1.Standard) {
+        return mergeFrom((com.paravai.regulations.standards.api.grpc.v1.Standard)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.dekra.service.regulations.standards.api.grpc.v1.Standard other) {
-      if (other == com.dekra.service.regulations.standards.api.grpc.v1.Standard.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.paravai.regulations.standards.api.grpc.v1.Standard other) {
+      if (other == com.paravai.regulations.standards.api.grpc.v1.Standard.getDefaultInstance()) return this;
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         bitField0_ |= 0x00000001;
@@ -1019,9 +1019,9 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 74
             case 82: {
-              com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion m =
+              com.paravai.regulations.standards.api.grpc.v1.StandardVersion m =
                   input.readMessage(
-                      com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.parser(),
+                      com.paravai.regulations.standards.api.grpc.v1.StandardVersion.parser(),
                       extensionRegistry);
               if (versionsBuilder_ == null) {
                 ensureVersionsIsMutable();
@@ -1703,22 +1703,22 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> versions_ =
+    private java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion> versions_ =
       java.util.Collections.emptyList();
     private void ensureVersionsIsMutable() {
       if (!((bitField0_ & 0x00000200) != 0)) {
-        versions_ = new java.util.ArrayList<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion>(versions_);
+        versions_ = new java.util.ArrayList<com.paravai.regulations.standards.api.grpc.v1.StandardVersion>(versions_);
         bitField0_ |= 0x00000200;
        }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> versionsBuilder_;
+        com.paravai.regulations.standards.api.grpc.v1.StandardVersion, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> versionsBuilder_;
 
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> getVersionsList() {
+    public java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion> getVersionsList() {
       if (versionsBuilder_ == null) {
         return java.util.Collections.unmodifiableList(versions_);
       } else {
@@ -1738,7 +1738,7 @@ private static final long serialVersionUID = 0L;
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index) {
+    public com.paravai.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index) {
       if (versionsBuilder_ == null) {
         return versions_.get(index);
       } else {
@@ -1749,7 +1749,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder setVersions(
-        int index, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion value) {
+        int index, com.paravai.regulations.standards.api.grpc.v1.StandardVersion value) {
       if (versionsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1766,7 +1766,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder setVersions(
-        int index, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
+        int index, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
       if (versionsBuilder_ == null) {
         ensureVersionsIsMutable();
         versions_.set(index, builderForValue.build());
@@ -1779,7 +1779,7 @@ private static final long serialVersionUID = 0L;
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public Builder addVersions(com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion value) {
+    public Builder addVersions(com.paravai.regulations.standards.api.grpc.v1.StandardVersion value) {
       if (versionsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1796,7 +1796,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder addVersions(
-        int index, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion value) {
+        int index, com.paravai.regulations.standards.api.grpc.v1.StandardVersion value) {
       if (versionsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1813,7 +1813,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder addVersions(
-        com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
+        com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
       if (versionsBuilder_ == null) {
         ensureVersionsIsMutable();
         versions_.add(builderForValue.build());
@@ -1827,7 +1827,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder addVersions(
-        int index, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
+        int index, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder builderForValue) {
       if (versionsBuilder_ == null) {
         ensureVersionsIsMutable();
         versions_.add(index, builderForValue.build());
@@ -1841,7 +1841,7 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
     public Builder addAllVersions(
-        java.lang.Iterable<? extends com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> values) {
+        java.lang.Iterable<? extends com.paravai.regulations.standards.api.grpc.v1.StandardVersion> values) {
       if (versionsBuilder_ == null) {
         ensureVersionsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1881,14 +1881,14 @@ private static final long serialVersionUID = 0L;
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder getVersionsBuilder(
+    public com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder getVersionsBuilder(
         int index) {
       return getVersionsFieldBuilder().getBuilder(index);
     }
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
+    public com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
         int index) {
       if (versionsBuilder_ == null) {
         return versions_.get(index);  } else {
@@ -1898,7 +1898,7 @@ private static final long serialVersionUID = 0L;
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public java.util.List<? extends com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> 
+    public java.util.List<? extends com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>
          getVersionsOrBuilderList() {
       if (versionsBuilder_ != null) {
         return versionsBuilder_.getMessageOrBuilderList();
@@ -1909,31 +1909,31 @@ private static final long serialVersionUID = 0L;
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder addVersionsBuilder() {
+    public com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder addVersionsBuilder() {
       return getVersionsFieldBuilder().addBuilder(
-          com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.getDefaultInstance());
+          com.paravai.regulations.standards.api.grpc.v1.StandardVersion.getDefaultInstance());
     }
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder addVersionsBuilder(
+    public com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder addVersionsBuilder(
         int index) {
       return getVersionsFieldBuilder().addBuilder(
-          index, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.getDefaultInstance());
+          index, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.getDefaultInstance());
     }
     /**
      * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
      */
-    public java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder> 
+    public java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder>
          getVersionsBuilderList() {
       return getVersionsFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> 
+        com.paravai.regulations.standards.api.grpc.v1.StandardVersion, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>
         getVersionsFieldBuilder() {
       if (versionsBuilder_ == null) {
         versionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>(
+            com.paravai.regulations.standards.api.grpc.v1.StandardVersion, com.paravai.regulations.standards.api.grpc.v1.StandardVersion.Builder, com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>(
                 versions_,
                 ((bitField0_ & 0x00000200) != 0),
                 getParentForChildren(),
@@ -1959,12 +1959,12 @@ private static final long serialVersionUID = 0L;
   }
 
   // @@protoc_insertion_point(class_scope:dekra.regulations.standards.v1.Standard)
-  private static final com.dekra.service.regulations.standards.api.grpc.v1.Standard DEFAULT_INSTANCE;
+  private static final com.paravai.regulations.standards.api.grpc.v1.Standard DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.dekra.service.regulations.standards.api.grpc.v1.Standard();
+    DEFAULT_INSTANCE = new com.paravai.regulations.standards.api.grpc.v1.Standard();
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.Standard getDefaultInstance() {
+  public static com.paravai.regulations.standards.api.grpc.v1.Standard getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
@@ -2000,7 +2000,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public com.dekra.service.regulations.standards.api.grpc.v1.Standard getDefaultInstanceForType() {
+  public com.paravai.regulations.standards.api.grpc.v1.Standard getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

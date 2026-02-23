@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.webclient.config;
+package com.paravai.foundation.webclient.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;

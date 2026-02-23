@@ -1,11 +1,11 @@
-package com.dekra.service.regulations.standards.application.common;
+package com.paravai.regulations.standards.application.common;
 
-import com.dekra.service.foundation.domain.value.ResourceTypeValue;
-import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
-import com.dekra.service.foundation.domaincore.value.EntityTypeValue;
-import com.dekra.service.foundation.domaincore.value.OidValue;
-import com.dekra.service.foundation.domaincore.value.OperationTypeValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domain.value.ResourceTypeValue;
+import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.foundation.domaincore.value.EntityTypeValue;
+import com.paravai.foundation.domaincore.value.OidValue;
+import com.paravai.foundation.domaincore.value.OperationTypeValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Objects;

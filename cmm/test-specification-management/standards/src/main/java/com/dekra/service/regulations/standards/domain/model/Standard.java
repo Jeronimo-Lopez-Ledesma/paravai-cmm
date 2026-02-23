@@ -1,10 +1,10 @@
-package com.dekra.service.regulations.standards.domain.model;
+package com.paravai.regulations.standards.domain.model;
 
-import com.dekra.service.foundation.domain.organization.value.OrganizationAssociationValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.regulations.standards.domain.exception.DuplicateStandardVersionException;
-import com.dekra.service.regulations.standards.domain.value.*;
+import com.paravai.foundation.domain.organization.value.OrganizationAssociationValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.regulations.standards.domain.exception.DuplicateStandardVersionException;
+import com.paravai.regulations.standards.domain.value.*;
 
 import java.util.*;
 
@@ -175,8 +175,8 @@ public final class Standard {
 
     public Standard addApplicabilityContext(IdValue versionId,
                                             IdValue certificationSchemeId,
-                                            com.dekra.service.foundation.domaincore.value.DateValue effectiveDate,
-                                            com.dekra.service.foundation.domaincore.value.DateValue endOfValidityDate,
+                                            com.paravai.foundation.domaincore.value.DateValue effectiveDate,
+                                            com.paravai.foundation.domaincore.value.DateValue endOfValidityDate,
                                             TimestampValue now) {
 
         Objects.requireNonNull(versionId, "versionId");

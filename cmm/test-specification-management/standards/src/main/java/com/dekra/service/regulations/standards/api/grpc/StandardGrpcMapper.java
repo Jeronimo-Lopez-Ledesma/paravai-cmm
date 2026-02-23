@@ -1,15 +1,15 @@
-package com.dekra.service.regulations.standards.api.grpc;
+package com.paravai.regulations.standards.api.grpc;
 
-import com.dekra.service.foundation.domaincore.value.DateValue;
-import com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext;
-import com.dekra.service.regulations.standards.api.grpc.v1.Standard;
-import com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion;
+import com.paravai.foundation.domaincore.value.DateValue;
+import com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext;
+import com.paravai.regulations.standards.api.grpc.v1.Standard;
+import com.paravai.regulations.standards.api.grpc.v1.StandardVersion;
 
 public final class StandardGrpcMapper {
 
     private StandardGrpcMapper() {}
 
-    public static Standard toProto(com.dekra.service.regulations.standards.domain.model.Standard s) {
+    public static Standard toProto(com.paravai.regulations.standards.domain.model.Standard s) {
 
         Standard.Builder b = Standard.newBuilder()
                 .setId(s.id().getValue())
@@ -30,7 +30,7 @@ public final class StandardGrpcMapper {
         return b.build();
     }
 
-    private static StandardVersion toProto(com.dekra.service.regulations.standards.domain.model.StandardVersion v) {
+    private static StandardVersion toProto(com.paravai.regulations.standards.domain.model.StandardVersion v) {
 
         StandardVersion.Builder b = StandardVersion.newBuilder()
                 .setId(v.id().getValue())
@@ -53,7 +53,7 @@ public final class StandardGrpcMapper {
         return b.build();
     }
 
-    private static ApplicabilityContext toProto(com.dekra.service.regulations.standards.domain.model.ApplicabilityContext c) {
+    private static ApplicabilityContext toProto(com.paravai.regulations.standards.domain.model.ApplicabilityContext c) {
 
         ApplicabilityContext.Builder b = ApplicabilityContext.newBuilder()
                 .setId(c.id().getValue())

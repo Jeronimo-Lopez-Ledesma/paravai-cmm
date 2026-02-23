@@ -1,8 +1,8 @@
-package com.dekra.service.foundation.infrastructure.kafka;
+package com.paravai.foundation.infrastructure.kafka;
 
-import com.dekra.service.foundation.integration.domain.event.DomainEventEnvelope;
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.MeterRegistry;

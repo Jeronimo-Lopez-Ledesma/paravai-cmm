@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 
-import com.dekra.service.foundation.domaincore.value.DateValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.DateValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

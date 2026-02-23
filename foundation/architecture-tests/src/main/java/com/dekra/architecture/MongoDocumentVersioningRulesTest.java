@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 @AnalyzeClasses(
-        packages = "com.dekra.service",
+        packages = "com.paravai",
         importOptions = {
                 com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests.class,
                 com.dekra.architecture.ExcludeFoundationImportOption.class

@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.relationships.api.v1.dto;
+package com.paravai.regulations.standards.relationships.api.v1.dto;
 
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
 
 import java.util.Locale;
 

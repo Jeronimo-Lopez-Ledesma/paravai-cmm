@@ -1,4 +1,4 @@
-package com.dekra.service.regulations.standards.domain.exception;
+package com.paravai.regulations.standards.domain.exception;
 
 public class FunctionalException extends RuntimeException {
     public FunctionalException(String message) {

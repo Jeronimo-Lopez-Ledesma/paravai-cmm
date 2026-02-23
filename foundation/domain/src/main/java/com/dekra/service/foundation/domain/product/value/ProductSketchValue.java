@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.product.value;
+package com.paravai.foundation.domain.product.value;
 
 import java.util.Objects;
 

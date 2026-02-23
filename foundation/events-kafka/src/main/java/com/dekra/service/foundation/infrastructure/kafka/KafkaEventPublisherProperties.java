@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.infrastructure.kafka;
+package com.paravai.foundation.infrastructure.kafka;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;

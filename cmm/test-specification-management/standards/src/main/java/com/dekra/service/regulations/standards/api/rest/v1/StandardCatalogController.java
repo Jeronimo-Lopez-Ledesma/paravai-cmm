@@ -1,10 +1,10 @@
-package com.dekra.service.regulations.standards.api.rest.v1;
+package com.paravai.regulations.standards.api.rest.v1;
 
-import com.dekra.service.foundation.localization.LocaleContext;
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.regulations.standards.api.rest.v1.dto.StandardTypeResponse;
-import com.dekra.service.regulations.standards.api.rest.v1.dto.StandardVersionStatusResponse;
-import com.dekra.service.regulations.standards.application.catalog.StandardCatalogService;
+import com.paravai.foundation.localization.LocaleContext;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.regulations.standards.api.rest.v1.dto.StandardTypeResponse;
+import com.paravai.regulations.standards.api.rest.v1.dto.StandardVersionStatusResponse;
+import com.paravai.regulations.standards.application.catalog.StandardCatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

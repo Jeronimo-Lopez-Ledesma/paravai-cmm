@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.domain.organization.value;
+package com.paravai.foundation.domain.organization.value;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

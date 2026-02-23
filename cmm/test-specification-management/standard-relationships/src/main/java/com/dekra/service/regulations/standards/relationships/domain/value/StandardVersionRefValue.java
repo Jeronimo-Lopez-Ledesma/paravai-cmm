@@ -1,6 +1,6 @@
-package com.dekra.service.regulations.standards.relationships.domain.value;
+package com.paravai.regulations.standards.relationships.domain.value;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 
 import java.util.Objects;
 

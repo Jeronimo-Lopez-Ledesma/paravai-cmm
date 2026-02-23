@@ -2,7 +2,7 @@
 // source: standard_query_service_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public interface SearchStandardsResponseOrBuilder extends
     // @@protoc_insertion_point(interface_extends:dekra.regulations.standards.v1.SearchStandardsResponse)
@@ -11,12 +11,12 @@ public interface SearchStandardsResponseOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.Standard items = 1;</code>
    */
-  java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.Standard> 
+  java.util.List<com.paravai.regulations.standards.api.grpc.v1.Standard>
       getItemsList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.Standard items = 1;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.Standard getItems(int index);
+  com.paravai.regulations.standards.api.grpc.v1.Standard getItems(int index);
   /**
    * <code>repeated .dekra.regulations.standards.v1.Standard items = 1;</code>
    */
@@ -24,12 +24,12 @@ public interface SearchStandardsResponseOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.Standard items = 1;</code>
    */
-  java.util.List<? extends com.dekra.service.regulations.standards.api.grpc.v1.StandardOrBuilder> 
+  java.util.List<? extends com.paravai.regulations.standards.api.grpc.v1.StandardOrBuilder>
       getItemsOrBuilderList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.Standard items = 1;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.StandardOrBuilder getItemsOrBuilder(
+  com.paravai.regulations.standards.api.grpc.v1.StandardOrBuilder getItemsOrBuilder(
       int index);
 
   /**

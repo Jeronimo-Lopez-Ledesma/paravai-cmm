@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.regulations.standards.domain.model.StandardVersion;
-import com.dekra.service.regulations.standards.domain.value.*;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.regulations.standards.domain.model.StandardVersion;
+import com.paravai.regulations.standards.domain.value.*;
 
 import jakarta.validation.constraints.NotBlank;
 

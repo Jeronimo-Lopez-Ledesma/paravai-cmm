@@ -1,4 +1,4 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 import jakarta.validation.constraints.NotBlank;
 
 /**

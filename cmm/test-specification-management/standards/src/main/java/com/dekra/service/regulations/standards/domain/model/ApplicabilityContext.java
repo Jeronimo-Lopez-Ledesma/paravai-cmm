@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.domain.model;
+package com.paravai.regulations.standards.domain.model;
 
-import com.dekra.service.foundation.domaincore.value.DateValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
+import com.paravai.foundation.domaincore.value.DateValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
 import org.bouncycastle.util.Times;
 
 import java.util.Objects;

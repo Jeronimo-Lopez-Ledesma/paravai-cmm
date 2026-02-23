@@ -1,4 +1,4 @@
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
@@ -12,29 +12,29 @@ public final class StandardQueryServiceGrpc {
   public static final java.lang.String SERVICE_NAME = "dekra.regulations.standards.v1.StandardQueryService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
-      com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod;
+  private static volatile io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
+      com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetStandardById",
-      requestType = com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest.class,
-      responseType = com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse.class,
+      requestType = com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest.class,
+      responseType = com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
-      com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod() {
-    io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest, com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod;
+  public static io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
+      com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod() {
+    io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest, com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getGetStandardByIdMethod;
     if ((getGetStandardByIdMethod = StandardQueryServiceGrpc.getGetStandardByIdMethod) == null) {
       synchronized (StandardQueryServiceGrpc.class) {
         if ((getGetStandardByIdMethod = StandardQueryServiceGrpc.getGetStandardByIdMethod) == null) {
           StandardQueryServiceGrpc.getGetStandardByIdMethod = getGetStandardByIdMethod =
-              io.grpc.MethodDescriptor.<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest, com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse>newBuilder()
+              io.grpc.MethodDescriptor.<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest, com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetStandardById"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest.getDefaultInstance()))
+                  com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse.getDefaultInstance()))
+                  com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse.getDefaultInstance()))
               .setSchemaDescriptor(new StandardQueryServiceMethodDescriptorSupplier("GetStandardById"))
               .build();
         }
@@ -43,29 +43,29 @@ public final class StandardQueryServiceGrpc {
     return getGetStandardByIdMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest,
-      com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod;
+  private static volatile io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest,
+      com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "SearchStandards",
-      requestType = com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.class,
-      responseType = com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse.class,
+      requestType = com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.class,
+      responseType = com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest,
-      com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod() {
-    io.grpc.MethodDescriptor<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest, com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod;
+  public static io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest,
+      com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod() {
+    io.grpc.MethodDescriptor<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest, com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> getSearchStandardsMethod;
     if ((getSearchStandardsMethod = StandardQueryServiceGrpc.getSearchStandardsMethod) == null) {
       synchronized (StandardQueryServiceGrpc.class) {
         if ((getSearchStandardsMethod = StandardQueryServiceGrpc.getSearchStandardsMethod) == null) {
           StandardQueryServiceGrpc.getSearchStandardsMethod = getSearchStandardsMethod =
-              io.grpc.MethodDescriptor.<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest, com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse>newBuilder()
+              io.grpc.MethodDescriptor.<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest, com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "SearchStandards"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance()))
+                  com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse.getDefaultInstance()))
+                  com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse.getDefaultInstance()))
               .setSchemaDescriptor(new StandardQueryServiceMethodDescriptorSupplier("SearchStandards"))
               .build();
         }
@@ -139,15 +139,15 @@ public final class StandardQueryServiceGrpc {
 
     /**
      */
-    default void getStandardById(com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest request,
-        io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> responseObserver) {
+    default void getStandardById(com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest request,
+        io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetStandardByIdMethod(), responseObserver);
     }
 
     /**
      */
-    default void searchStandards(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest request,
-        io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> responseObserver) {
+    default void searchStandards(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest request,
+        io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSearchStandardsMethod(), responseObserver);
     }
   }
@@ -181,16 +181,16 @@ public final class StandardQueryServiceGrpc {
 
     /**
      */
-    public void getStandardById(com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest request,
-        io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> responseObserver) {
+    public void getStandardById(com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest request,
+        io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetStandardByIdMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void searchStandards(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest request,
-        io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> responseObserver) {
+    public void searchStandards(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest request,
+        io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getSearchStandardsMethod(), getCallOptions()), request, responseObserver);
     }
@@ -214,14 +214,14 @@ public final class StandardQueryServiceGrpc {
 
     /**
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse getStandardById(com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) throws io.grpc.StatusException {
+    public com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse getStandardById(com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetStandardByIdMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse searchStandards(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest request) throws io.grpc.StatusException {
+    public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse searchStandards(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getSearchStandardsMethod(), getCallOptions(), request);
     }
@@ -245,14 +245,14 @@ public final class StandardQueryServiceGrpc {
 
     /**
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse getStandardById(com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) {
+    public com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse getStandardById(com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetStandardByIdMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse searchStandards(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest request) {
+    public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse searchStandards(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getSearchStandardsMethod(), getCallOptions(), request);
     }
@@ -276,16 +276,16 @@ public final class StandardQueryServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getStandardById(
-        com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse> getStandardById(
+        com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetStandardByIdMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse> searchStandards(
-        com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse> searchStandards(
+        com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getSearchStandardsMethod(), getCallOptions()), request);
     }
@@ -312,12 +312,12 @@ public final class StandardQueryServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_GET_STANDARD_BY_ID:
-          serviceImpl.getStandardById((com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest) request,
-              (io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse>) responseObserver);
+          serviceImpl.getStandardById((com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse>) responseObserver);
           break;
         case METHODID_SEARCH_STANDARDS:
-          serviceImpl.searchStandards((com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest) request,
-              (io.grpc.stub.StreamObserver<com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse>) responseObserver);
+          serviceImpl.searchStandards((com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest) request,
+              (io.grpc.stub.StreamObserver<com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -341,15 +341,15 @@ public final class StandardQueryServiceGrpc {
           getGetStandardByIdMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
-              com.dekra.service.regulations.standards.api.grpc.v1.GetStandardByIdResponse>(
+              com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdRequest,
+              com.paravai.regulations.standards.api.grpc.v1.GetStandardByIdResponse>(
                 service, METHODID_GET_STANDARD_BY_ID)))
         .addMethod(
           getSearchStandardsMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest,
-              com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsResponse>(
+              com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest,
+              com.paravai.regulations.standards.api.grpc.v1.SearchStandardsResponse>(
                 service, METHODID_SEARCH_STANDARDS)))
         .build();
   }
@@ -360,7 +360,7 @@ public final class StandardQueryServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.getDescriptor();
+      return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.getDescriptor();
     }
 
     @java.lang.Override

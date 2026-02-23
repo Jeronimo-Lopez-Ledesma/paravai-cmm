@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.persistence.mongo.resilience;
+package com.paravai.foundation.persistence.mongo.resilience;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;

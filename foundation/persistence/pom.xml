@@ -28,7 +28,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>domain-core</artifactId>
         </dependency>
         <dependency>

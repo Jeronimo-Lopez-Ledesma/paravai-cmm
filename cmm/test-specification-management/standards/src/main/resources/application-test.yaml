@@ -71,7 +71,7 @@ resilience4j:
           - java.io.IOException
           - reactor.netty.http.client.PrematureCloseException
         ignoreExceptions:
-          - com.dekra.service.sales.opportunities.domain.error.FunctionalException
+          - com.paravai.sales.opportunities.domain.error.FunctionalException
 
 resilience:
   order:
@@ -95,7 +95,7 @@ logging:
     root: INFO
     org.springframework.web: INFO
     reactor.netty: INFO
-    com.dekra.service.sales.opportunities: DEBUG
+    com.paravai.sales.opportunities: DEBUG
 
 server:
   port: 8091

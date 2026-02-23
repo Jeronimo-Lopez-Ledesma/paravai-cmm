@@ -9,8 +9,8 @@
     <!--                         PARENT                             -->
     <!-- ========================================================= -->
     <parent>
-        <groupId>com.paravai.regulations</groupId>
-        <artifactId>test-specification-management</artifactId>
+        <groupId>com.paravai.communities</groupId>
+        <artifactId>community-management</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -18,10 +18,10 @@
     <!-- ========================================================= -->
     <!--                     MODULE COORDINATES                     -->
     <!-- ========================================================= -->
-    <artifactId>test-specification-management-common</artifactId>
-    <name>Test Specification Management - Common Module</name>
+    <artifactId>community-management-common</artifactId>
+    <name>Community Management - Common Module</name>
     <description>
-        Shared classes for Test Specification Management bounded context
+        Shared classes for Community Management bounded context
         (value objects, exceptions, constants, utilities).
     </description>
 
@@ -31,8 +31,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.paravai.regulations</groupId>
-                <artifactId>test-specification-management-bom</artifactId>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>community-management-bom</artifactId>
                 <version>1.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>

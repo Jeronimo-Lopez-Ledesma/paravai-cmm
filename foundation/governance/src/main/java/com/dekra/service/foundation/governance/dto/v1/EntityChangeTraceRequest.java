@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.governance.dto.v1;
+package com.paravai.foundation.governance.dto.v1;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.governance.association;
+package com.paravai.foundation.governance.association;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 import lombok.Data;
 
 import java.util.HashSet;

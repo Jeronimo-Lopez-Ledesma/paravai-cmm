@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.persistence.mongo.resilience;
+package com.paravai.foundation.persistence.mongo.resilience;
 
-import com.dekra.service.foundation.persistence.mongo.resilience.metrics.MongoResilienceMetrics;
+import com.paravai.foundation.persistence.mongo.resilience.metrics.MongoResilienceMetrics;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 

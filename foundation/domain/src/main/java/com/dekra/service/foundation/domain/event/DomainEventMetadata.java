@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.domaincore.event;
+package com.paravai.foundation.domaincore.event;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
 
 public record DomainEventMetadata(
         /**

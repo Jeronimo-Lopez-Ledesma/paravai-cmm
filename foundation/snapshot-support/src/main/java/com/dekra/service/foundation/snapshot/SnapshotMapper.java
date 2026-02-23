@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.snapshot;
+package com.paravai.foundation.snapshot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.relationships.infrastructure.persistence.mapper;
+package com.paravai.regulations.standards.relationships.infrastructure.persistence.mapper;
 
-import com.dekra.service.foundation.snapshot.SnapshotMapper;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
-import com.dekra.service.regulations.standards.relationships.infrastructure.event.StandardRelationshipEventPayloadV1;
+import com.paravai.foundation.snapshot.SnapshotMapper;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.regulations.standards.relationships.infrastructure.event.StandardRelationshipEventPayloadV1;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;

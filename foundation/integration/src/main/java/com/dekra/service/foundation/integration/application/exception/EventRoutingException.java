@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.integration.application.exception;
+package com.paravai.foundation.integration.application.exception;
 
 public class EventRoutingException extends RuntimeException {
 

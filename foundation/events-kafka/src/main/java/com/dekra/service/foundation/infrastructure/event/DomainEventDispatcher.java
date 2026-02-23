@@ -1,9 +1,9 @@
-package com.dekra.service.foundation.infrastructure.event;
+package com.paravai.foundation.infrastructure.event;
 
-import com.dekra.service.foundation.domaincore.event.DomainEvent;
-import com.dekra.service.foundation.domaincore.event.DomainEventHandler;
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.domaincore.event.DomainEvent;
+import com.paravai.foundation.domaincore.event.DomainEventHandler;
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Component;

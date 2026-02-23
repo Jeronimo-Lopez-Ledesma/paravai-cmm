@@ -29,7 +29,7 @@
     <dependencies>
         <!-- Service Foundation -->
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>observability</artifactId>
         </dependency>
 
@@ -43,11 +43,11 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>domain-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>integration</artifactId>
         </dependency>
         <dependency>

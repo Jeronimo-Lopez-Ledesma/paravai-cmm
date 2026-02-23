@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domaincore.event;
+package com.paravai.foundation.domaincore.event;
 
 public abstract class AbstractReactiveDomainEventHandler<T extends DomainEvent> implements ReactiveDomainEventHandler<T> {
 

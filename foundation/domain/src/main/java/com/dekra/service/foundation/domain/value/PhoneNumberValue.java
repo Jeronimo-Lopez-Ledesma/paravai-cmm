@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.value;
+package com.paravai.foundation.domain.value;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.i18n.phonenumbers.NumberParseException;

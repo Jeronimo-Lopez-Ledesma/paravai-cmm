@@ -1,6 +1,6 @@
-package com.dekra.service.regulations.standards.infrastructure.config;
+package com.paravai.regulations.standards.infrastructure.config;
 
-import com.dekra.service.regulations.standards.application.common.StandardEventFactory;
+import com.paravai.regulations.standards.application.common.StandardEventFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

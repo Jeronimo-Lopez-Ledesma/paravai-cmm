@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.persistence.mongo.resilience.metrics;
+package com.paravai.foundation.persistence.mongo.resilience.metrics;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

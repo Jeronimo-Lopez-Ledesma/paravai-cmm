@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.viewjsonapi.jsonapi;
+package com.paravai.foundation.viewjsonapi.jsonapi;
 
 import lombok.Builder;
 import lombok.Getter;

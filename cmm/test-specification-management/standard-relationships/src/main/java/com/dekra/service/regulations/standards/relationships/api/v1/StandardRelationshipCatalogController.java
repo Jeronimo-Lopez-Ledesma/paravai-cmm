@@ -1,10 +1,10 @@
-package com.dekra.service.regulations.standards.relationships.api.v1;
+package com.paravai.regulations.standards.relationships.api.v1;
 
-import com.dekra.service.foundation.localization.LocaleContext;
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.regulations.standards.relationships.api.v1.dto.StandardRelationshipPurposeResponse;
-import com.dekra.service.regulations.standards.relationships.api.v1.dto.StandardRelationshipTypeResponse;
-import com.dekra.service.regulations.standards.relationships.application.catalog.StandardRelationshipCatalogService;
+import com.paravai.foundation.localization.LocaleContext;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.regulations.standards.relationships.api.v1.dto.StandardRelationshipPurposeResponse;
+import com.paravai.regulations.standards.relationships.api.v1.dto.StandardRelationshipTypeResponse;
+import com.paravai.regulations.standards.relationships.application.catalog.StandardRelationshipCatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

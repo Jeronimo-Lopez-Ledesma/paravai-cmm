@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.securityutils.security.jwt;
+package com.paravai.foundation.securityutils.security.jwt;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;

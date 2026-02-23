@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.viewjsonapi.pagination;
+package com.paravai.foundation.viewjsonapi.pagination;
 
 
 import org.junit.jupiter.api.Test;

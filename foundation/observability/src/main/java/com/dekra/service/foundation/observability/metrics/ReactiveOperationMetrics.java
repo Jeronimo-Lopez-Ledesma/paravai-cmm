@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.observability.metrics;
+package com.paravai.foundation.observability.metrics;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;

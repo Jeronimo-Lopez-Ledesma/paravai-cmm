@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.exception;
+package com.paravai.foundation.domain.exception;
 
 /**
  * Custom exception for hashing related errors.

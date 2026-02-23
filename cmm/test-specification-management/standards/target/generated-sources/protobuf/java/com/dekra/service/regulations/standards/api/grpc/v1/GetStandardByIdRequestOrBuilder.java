@@ -2,7 +2,7 @@
 // source: standard_query_service_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public interface GetStandardByIdRequestOrBuilder extends
     // @@protoc_insertion_point(interface_extends:dekra.regulations.standards.v1.GetStandardByIdRequest)

@@ -1,6 +1,6 @@
-package com.dekra.service.regulations.standards.application.exception;
+package com.paravai.regulations.standards.application.exception;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.IdValue;
 
 public class StandardNotFoundException extends RuntimeException {
 

@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.relationships.application.common;
+package com.paravai.regulations.standards.relationships.application.common;
 
-import com.dekra.service.foundation.snapshot.SnapshotMapper;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.foundation.snapshot.SnapshotMapper;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Objects;

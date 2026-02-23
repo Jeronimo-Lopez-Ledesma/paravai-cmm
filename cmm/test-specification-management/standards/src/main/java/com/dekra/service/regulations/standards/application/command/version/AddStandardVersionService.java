@@ -1,19 +1,19 @@
-package com.dekra.service.regulations.standards.application.command.version;
+package com.paravai.regulations.standards.application.command.version;
 
-import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
-import com.dekra.service.foundation.domaincore.event.NonBlockingEventPublisher;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.OperationTypeValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.foundation.observability.metrics.MetricsSupport;
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
-import com.dekra.service.foundation.securityutils.reactive.context.RequestContext;
-import com.dekra.service.foundation.snapshot.SnapshotMapper;
-import com.dekra.service.regulations.standards.application.common.*;
-import com.dekra.service.regulations.standards.domain.model.Standard;
-import com.dekra.service.regulations.standards.domain.repository.StandardRepository;
-import com.dekra.service.regulations.standards.domain.value.*;
+import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.foundation.domaincore.event.NonBlockingEventPublisher;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.OperationTypeValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.foundation.observability.metrics.MetricsSupport;
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.securityutils.reactive.context.RequestContext;
+import com.paravai.foundation.snapshot.SnapshotMapper;
+import com.paravai.regulations.standards.application.common.*;
+import com.paravai.regulations.standards.domain.model.Standard;
+import com.paravai.regulations.standards.domain.repository.StandardRepository;
+import com.paravai.regulations.standards.domain.value.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class AddStandardVersionService {
     private final ReactiveOperationMetrics metrics;
 
     public AddStandardVersionService(StandardRepository repo,
-                                     com.dekra.service.foundation.domaincore.event.ReactiveDomainEventPublisher eventPublisher,
+                                     com.paravai.foundation.domaincore.event.ReactiveDomainEventPublisher eventPublisher,
                                      SnapshotMapper<Standard> snapshotMapper,
                                      StandardEventFactory standardEventFactory,
                                      ReactiveOperationMetrics metrics) {

@@ -2,7 +2,7 @@
 // source: standards_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public interface StandardOrBuilder extends
     // @@protoc_insertion_point(interface_extends:dekra.regulations.standards.v1.Standard)
@@ -124,12 +124,12 @@ public interface StandardOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
-  java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion> 
+  java.util.List<com.paravai.regulations.standards.api.grpc.v1.StandardVersion>
       getVersionsList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index);
+  com.paravai.regulations.standards.api.grpc.v1.StandardVersion getVersions(int index);
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
@@ -137,11 +137,11 @@ public interface StandardOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
-  java.util.List<? extends com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder> 
+  java.util.List<? extends com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder>
       getVersionsOrBuilderList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.StandardVersion versions = 10;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
+  com.paravai.regulations.standards.api.grpc.v1.StandardVersionOrBuilder getVersionsOrBuilder(
       int index);
 }

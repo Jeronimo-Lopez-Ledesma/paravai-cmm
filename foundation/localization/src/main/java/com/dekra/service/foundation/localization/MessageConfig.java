@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.localization;
+package com.paravai.foundation.localization;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

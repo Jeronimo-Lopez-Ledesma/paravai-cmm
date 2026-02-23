@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.persistence.mongo.resilience;
+package com.paravai.foundation.persistence.mongo.resilience;
 
-import com.dekra.service.foundation.persistence.mongo.resilience.metrics.MongoResilienceMetrics;
+import com.paravai.foundation.persistence.mongo.resilience.metrics.MongoResilienceMetrics;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
 import org.slf4j.Logger;

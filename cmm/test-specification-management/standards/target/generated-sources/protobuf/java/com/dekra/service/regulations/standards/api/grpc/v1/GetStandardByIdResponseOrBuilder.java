@@ -2,7 +2,7 @@
 // source: standard_query_service_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public interface GetStandardByIdResponseOrBuilder extends
     // @@protoc_insertion_point(interface_extends:dekra.regulations.standards.v1.GetStandardByIdResponse)
@@ -17,9 +17,9 @@ public interface GetStandardByIdResponseOrBuilder extends
    * <code>.dekra.regulations.standards.v1.Standard standard = 1;</code>
    * @return The standard.
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.Standard getStandard();
+  com.paravai.regulations.standards.api.grpc.v1.Standard getStandard();
   /**
    * <code>.dekra.regulations.standards.v1.Standard standard = 1;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.StandardOrBuilder getStandardOrBuilder();
+  com.paravai.regulations.standards.api.grpc.v1.StandardOrBuilder getStandardOrBuilder();
 }

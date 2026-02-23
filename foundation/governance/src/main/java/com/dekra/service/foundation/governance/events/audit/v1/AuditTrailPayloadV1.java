@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.governance.events.audit.v1;
+package com.paravai.foundation.governance.events.audit.v1;
 
-import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.foundation.domaincore.event.EntityChangedEvent;
 
 public record AuditTrailPayloadV1(
         String resourceType,

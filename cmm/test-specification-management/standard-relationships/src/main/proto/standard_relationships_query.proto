@@ -3,7 +3,7 @@ syntax = "proto3";
 package dekra.regulations.standardrelationships.v1;
 
 option java_multiple_files = true;
-option java_package = "com.dekra.service.regulations.standardrelationships.api.grpc.v1";
+option java_package = "com.paravai.regulations.standardrelationships.api.grpc.v1";
 
 message ListRelationshipsByStandardIdRequest {
   string standard_id = 1;

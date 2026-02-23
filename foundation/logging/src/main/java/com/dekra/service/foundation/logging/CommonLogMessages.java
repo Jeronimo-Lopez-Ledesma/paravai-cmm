@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.logging;
+package com.paravai.foundation.logging;
 
 public final class CommonLogMessages {
 

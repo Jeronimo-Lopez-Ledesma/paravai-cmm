@@ -1,11 +1,11 @@
-package com.dekra.service.regulations.standards.relationships.infrastructure.event.handler;
+package com.paravai.regulations.standards.relationships.infrastructure.event.handler;
 
-import com.dekra.service.foundation.domaincore.event.DomainEventHandler;
-import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
-import com.dekra.service.foundation.infrastructure.kafka.IntegrationEventPublisher;
-import com.dekra.service.regulations.standards.relationships.infrastructure.event.mapper.AuditTrailEnvelopeMapper;
-import com.dekra.service.regulations.standards.relationships.infrastructure.event.mapper.HistorizationEnvelopeMapper;
-import com.dekra.service.regulations.standards.relationships.infrastructure.event.mapper.StandardRelationshipEventEnvelopeMapper;
+import com.paravai.foundation.domaincore.event.DomainEventHandler;
+import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.foundation.infrastructure.kafka.IntegrationEventPublisher;
+import com.paravai.regulations.standards.relationships.infrastructure.event.mapper.AuditTrailEnvelopeMapper;
+import com.paravai.regulations.standards.relationships.infrastructure.event.mapper.HistorizationEnvelopeMapper;
+import com.paravai.regulations.standards.relationships.infrastructure.event.mapper.StandardRelationshipEventEnvelopeMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,16 +1,16 @@
-package com.dekra.service.regulations.standards.application.query.search;
+package com.paravai.regulations.standards.application.query.search;
 
-import com.dekra.service.foundation.domaincore.exception.ServiceUnavailableException;
-import com.dekra.service.foundation.observability.metrics.MetricsSupport;
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
-import com.dekra.service.foundation.securityutils.reactive.context.RequestContext;
-import com.dekra.service.foundation.viewjsonapi.query.FilterSetValue;
-import com.dekra.service.foundation.viewjsonapi.query.SearchQueryValue;
+import com.paravai.foundation.domaincore.exception.ServiceUnavailableException;
+import com.paravai.foundation.observability.metrics.MetricsSupport;
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.securityutils.reactive.context.RequestContext;
+import com.paravai.foundation.viewjsonapi.query.FilterSetValue;
+import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
 
-import com.dekra.service.regulations.standards.application.common.StandardMetrics;
-import com.dekra.service.regulations.standards.domain.model.Standard;
-import com.dekra.service.regulations.standards.domain.repository.StandardRepository;
+import com.paravai.regulations.standards.application.common.StandardMetrics;
+import com.paravai.regulations.standards.domain.model.Standard;
+import com.paravai.regulations.standards.domain.repository.StandardRepository;
 import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

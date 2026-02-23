@@ -1,10 +1,10 @@
-package com.dekra.service.foundation.integration.mapper;
+package com.paravai.foundation.integration.mapper;
 
-import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
-import com.dekra.service.foundation.integration.domain.event.DomainEventEnvelope;
-import com.dekra.service.foundation.integration.domain.event.EventChannel;
-import com.dekra.service.foundation.integration.domain.event.EventCmm;
-import com.dekra.service.foundation.integration.domain.event.SchemaId;
+import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
+import com.paravai.foundation.integration.domain.event.EventChannel;
+import com.paravai.foundation.integration.domain.event.EventCmm;
+import com.paravai.foundation.integration.domain.event.SchemaId;
 
 import java.util.Objects;
 

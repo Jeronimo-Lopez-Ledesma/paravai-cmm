@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.relationships.application.catalog;
+package com.paravai.regulations.standards.relationships.application.catalog;
 
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 

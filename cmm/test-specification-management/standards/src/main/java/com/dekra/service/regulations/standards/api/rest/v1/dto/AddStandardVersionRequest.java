@@ -1,9 +1,9 @@
-package com.dekra.service.regulations.standards.api.rest.v1.dto;
+package com.paravai.regulations.standards.api.rest.v1.dto;
 
-import com.dekra.service.regulations.standards.domain.value.PublicationDateValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionStatusValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionValue;
-import com.dekra.service.regulations.standards.domain.value.VisibilityStatusValue;
+import com.paravai.regulations.standards.domain.value.PublicationDateValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionStatusValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionValue;
+import com.paravai.regulations.standards.domain.value.VisibilityStatusValue;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;

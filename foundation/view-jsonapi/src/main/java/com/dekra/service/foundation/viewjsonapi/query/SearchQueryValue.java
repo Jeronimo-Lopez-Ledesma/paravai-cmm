@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.viewjsonapi.query;
+package com.paravai.foundation.viewjsonapi.query;
 
-import com.dekra.service.foundation.viewjsonapi.pagination.PaginationRequest;
+import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 
 import java.util.Map;
 import java.util.Objects;

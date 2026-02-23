@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.governance.resilience;
+package com.paravai.foundation.governance.resilience;
 
 public final class DownstreamServiceNames {
 

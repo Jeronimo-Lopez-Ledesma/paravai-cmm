@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.relationships.domain.repository;
+package com.paravai.regulations.standards.relationships.domain.repository;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.viewjsonapi.query.SearchQueryValue;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

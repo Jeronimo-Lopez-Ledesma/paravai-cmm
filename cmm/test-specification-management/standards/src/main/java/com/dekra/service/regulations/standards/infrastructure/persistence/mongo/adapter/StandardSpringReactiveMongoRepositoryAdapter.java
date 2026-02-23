@@ -1,16 +1,16 @@
-package com.dekra.service.regulations.standards.infrastructure.persistence.mongo.adapter;
+package com.paravai.regulations.standards.infrastructure.persistence.mongo.adapter;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.observability.metrics.MetricsSupport; // Service Foundation
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
-import com.dekra.service.foundation.persistence.mongo.MongoReactiveEntityFilter;
-import com.dekra.service.foundation.viewjsonapi.query.SearchQueryValue;
-import com.dekra.service.regulations.standards.application.common.StandardMetrics;
-import com.dekra.service.regulations.standards.domain.model.Standard;
-import com.dekra.service.regulations.standards.domain.repository.StandardRepository;
-import com.dekra.service.regulations.standards.infrastructure.persistence.mongo.document.StandardDocument;
-import com.dekra.service.regulations.standards.infrastructure.persistence.mongo.springdata.StandardSpringReactiveMongoRepository;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.observability.metrics.MetricsSupport; // Service Foundation
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.persistence.mongo.MongoReactiveEntityFilter;
+import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
+import com.paravai.regulations.standards.application.common.StandardMetrics;
+import com.paravai.regulations.standards.domain.model.Standard;
+import com.paravai.regulations.standards.domain.repository.StandardRepository;
+import com.paravai.regulations.standards.infrastructure.persistence.mongo.document.StandardDocument;
+import com.paravai.regulations.standards.infrastructure.persistence.mongo.springdata.StandardSpringReactiveMongoRepository;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;

@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.infrastructure.kafka;
+package com.paravai.foundation.infrastructure.kafka;
 
 
-import com.dekra.service.foundation.integration.domain.event.DomainEventEnvelope;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

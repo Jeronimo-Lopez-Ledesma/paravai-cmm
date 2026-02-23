@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domaincore.value;
+package com.paravai.foundation.domaincore.value;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;

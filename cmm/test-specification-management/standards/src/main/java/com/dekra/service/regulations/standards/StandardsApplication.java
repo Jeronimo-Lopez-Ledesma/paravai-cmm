@@ -1,4 +1,4 @@
-package com.dekra.service.regulations.standards;
+package com.paravai.regulations.standards;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +15,12 @@ import java.util.Locale;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-		"com.dekra.service.regulations.standards",
-        "com.dekra.service.foundation.viewjsonapi.exception",
-		"com.dekra.service.foundation.localization",
-		"com.dekra.service.foundation.infrastructure.event",
-		"com.dekra.service.foundation.infrastructure.kafka",
-        "com.dekra.service.foundation.integration",
+		"com.paravai.regulations.standards",
+        "com.paravai.foundation.viewjsonapi.exception",
+		"com.paravai.foundation.localization",
+		"com.paravai.foundation.infrastructure.event",
+		"com.paravai.foundation.infrastructure.kafka",
+        "com.paravai.foundation.integration",
 
 })
 public class StandardsApplication {

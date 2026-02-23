@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.relationships.application.common;
+package com.paravai.regulations.standards.relationships.application.common;
 
-import com.dekra.service.foundation.observability.metrics.ComponentIdentity;
-import com.dekra.service.foundation.observability.metrics.ModuleType;
+import com.paravai.foundation.observability.metrics.ComponentIdentity;
+import com.paravai.foundation.observability.metrics.ModuleType;
 
 public final class StandardRelationshipMetrics {
 

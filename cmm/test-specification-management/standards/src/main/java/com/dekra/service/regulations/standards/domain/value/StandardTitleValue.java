@@ -1,4 +1,4 @@
-package com.dekra.service.regulations.standards.domain.value;
+package com.paravai.regulations.standards.domain.value;
 
 import java.text.Normalizer;
 import java.util.Locale;

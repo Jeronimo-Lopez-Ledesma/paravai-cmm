@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.viewjsonapi.composition;
+package com.paravai.foundation.viewjsonapi.composition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;

@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.logging;
+package com.paravai.foundation.logging;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

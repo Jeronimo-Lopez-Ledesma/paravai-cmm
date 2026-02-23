@@ -1,9 +1,9 @@
-package com.dekra.service.regulations.standards.relationships.api.v1.dto;
+package com.paravai.regulations.standards.relationships.api.v1.dto;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardVersionRefValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardVersionRefValue;
 import jakarta.validation.constraints.NotBlank;
 
 /**

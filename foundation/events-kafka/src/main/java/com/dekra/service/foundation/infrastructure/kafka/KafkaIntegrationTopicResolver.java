@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.infrastructure.kafka;
+package com.paravai.foundation.infrastructure.kafka;
 
-import com.dekra.service.foundation.integration.domain.event.DomainEventEnvelope;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

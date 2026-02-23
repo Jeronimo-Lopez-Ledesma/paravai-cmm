@@ -1,12 +1,12 @@
-package com.dekra.service.regulations.standards.relationships.infrastructure.persistence.mongo.document;
+package com.paravai.regulations.standards.relationships.infrastructure.persistence.mongo.document;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationshipFactory;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
-import com.dekra.service.regulations.standards.relationships.domain.value.StandardVersionRefValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationshipFactory;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipPurposeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardRelationshipTypeValue;
+import com.paravai.regulations.standards.relationships.domain.value.StandardVersionRefValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;

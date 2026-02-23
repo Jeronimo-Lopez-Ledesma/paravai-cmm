@@ -2,7 +2,7 @@
 // source: standards_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 public interface StandardVersionOrBuilder extends
     // @@protoc_insertion_point(interface_extends:dekra.regulations.standards.v1.StandardVersion)
@@ -105,12 +105,12 @@ public interface StandardVersionOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.ApplicabilityContext applicability_contexts = 8;</code>
    */
-  java.util.List<com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext> 
+  java.util.List<com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext> 
       getApplicabilityContextsList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.ApplicabilityContext applicability_contexts = 8;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContext getApplicabilityContexts(int index);
+  com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContext getApplicabilityContexts(int index);
   /**
    * <code>repeated .dekra.regulations.standards.v1.ApplicabilityContext applicability_contexts = 8;</code>
    */
@@ -118,11 +118,11 @@ public interface StandardVersionOrBuilder extends
   /**
    * <code>repeated .dekra.regulations.standards.v1.ApplicabilityContext applicability_contexts = 8;</code>
    */
-  java.util.List<? extends com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder> 
+  java.util.List<? extends com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder> 
       getApplicabilityContextsOrBuilderList();
   /**
    * <code>repeated .dekra.regulations.standards.v1.ApplicabilityContext applicability_contexts = 8;</code>
    */
-  com.dekra.service.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder getApplicabilityContextsOrBuilder(
+  com.paravai.regulations.standards.api.grpc.v1.ApplicabilityContextOrBuilder getApplicabilityContextsOrBuilder(
       int index);
 }

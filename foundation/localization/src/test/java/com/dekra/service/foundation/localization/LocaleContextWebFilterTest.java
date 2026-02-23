@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.localization;
+package com.paravai.foundation.localization;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;

@@ -1,6 +1,6 @@
-package com.dekra.service.foundation.domaincore.value;
+package com.paravai.foundation.domaincore.value;
 
-import com.dekra.service.foundation.domain.value.ResourceTypeValue;
+import com.paravai.foundation.domain.value.ResourceTypeValue;
 
 /** Normaliza EntityTypeValue a ResourceTypeValue */
 public final class ResourceTypeMapper {

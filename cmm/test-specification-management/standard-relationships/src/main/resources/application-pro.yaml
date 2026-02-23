@@ -82,7 +82,7 @@ logging:
   level:
     root: INFO
     reactor.netty: WARN
-    com.dekra.service.sales.opportunities: INFO
+    com.paravai.sales.opportunities: INFO
 
 server:
   port: 8080

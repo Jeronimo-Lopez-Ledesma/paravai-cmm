@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.localization;
+package com.paravai.foundation.localization;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

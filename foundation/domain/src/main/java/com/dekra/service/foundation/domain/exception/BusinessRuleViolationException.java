@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.domain.exception;
+package com.paravai.foundation.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

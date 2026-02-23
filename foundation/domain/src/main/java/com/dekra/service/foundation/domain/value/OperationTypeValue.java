@@ -1,7 +1,7 @@
-package com.dekra.service.foundation.domaincore.value;
+package com.paravai.foundation.domaincore.value;
 
-import com.dekra.service.foundation.localization.LocalizableValueObject;
-import com.dekra.service.foundation.localization.MessageService;
+import com.paravai.foundation.localization.LocalizableValueObject;
+import com.paravai.foundation.localization.MessageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 

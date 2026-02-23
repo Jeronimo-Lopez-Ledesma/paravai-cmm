@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.governance.config;
+package com.paravai.foundation.governance.config;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -2,7 +2,7 @@
 // source: standard_query_service_v1.proto
 
 // Protobuf Java Version: 3.25.5
-package com.dekra.service.regulations.standards.api.grpc.v1;
+package com.paravai.regulations.standards.api.grpc.v1;
 
 /**
  * Protobuf type {@code dekra.regulations.standards.v1.SearchStandardsRequest}
@@ -30,7 +30,7 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
+    return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
   }
 
   @SuppressWarnings({"rawtypes"})
@@ -48,9 +48,9 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_fieldAccessorTable
+    return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.class, com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.Builder.class);
+            com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.class, com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.Builder.class);
   }
 
   public static final int SEARCH_FIELD_NUMBER = 1;
@@ -167,7 +167,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String, java.lang.String> defaultEntry =
             com.google.protobuf.MapEntry
             .<java.lang.String, java.lang.String>newDefaultInstance(
-                com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_FiltersEntry_descriptor, 
+                com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_FiltersEntry_descriptor,
                 com.google.protobuf.WireFormat.FieldType.STRING,
                 "",
                 com.google.protobuf.WireFormat.FieldType.STRING,
@@ -315,10 +315,10 @@ java.lang.String defaultValue) {
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest)) {
+    if (!(obj instanceof com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest)) {
       return super.equals(obj);
     }
-    com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest other = (com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest) obj;
+    com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest other = (com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest) obj;
 
     if (!getSearch()
         .equals(other.getSearch())) return false;
@@ -358,44 +358,44 @@ java.lang.String defaultValue) {
     return hash;
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(byte[] data)
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -403,26 +403,26 @@ java.lang.String defaultValue) {
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseDelimitedFrom(java.io.InputStream input)
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseDelimitedFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -435,7 +435,7 @@ java.lang.String defaultValue) {
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest prototype) {
+  public static Builder newBuilder(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -456,10 +456,10 @@ java.lang.String defaultValue) {
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:dekra.regulations.standards.v1.SearchStandardsRequest)
-      com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequestOrBuilder {
+      com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
@@ -487,12 +487,12 @@ java.lang.String defaultValue) {
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_fieldAccessorTable
+      return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.class, com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.Builder.class);
+              com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.class, com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.Builder.class);
     }
 
-    // Construct using com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.newBuilder()
+    // Construct using com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.newBuilder()
     private Builder() {
 
     }
@@ -517,17 +517,17 @@ java.lang.String defaultValue) {
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
+      return com.paravai.regulations.standards.api.grpc.v1.StandardQueryServiceProto.internal_static_dekra_regulations_standards_v1_SearchStandardsRequest_descriptor;
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstanceForType() {
-      return com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance();
+    public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstanceForType() {
+      return com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest build() {
-      com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest result = buildPartial();
+    public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest build() {
+      com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -535,14 +535,14 @@ java.lang.String defaultValue) {
     }
 
     @java.lang.Override
-    public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest buildPartial() {
-      com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest result = new com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest(this);
+    public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest buildPartial() {
+      com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest result = new com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest result) {
+    private void buildPartial0(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.search_ = search_;
@@ -596,16 +596,16 @@ java.lang.String defaultValue) {
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest) {
-        return mergeFrom((com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest)other);
+      if (other instanceof com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest) {
+        return mergeFrom((com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest other) {
-      if (other == com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest other) {
+      if (other == com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest.getDefaultInstance()) return this;
       if (!other.getSearch().isEmpty()) {
         search_ = other.search_;
         bitField0_ |= 0x00000001;
@@ -1072,12 +1072,12 @@ java.lang.String defaultValue) {
   }
 
   // @@protoc_insertion_point(class_scope:dekra.regulations.standards.v1.SearchStandardsRequest)
-  private static final com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest DEFAULT_INSTANCE;
+  private static final com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest();
+    DEFAULT_INSTANCE = new com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest();
   }
 
-  public static com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstance() {
+  public static com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
@@ -1113,7 +1113,7 @@ java.lang.String defaultValue) {
   }
 
   @java.lang.Override
-  public com.dekra.service.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstanceForType() {
+  public com.paravai.regulations.standards.api.grpc.v1.SearchStandardsRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

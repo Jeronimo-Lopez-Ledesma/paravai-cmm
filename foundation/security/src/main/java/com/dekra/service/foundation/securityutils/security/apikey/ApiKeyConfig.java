@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.securityutils.security.apikey;
+package com.paravai.foundation.securityutils.security.apikey;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

@@ -1,8 +1,8 @@
-package com.dekra.service.regulations.standards.domain.exception;
+package com.paravai.regulations.standards.domain.exception;
 
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
-import com.dekra.service.regulations.standards.domain.value.StandardVersionValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.regulations.standards.domain.value.StandardVersionValue;
 
 import java.util.Objects;
 

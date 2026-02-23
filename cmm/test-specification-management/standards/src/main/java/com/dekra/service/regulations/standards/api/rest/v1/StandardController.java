@@ -1,27 +1,27 @@
-package com.dekra.service.regulations.standards.api.rest.v1;
+package com.paravai.regulations.standards.api.rest.v1;
 
-import com.dekra.service.foundation.domain.organization.value.OrganizationAssociationValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.localization.LocaleContext;
-import com.dekra.service.foundation.localization.MessageService;
-import com.dekra.service.foundation.securityutils.reactive.context.RequestContext;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiRequest;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiResponseBuilder;
-import com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiSingleResponse;
-import com.dekra.service.foundation.viewjsonapi.pagination.PaginationRequest;
-import com.dekra.service.foundation.viewjsonapi.query.SearchQueryValue;
-import com.dekra.service.regulations.standards.api.rest.v1.dto.*;
-import com.dekra.service.regulations.standards.application.command.applicability.AddApplicabilityContextService;
-import com.dekra.service.regulations.standards.application.command.applicability.RemoveApplicabilityContextService;
-import com.dekra.service.regulations.standards.application.command.create.CreateStandardService;
+import com.paravai.foundation.domain.organization.value.OrganizationAssociationValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.localization.LocaleContext;
+import com.paravai.foundation.localization.MessageService;
+import com.paravai.foundation.securityutils.reactive.context.RequestContext;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiRequest;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponseBuilder;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiSingleResponse;
+import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
+import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
+import com.paravai.regulations.standards.api.rest.v1.dto.*;
+import com.paravai.regulations.standards.application.command.applicability.AddApplicabilityContextService;
+import com.paravai.regulations.standards.application.command.applicability.RemoveApplicabilityContextService;
+import com.paravai.regulations.standards.application.command.create.CreateStandardService;
 
-import com.dekra.service.regulations.standards.application.command.update.ChangeStandardizationBodyService;
-import com.dekra.service.regulations.standards.application.command.update.ChangeStandardTypeService;
-import com.dekra.service.regulations.standards.application.command.update.UpdateStandardService;
-import com.dekra.service.regulations.standards.application.command.version.AddStandardVersionService;
-import com.dekra.service.regulations.standards.application.query.find.FindStandardByIdService;
-import com.dekra.service.regulations.standards.application.query.search.SearchStandardsService;
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.regulations.standards.application.command.update.ChangeStandardizationBodyService;
+import com.paravai.regulations.standards.application.command.update.ChangeStandardTypeService;
+import com.paravai.regulations.standards.application.command.update.UpdateStandardService;
+import com.paravai.regulations.standards.application.command.version.AddStandardVersionService;
+import com.paravai.regulations.standards.application.query.find.FindStandardByIdService;
+import com.paravai.regulations.standards.application.query.search.SearchStandardsService;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -500,7 +500,7 @@ public class StandardController {
     // Paginated list
     @GetMapping
     @Operation(summary = "Get paginated list of Standards")
-    public Mono<com.dekra.service.foundation.viewjsonapi.jsonapi.JsonApiResponse<StandardResponse>> getAll(
+    public Mono<com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponse<StandardResponse>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size,
             @RequestParam(name = "sort", required = false) String sort,

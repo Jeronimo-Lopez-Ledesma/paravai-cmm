@@ -1,14 +1,14 @@
-package com.dekra.service.regulations.standards.relationships.application.query.find;
+package com.paravai.regulations.standards.relationships.application.query.find;
 
-import com.dekra.service.foundation.domaincore.exception.ServiceUnavailableException;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.observability.metrics.MetricsSupport;
-import com.dekra.service.foundation.observability.metrics.OperationCtx;
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
-import com.dekra.service.foundation.securityutils.reactive.context.RequestContext;
-import com.dekra.service.regulations.standards.relationships.application.common.StandardRelationshipMetrics;
-import com.dekra.service.regulations.standards.relationships.domain.model.StandardRelationship;
-import com.dekra.service.regulations.standards.relationships.domain.repository.StandardRelationshipRepository;
+import com.paravai.foundation.domaincore.exception.ServiceUnavailableException;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.observability.metrics.MetricsSupport;
+import com.paravai.foundation.observability.metrics.OperationCtx;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.securityutils.reactive.context.RequestContext;
+import com.paravai.regulations.standards.relationships.application.common.StandardRelationshipMetrics;
+import com.paravai.regulations.standards.relationships.domain.model.StandardRelationship;
+import com.paravai.regulations.standards.relationships.domain.repository.StandardRelationshipRepository;
 import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

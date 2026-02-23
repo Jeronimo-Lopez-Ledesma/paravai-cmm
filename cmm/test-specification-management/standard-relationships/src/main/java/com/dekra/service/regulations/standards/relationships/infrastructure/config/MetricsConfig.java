@@ -1,6 +1,6 @@
-package com.dekra.service.regulations.standards.relationships.infrastructure.config;
+package com.paravai.regulations.standards.relationships.infrastructure.config;
 
-import com.dekra.service.foundation.observability.metrics.ReactiveOperationMetrics;
+import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

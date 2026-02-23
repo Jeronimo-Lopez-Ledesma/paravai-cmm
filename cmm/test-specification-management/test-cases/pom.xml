@@ -9,7 +9,7 @@
     <!--                         PARENT                             -->
     <!-- ========================================================= -->
     <parent>
-        <groupId>com.dekra.service.regulations</groupId>
+        <groupId>com.paravai.regulations</groupId>
         <artifactId>test-specification-management</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -39,7 +39,7 @@
 
             <!-- Internal BOM -->
             <dependency>
-                <groupId>com.dekra.service.regulations</groupId>
+                <groupId>com.paravai.regulations</groupId>
                 <artifactId>test-specification-management-bom</artifactId>
                 <version>1.0.0</version>
                 <type>pom</type>
@@ -48,7 +48,7 @@
 
             <!-- Internal Shared Code -->
             <dependency>
-                <groupId>com.dekra.service.regulations</groupId>
+                <groupId>com.paravai.regulations</groupId>
                 <artifactId>test-specification-management-common</artifactId>
             </dependency>
 
@@ -96,45 +96,45 @@
         <!-- ========================================================= -->
 
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>domain-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>events-kafka</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>governance</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>localization</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>persistence</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>security</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>view-jsonapi</artifactId>
         </dependency>
 
         <!-- Snapshot support -->
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>snapshot-support</artifactId>
         </dependency>
 
@@ -150,7 +150,7 @@
 
         <!-- Architecture validation -->
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>architecture-tests</artifactId>
             <scope>test</scope>
         </dependency>
@@ -236,7 +236,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.dekra.service.regulations.tests.TestsApplication</mainClass>
+                    <mainClass>com.paravai.regulations.tests.TestsApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

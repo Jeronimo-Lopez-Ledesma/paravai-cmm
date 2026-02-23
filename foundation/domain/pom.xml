@@ -41,7 +41,7 @@
             <artifactId>libphonenumber</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dekra.service.foundation</groupId>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>localization</artifactId>
         </dependency>
         <dependency>
@@ -49,7 +49,7 @@
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
         </dependency>
       <dependency>
-        <groupId>com.dekra.service.foundation</groupId>
+        <groupId>com.paravai.foundation</groupId>
         <artifactId>domain-core</artifactId>
       </dependency>
 

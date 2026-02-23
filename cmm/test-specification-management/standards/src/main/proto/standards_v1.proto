@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package dekra.regulations.standards.v1;
 
-option java_package = "com.dekra.service.regulations.standards.api.grpc.v1";
+option java_package = "com.paravai.regulations.standards.api.grpc.v1";
 option java_multiple_files = true;
 option java_outer_classname = "StandardsProto";
 

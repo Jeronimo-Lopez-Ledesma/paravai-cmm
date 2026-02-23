@@ -1,7 +1,7 @@
-package com.dekra.service.regulations.standards.relationships.domain.value;
+package com.paravai.regulations.standards.relationships.domain.value;
 
-import com.dekra.service.foundation.localization.LocalizableValueObject;
-import com.dekra.service.foundation.localization.MessageService;
+import com.paravai.foundation.localization.LocalizableValueObject;
+import com.paravai.foundation.localization.MessageService;
 
 import java.util.List;
 import java.util.Locale;

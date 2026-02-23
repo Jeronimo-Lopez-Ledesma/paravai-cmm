@@ -1,11 +1,11 @@
-package com.dekra.service.regulations.standards.domain.model;
+package com.paravai.regulations.standards.domain.model;
 
-import com.dekra.service.foundation.domain.organization.value.OrganizationAssociationValue;
-import com.dekra.service.foundation.domaincore.value.IdValue;
-import com.dekra.service.foundation.domaincore.value.TimestampValue;
-import com.dekra.service.regulations.standards.domain.value.StandardCodeValue;
-import com.dekra.service.regulations.standards.domain.value.StandardTitleValue;
-import com.dekra.service.regulations.standards.domain.value.StandardTypeValue;
+import com.paravai.foundation.domain.organization.value.OrganizationAssociationValue;
+import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domaincore.value.TimestampValue;
+import com.paravai.regulations.standards.domain.value.StandardCodeValue;
+import com.paravai.regulations.standards.domain.value.StandardTitleValue;
+import com.paravai.regulations.standards.domain.value.StandardTypeValue;
 
 import java.util.List;
 import java.util.Objects;

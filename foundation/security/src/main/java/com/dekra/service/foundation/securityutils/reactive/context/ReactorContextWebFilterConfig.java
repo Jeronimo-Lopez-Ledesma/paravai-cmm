@@ -1,4 +1,4 @@
-package com.dekra.service.foundation.securityutils.reactive.context;
+package com.paravai.foundation.securityutils.reactive.context;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -134,7 +134,7 @@ logging:
     root: INFO
     org.springframework.web: INFO
     reactor.netty: INFO
-    com.dekra.service.regulations.standards: DEBUG
+    com.paravai.regulations.standards: DEBUG
 
 
 # ============================================================
