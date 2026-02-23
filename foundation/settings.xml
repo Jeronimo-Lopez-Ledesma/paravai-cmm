@@ -1,0 +1,11 @@
+
+<settings>
+    <servers>
+        <server>
+            <!-- Id has to match the id provided in pom.xml -->
+            <id>DEKRA-SD-PT-Reposilite</id>
+            <username>ui-auto</username>
+            <password>zufRgTE/Qh6cQycqnCvK5mlfrVi+EL/eqV4bpLEUJbqCbXEqGiGhnutjdwuskrTH</password>
+        </server>
+    </servers>
+</settings>

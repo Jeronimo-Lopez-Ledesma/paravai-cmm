@@ -1,0 +1,88 @@
+spring:
+  data:
+    mongodb:
+      host: mongodb-prod.internal
+      port: 27017
+      database: OPPORTUNITIES
+      username: prod_user
+      password: ${MONGO_PASSWORD}
+      transaction:
+        enabled: true
+
+app:
+  environment: PRO
+
+info:
+  app:
+    name: opportunities
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Platform Crew
+
+governance:
+  entity-change-tracer:
+    base-url: ${ENTITY_CHANGE_TRACER_URL:http://localhost:9095}
+
+kafka:
+  bootstrapServers: kafka-prod.internal:9092
+  topic: opportunity-events
+  clientId: opportunity
+  acks: all
+  retries: 2
+
+opportunities:
+  http:
+    baseUrl: https://opportunities-backend.internal
+    connectTimeoutMs: 1500
+    responseTimeoutMs: 2500
+    readTimeoutMs: 2500
+    writeTimeoutMs: 2500
+    pool:
+      maxConnections: 500
+      acquireTimeoutMs: 1500
+      maxIdleTimeMs: 60000
+      maxLifeTimeMs: 300000
+
+resilience4j:
+  bulkhead:
+    instances:
+      opportunitiesBackend:
+        maxConcurrentCalls: 200
+        maxWaitDuration: 0
+  circuitbreaker:
+    instances:
+      opportunitiesBackend:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 100
+        minimumNumberOfCalls: 50
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 1s
+        waitDurationInOpenState: 20s
+        permittedNumberOfCallsInHalfOpenState: 10
+  retry:
+    instances:
+      opportunitiesBackend:
+        maxAttempts: 2
+        waitDuration: 150ms
+        retryExceptions:
+          - java.io.IOException
+          - reactor.netty.http.client.PrematureCloseException
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    reactor.netty: WARN
+    com.dekra.service.sales.opportunities: INFO
+
+server:
+  port: 8080

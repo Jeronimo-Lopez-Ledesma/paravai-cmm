@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================================= -->
+    <!--                         PARENT                            -->
+    <!-- ========================================================= -->
+    <parent>
+        <groupId>com.paravai.communities</groupId>
+        <artifactId>community-management</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- ========================================================= -->
+    <!--                     BOM COORDINATES                       -->
+    <!-- ========================================================= -->
+    <artifactId>community-management-bom</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>Community Management Management :: BOM</name>
+    <description>
+        Domain-specific dependency versions for Community Management services.
+        Contains internal module versions only. External dependencies come from service-bom.
+    </description>
+
+    <!-- ========================================================= -->
+    <!--                 DOMAIN-SPECIFIC DEPENDENCIES              -->
+    <!-- ========================================================= -->
+    <properties>
+        <service.foundation.version>2.1.0</service.foundation.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Shared utilities inside this CMM -->
+            <dependency>
+                <groupId>com.paravai.communitites</groupId>
+                <artifactId>community-management-common</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <!-- Standards aggregate -->
+            <dependency>
+                <groupId>com.paravai.communitites</groupId>
+                <artifactId>communities</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <!-- Membership aggregate -->
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>memberships</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <!-- Orchestrator (single orchestrator for the whole subdomain) -->
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>composition</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <!-- Read Model (single readmodel for the whole subdomain) -->
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>readmodel</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

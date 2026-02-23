@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================================= -->
+    <!--                         PARENT                             -->
+    <!-- ========================================================= -->
+    <parent>
+        <groupId>com.dekra.service.regulations</groupId>
+        <artifactId>test-specification-management</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- ========================================================= -->
+    <!--                    MODULE COORDINATES                      -->
+    <!-- ========================================================= -->
+    <artifactId>composition</artifactId>
+    <name>Test Specification Management :: Orchestrator</name>
+    <packaging>jar</packaging>
+
+    <!-- ========================================================= -->
+    <!--                        PROPERTIES                          -->
+    <!-- ========================================================= -->
+    <properties>
+        <resilience4j.version>2.2.0</resilience4j.version>
+        <logstash.encoder.version>7.4</logstash.encoder.version>
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.6</spring-cloud.version>
+    </properties>
+
+    <!-- ========================================================= -->
+    <!--                  DEPENDENCY MANAGEMENT                     -->
+    <!-- ========================================================= -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Import BOM of this CMM -->
+            <dependency>
+                <groupId>com.dekra.service.regulations</groupId>
+                <artifactId>test-specification-management-bom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+
+                <!-- Orchestrator does NOT need Kafka -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.dekra.service.foundation</groupId>
+                        <artifactId>events-kafka</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Spring Cloud BOM -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- ========================================================= -->
+    <!--                       DEPENDENCIES                         -->
+    <!-- ========================================================= -->
+    <dependencies>
+
+        <!-- Reactive Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- OpenAPI Docs -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+        </dependency>
+
+        <!-- ========================================================= -->
+        <!--                  SERVICE FOUNDATION                        -->
+        <!-- ========================================================= -->
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>domain-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>governance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>localization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>persistence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>view-jsonapi</artifactId>
+        </dependency>
+
+        <!-- ========================================================= -->
+        <!--                   Eureka Client                           -->
+        <!-- ========================================================= -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- ========================================================= -->
+        <!--                        RESILIENCE                         -->
+        <!-- ========================================================= -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-reactor</artifactId>
+        </dependency>
+
+        <!-- ========================================================= -->
+        <!--            Observability / Metrics / Actuator            -->
+        <!-- ========================================================= -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- JSON encoder for logs -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
+
+        <!-- ========================================================= -->
+        <!--                         TEST STACK                        -->
+        <!-- ========================================================= -->
+        <dependency>
+            <groupId>com.dekra.service.foundation</groupId>
+            <artifactId>architecture-tests</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JAX-RS Exceptions -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+        </dependency>
+
+        <!-- Spring Security (if orchestrator needs to call secure downstream services) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ========================================================= -->
+    <!--                          BUILD                             -->
+    <!-- ========================================================= -->
+    <build>
+        <finalName>orchestrator</finalName>
+
+        <plugins>
+
+            <!-- Boot executable JAR -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>
+                        com.dekra.service.regulations.orchestrator.OrchestratorApplication
+                    </mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

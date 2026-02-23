@@ -1,0 +1,30 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import com.dekra.service.foundation.domaincore.event.DomainEvent;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConditionalOnProperty(name = "events.kafka.enabled", havingValue = "true", matchIfMissing = true)
+public class KafkaDomainEventForwarder {
+    private final EventPublishingPolicy policy;
+    private final TopicResolver resolver;
+    private final KafkaTemplate<String, Object> kafka;
+
+
+    public KafkaDomainEventForwarder(EventPublishingPolicy policy,
+                                     TopicResolver resolver,
+                                     KafkaTemplate<String, Object> kafka) {
+        this.policy = policy; this.resolver = resolver; this.kafka = kafka;
+    }
+
+
+    public void forward(DomainEvent event) {
+        if (!policy.shouldPublish(event)) return; // no publicado
+        String annotationTopic = policy.annotationTopicOrNull(event);
+        String topic = resolver.resolve(event, annotationTopic);
+        String key = event.metadata().eventId().getValue();
+        kafka.send(topic, key, event);
+    }
+}

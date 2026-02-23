@@ -1,0 +1,28 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import com.dekra.service.foundation.domaincore.event.EntityChangedEvent;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class TopicResolver {
+    private final EventsTopicProperties props;
+    private final String appName;
+
+
+    public TopicResolver(EventsTopicProperties props,
+                         @Value("${spring.application.name}") String appName) {
+        this.props = props; this.appName = appName;
+    }
+
+
+    public String resolve(Object event, String annotationTopic) {
+        if (annotationTopic != null && !annotationTopic.isBlank()) return annotationTopic;
+        if (event instanceof EntityChangedEvent && props.getEntityChanged() != null && !props.getEntityChanged().isBlank()) {
+            return props.getEntityChanged();
+        }
+        return (props.getFallback() != null && !props.getFallback().isBlank())
+                ? props.getFallback()
+                : appName + "-events";
+    }
+}

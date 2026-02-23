@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+target/
+.idea/
+*.iml
+*.log
+.mvn/
+.mvnw
+.mvnw.cmd
+.vscode/

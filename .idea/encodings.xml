@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/cmm/community-management/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/composition/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/composition/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/readmodel/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/readmodel/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/standard-relationships/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/standard-relationships/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/standards/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/standards/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-cases/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-cases/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specification-management-bom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specification-management-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specification-management-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specification-management-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specifications/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cmm/test-specification-management/test-specifications/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/architecture-tests/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/architecture-tests/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/domain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/events-kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/events-kafka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/foundation-bom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/foundation-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/governance/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/governance/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/integration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/integration/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/localization/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/localization/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/logging/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/logging/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/observability/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/observability/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/pact/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/pact/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/persistence/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/persistence/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/security/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/service-foundation-bom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/service-foundation-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/snapshot-support/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/snapshot-support/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/view-jsonapi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/view-jsonapi/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/webclient/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foundation/webclient/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/java/platform-build-parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/java/platform-build-parent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/java/service-bom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/java/service-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/platform/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

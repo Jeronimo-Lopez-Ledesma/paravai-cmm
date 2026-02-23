@@ -1,0 +1,15 @@
+package com.dekra.service.foundation.infrastructure.kafka;
+
+import com.dekra.service.foundation.domaincore.event.DomainEvent;
+import org.springframework.stereotype.Component;
+
+@Component
+public class KafkaTopicResolver {
+    public String resolve(DomainEvent event) {
+        PublishToKafka annotation = event.getClass().getAnnotation(PublishToKafka.class);
+        if (annotation != null && !annotation.topic().isBlank()) {
+            return annotation.topic();
+        }
+        return "domain-events." + event.getClass().getSimpleName();
+    }
+}

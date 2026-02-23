@@ -1,0 +1,63 @@
+package com.dekra.service.foundation.infrastructure.kafka;
+
+import com.dekra.service.foundation.domaincore.event.DomainEvent;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Configuration
+@EnableConfigurationProperties(KafkaEventPublisherProperties.class)
+@ConditionalOnProperty(name = "kafka.enabled", havingValue = "true", matchIfMissing = true)
+public class KafkaSenderConfig {
+
+    @Value("${kafka.bootstrapServers}")
+    private String bootstrapServers;
+
+    /**
+     * KafkaSender<String, DomainEvent> bean used to publish domain events to Kafka.
+     *
+     * bootstrapServers:
+     * - This is the list of Kafka brokers used by the producer to connect to the Kafka cluster.
+     * - It must be configured via 'kafka.bootstrapServers' in application.yaml or as an environment variable.
+     * - Example: kafka.bootstrapServers=broker1:9092,broker2:9092
+     *
+     * Example snippet for application.yaml:
+     *  *
+     *  * kafka:
+     *  *   bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+     *  *
+     *  * This supports dynamic environment configuration. You can override it in production like:
+     *  *   export KAFKA_BOOTSTRAP_SERVERS=kafka-prod.solutionpro.com:9092
+     * Important:
+     * - Any service that wants to use this KafkaSender **must define the 'kafka.bootstrapServers' property** in its configuration.
+     * - If omitted, the service will fail to initialize the KafkaSender bean.
+     *
+     * Notes:
+     * - The bootstrap servers are only used to discover the rest of the Kafka cluster.
+     * - You don't need to list all brokers—just a few accessible ones.
+     */
+
+    @Bean
+    public KafkaSender<String, DomainEvent> domainEventKafkaSender(KafkaEventPublisherProperties props) {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, props.getBootstrapServers());
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(ProducerConfig.CLIENT_ID_CONFIG, props.getClientId());
+        config.put(ProducerConfig.ACKS_CONFIG, props.getAcks());
+        config.put(ProducerConfig.RETRIES_CONFIG, props.getRetries());
+
+        SenderOptions<String, DomainEvent> options = SenderOptions.create(config);
+        return KafkaSender.create(options);
+    }
+}

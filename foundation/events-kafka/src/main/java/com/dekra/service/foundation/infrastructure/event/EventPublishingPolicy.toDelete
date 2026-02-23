@@ -1,0 +1,26 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class EventPublishingPolicy {
+    private final EventPublishingPolicyProps cfg;
+
+
+    public EventPublishingPolicy(EventPublishingPolicyProps cfg) { this.cfg = cfg; }
+
+
+    public boolean shouldPublish(Object event) {
+        String fqcn = event.getClass().getName();
+        if (cfg.getDenylist().contains(fqcn)) return false;
+        boolean annotated = event.getClass().isAnnotationPresent(PublishToKafka.class);
+        if (annotated) return true; // anotación marca intención
+        return cfg.getAllowlist().contains(fqcn);
+    }
+
+
+    public String annotationTopicOrNull(Object event) {
+        PublishToKafka ann = event.getClass().getAnnotation(PublishToKafka.class);
+        return (ann != null && !ann.topic().isBlank()) ? ann.topic() : null;
+    }
+}

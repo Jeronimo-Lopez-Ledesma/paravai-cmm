@@ -1,0 +1,12 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import java.lang.annotation.*;
+
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface PublishToKafka {
+    /** Topic explícito, opcional.
+     * Si vacío, se usará el TopicResolver */
+    String topic() default "";
+}

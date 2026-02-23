@@ -1,0 +1,17 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+import java.util.Set;
+
+@Component
+@ConfigurationProperties(prefix = "events.kafka.policy")
+class EventPublishingPolicyProps {
+    private Set<String> allowlist = Set.of();
+    private Set<String> denylist = Set.of();
+    public Set<String> getAllowlist() { return allowlist; }
+    public void setAllowlist(Set<String> a) { this.allowlist = a; }
+    public Set<String> getDenylist() { return denylist; }
+    public void setDenylist(Set<String> d) { this.denylist = d; }
+}

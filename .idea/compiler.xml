@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="events-kafka" />
+        <module name="localization" />
+        <module name="snapshot-support" />
+        <module name="webclient" />
+        <module name="test-cases" />
+        <module name="view-jsonapi" />
+        <module name="standards" />
+        <module name="security" />
+        <module name="test-specifications" />
+        <module name="test-specification-management-common" />
+        <module name="service-bom" />
+        <module name="composition" />
+        <module name="pact" />
+        <module name="readmodel" />
+        <module name="domain" />
+        <module name="integration" />
+        <module name="logging" />
+        <module name="persistence" />
+        <module name="architecture-tests" />
+        <module name="observability" />
+        <module name="governance" />
+        <module name="standard-relationships" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="paravai" target="21" />
+      <module name="service-foundation-bom" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="test-specification-management-common" options="-parameters" />
+    </option>
+  </component>
+</project>

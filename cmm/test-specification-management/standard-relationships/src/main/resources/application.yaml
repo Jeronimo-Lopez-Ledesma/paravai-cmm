@@ -1,0 +1,98 @@
+spring:
+  application:
+    name: standard-relationships
+  main:
+    web-application-type: reactive
+
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+
+  messages:
+    basename: i18n/messages, i18n/common/messages
+    fallback-to-system-locale: false
+    encoding: UTF-8
+
+server:
+  port: 8096
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Use integration publisher (DomainEventEnvelope -> KafkaIntegrationEventPublisher)
+kafka:
+  enabled: true
+  integration:
+    topic-prefix: regulations
+    default-topic: domain-events
+    pattern: "%s.events.%s"
+
+# Disable legacy DomainEvent->Kafka forwarder
+events:
+  kafka:
+    enabled: false
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /docs/standards.yaml
+
+logging:
+  level:
+    org.springframework.boot.context.config: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+  info:
+    env:
+      enabled: true
+  health:
+    redis:
+      enabled: false
+
+  metrics:
+    tags:
+      cmm: test-specification-management
+      service: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        cmm.application.operation.duration: true
+        cmm.outbound.operation.duration: true
+      percentiles:
+        cmm.application.operation.duration: 0.5,0.9,0.95,0.99
+        cmm.outbound.operation.duration: 0.5,0.9,0.95,0.99
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    enabled: false
+  instance:
+    prefer-ip-address: false
+    hostname: ${HOSTNAME}
+
+foundation:
+  security:
+    cors:
+      allowed-origins:
+        - http://localhost:4200
+        - https://dekra-solutionpro.com/dev
+        - https://dekra-solutionpro.com/test
+        - https://dekra-solutionpro.com
+      allowed-methods: ["*"]
+      allowed-headers: ["*"]
+      allow-credentials: true

@@ -1,0 +1,64 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import com.dekra.service.foundation.domaincore.event.DomainEvent;
+import com.dekra.service.foundation.domaincore.event.ReactiveDomainEventPublisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Objects;
+
+@Primary
+@Component
+@ConditionalOnBean(DomainEventDispatcher.class)
+public class GeneralReactiveDomainEventPublisher implements ReactiveDomainEventPublisher {
+
+    private static final Logger log = LoggerFactory.getLogger(GeneralReactiveDomainEventPublisher.class);
+
+    private final DomainEventDispatcher dispatcher;
+
+    public GeneralReactiveDomainEventPublisher(DomainEventDispatcher dispatcher) {
+        this.dispatcher = Objects.requireNonNull(dispatcher, "dispatcher");
+    }
+
+    @Override
+    public Mono<Void> publish(DomainEvent event) {
+        if (event == null) {
+            return Mono.error(new IllegalArgumentException("DomainEvent must not be null"));
+        }
+        if (event.metadata() == null) {
+            return Mono.error(new IllegalStateException("DomainEvent.metadata must not be null"));
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Publishing domain event type={}, eventId={}",
+                    event.getClass().getSimpleName(),
+                    safeEventId(event));
+        }
+
+        return dispatcher.dispatch(event);
+    }
+
+    @Override
+    public Mono<Void> publishAll(List<? extends DomainEvent> events) {
+        if (events == null || events.isEmpty()) return Mono.empty();
+
+        // Ordered dispatch (predictable). If you ever need parallelism, make it explicit.
+        return Flux.fromIterable(events)
+                .concatMap(this::publish)
+                .then();
+    }
+
+    private static String safeEventId(DomainEvent event) {
+        try {
+            return event.metadata().eventId().toString();
+        } catch (Exception ignored) {
+            return "no-event-id";
+        }
+    }
+}

@@ -1,0 +1,19 @@
+package com.dekra.service.foundation.infrastructure.event;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+
+@Component
+@ConfigurationProperties(prefix = "events.kafka.topics")
+public class EventsTopicProperties {
+    /** Topic por defecto si no hay mapping ni anotación */
+    private String fallback;
+    /** Topic para EntityChangedEvent (opcional) */
+    private String entityChanged;
+    // getters/setters
+    public String getFallback() { return fallback; }
+    public void setFallback(String f) { this.fallback = f; }
+    public String getEntityChanged() { return entityChanged; }
+    public void setEntityChanged(String e) { this.entityChanged = e; }
+}

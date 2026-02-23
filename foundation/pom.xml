@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.paravai.foundation</groupId>
+    <artifactId>foundation</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Paravai Foundation</name>
+    <description>Multi-module parent for shared libraries </description>
+
+    <modules>
+        <module>foundation-bom</module>
+        <module>events-kafka</module>
+        <module>domain</module>
+        <module>localization</module>
+        <module>view-jsonapi</module>
+        <module>pact</module>
+        <module>security</module>
+        <module>logging</module>
+        <module>governance</module>
+        <module>persistence</module>
+        <module>architecture-tests</module>
+        <module>snapshot-support</module>
+        <module>integration</module>
+        <module>webclient</module>
+        <module>observability</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                    <configuration>
+                        <release>${maven.compiler.release}</release>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.11</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

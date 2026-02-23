@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <!-- ===================================================================
+         SPRING PROPERTIES
+         =================================================================== -->
+    <springProperty name="APP_NAME" source="spring.application.name" defaultValue="unknown-service"/>
+    <springProperty name="ENV" source="spring.profiles.active" defaultValue="local"/>
+
+    <!-- ===================================================================
+         CONSOLE APPENDER (JSON STRUCTURED)
+         =================================================================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Timestamp in UTC -->
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+
+                <!-- Core log fields -->
+                <pattern>
+                    <pattern>
+                        {
+                        "level": "%level",
+                        "logger": "%logger",
+                        "thread": "%thread",
+                        "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+
+                <!-- Unified MDC fields across all DPS services -->
+                <mdc>
+                    <includeMdcKeyName>traceId</includeMdcKeyName>
+                    <includeMdcKeyName>userOid</includeMdcKeyName>
+                    <includeMdcKeyName>operationName</includeMdcKeyName>
+                    <includeMdcKeyName>mongoOperation</includeMdcKeyName>
+                    <includeMdcKeyName>externalService</includeMdcKeyName>
+                    <includeMdcKeyName>externalOperation</includeMdcKeyName>
+                    <includeMdcKeyName>retryCount</includeMdcKeyName>
+                    <includeMdcKeyName>kafkaTopic</includeMdcKeyName>
+                    <includeMdcKeyName>kafkaKey</includeMdcKeyName>
+                </mdc>
+
+                <!-- Static metadata for observability -->
+                <globalCustomFields>
+                    {"service":"${APP_NAME}", "environment":"${ENV}"}
+                </globalCustomFields>
+
+                <arguments/>
+                <stackTrace>
+                    <fieldName>stacktrace</fieldName>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- ===================================================================
+         FILE APPENDER (JSON STRUCTURED + DAILY ROLLING)
+         =================================================================== -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/${APP_NAME}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/${APP_NAME}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+
+                <pattern>
+                    <pattern>
+                        {
+                        "level": "%level",
+                        "logger": "%logger",
+                        "thread": "%thread",
+                        "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+
+                <mdc>
+                    <includeMdcKeyName>traceId</includeMdcKeyName>
+                    <includeMdcKeyName>userOid</includeMdcKeyName>
+                    <includeMdcKeyName>operationName</includeMdcKeyName>
+                    <includeMdcKeyName>mongoOperation</includeMdcKeyName>
+                    <includeMdcKeyName>externalService</includeMdcKeyName>
+                    <includeMdcKeyName>externalOperation</includeMdcKeyName>
+                    <includeMdcKeyName>retryCount</includeMdcKeyName>
+                    <includeMdcKeyName>kafkaTopic</includeMdcKeyName>
+                    <includeMdcKeyName>kafkaKey</includeMdcKeyName>
+                </mdc>
+
+                <globalCustomFields>
+                    {"service":"${APP_NAME}", "environment":"${ENV}"}
+                </globalCustomFields>
+
+                <arguments/>
+                <stackTrace>
+                    <fieldName>stacktrace</fieldName>
+                </stackTrace>
+
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- ===================================================================
+     ROOT LOGGER
+     =================================================================== -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
+
+
