@@ -35,10 +35,8 @@
     <modules>
         <module>community-management-bom</module>
         <module>community-management-common</module>
-        <module>communities</module>
-        <module>memberships</module>
-        <module>composition</module>
-        <module>readmodel</module>
+        <module>community</module>
+        <module>membership</module>
     </modules>
 
     <!-- ========================================================= -->

@@ -39,10 +39,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.paravai.foundation</groupId>
-            <artifactId>domain-core</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -44,10 +44,6 @@
         </dependency>
         <dependency>
             <groupId>com.paravai.foundation</groupId>
-            <artifactId>domain-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.paravai.foundation</groupId>
             <artifactId>integration</artifactId>
         </dependency>
         <dependency>

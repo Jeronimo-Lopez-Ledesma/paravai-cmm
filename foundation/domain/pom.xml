@@ -48,10 +48,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
         </dependency>
-      <dependency>
-        <groupId>com.paravai.foundation</groupId>
-        <artifactId>domain-core</artifactId>
-      </dependency>
 
         <!-- JUnit 5 -->
         <dependency>
@@ -79,6 +75,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- NanoId / MIT -->
+        <dependency>
+            <groupId>com.aventrix.jnanoid</groupId>
+            <artifactId>jnanoid</artifactId>
         </dependency>
 
 

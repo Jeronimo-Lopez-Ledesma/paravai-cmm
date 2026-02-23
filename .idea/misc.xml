@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/cmm/community-management/community-management-bom/pom.xml" />
         <option value="$PROJECT_DIR$/edge-service/pom.xml" />
         <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/cmm/community-management/membership/pom.xml" />
       </list>
     </option>
   </component>
