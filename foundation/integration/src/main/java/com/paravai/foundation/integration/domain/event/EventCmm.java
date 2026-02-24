@@ -4,10 +4,10 @@ import java.util.Locale;
 
 public enum EventCmm {
 
-    TESTSPEC("test-specification-management"),          // Test Specification Management
-    CERT("certificate-management"),                     // Certificate Management
-    PRESALESTA("pre-sales-technical-analysis"),         // Presales Technical Analysis
-    CUSTPRODUCT("customer-product-management");         // Custom Product Management
+    COMMUNITIES_MANAGEMENT("communities-management"),          // Communities Management
+    CERT("certificate-management"),              // Certificate Management
+    PRESALESTA("pre-sales-technical-analysis"),  // Presales Technical Analysis
+    CUSTPRODUCT("customer-product-management");  // Custom Product Management
 
     private final String token;
 

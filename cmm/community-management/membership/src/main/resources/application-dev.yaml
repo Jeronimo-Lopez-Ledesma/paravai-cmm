@@ -6,11 +6,11 @@ app:
 
 info:
   app:
-    name: standards
-    description: Standards module
+    name: membership
+    description: Membership Aggregate
     environment: ${app.environment:UNKNOWN}
     version: 1.0.0
-    owner: Platform Crew
+    owner: Jerónimo López
 
 
 # ============================================================
@@ -49,11 +49,11 @@ kafka:
   producer:
     acks: all
     retries: 3
-    client-id: standards
+    client-id: membership
 
   # Topic resolution strategy for DomainEventEnvelope publishing
   integration:
-    topic-prefix: regulations           # optional prefix for topics
+    topic-prefix: communities           # optional prefix for topics
     default-topic: domain-events        # fallback if entityType is missing
     # pattern: "%s.events.%s"           # optional override (default already set in code)
 

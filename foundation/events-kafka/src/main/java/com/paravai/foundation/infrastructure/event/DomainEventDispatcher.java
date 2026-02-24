@@ -1,7 +1,7 @@
 package com.paravai.foundation.infrastructure.event;
 
-import com.paravai.foundation.domaincore.event.DomainEvent;
-import com.paravai.foundation.domaincore.event.DomainEventHandler;
+import com.paravai.foundation.domain.event.DomainEvent;
+import com.paravai.foundation.domain.event.DomainEventHandler;
 import com.paravai.foundation.observability.metrics.OperationCtx;
 import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
 import lombok.extern.slf4j.Slf4j;

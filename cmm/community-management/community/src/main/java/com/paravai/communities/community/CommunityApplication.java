@@ -1,4 +1,4 @@
-package com.paravai.regulations.standards;
+package com.paravai.communities.community;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-		"com.paravai.regulations.standards",
+		"com.paravai.communities.community",
         "com.paravai.foundation.viewjsonapi.exception",
 		"com.paravai.foundation.localization",
 		"com.paravai.foundation.infrastructure.event",
@@ -23,13 +23,13 @@ import java.util.Locale;
         "com.paravai.foundation.integration",
 
 })
-public class StandardsApplication {
+public class CommunityApplication {
 
 	public static void main(String[] args) {
 
-		Logger log = LoggerFactory.getLogger(StandardsApplication.class);
+		Logger log = LoggerFactory.getLogger(CommunityApplication.class);
 		log.info("PRUEBA DE LOG ACTIVA");
-		SpringApplication.run(StandardsApplication.class, args);
+		SpringApplication.run(CommunityApplication.class, args);
 	}
 
     @Bean
@@ -49,7 +49,7 @@ public class StandardsApplication {
 	@Bean
 	CommandLineRunner testMessages(MessageSource messageSource) {
 		return args -> {
-			String message = messageSource.getMessage("standards.standardType.TECHNICAL_STANDARD", null, Locale.ENGLISH);
+			String message = messageSource.getMessage("community.visibility.PUBLIC", null, Locale.ENGLISH);
 			System.out.println("i18n resolved (EN): " + message);
 		};
 	}

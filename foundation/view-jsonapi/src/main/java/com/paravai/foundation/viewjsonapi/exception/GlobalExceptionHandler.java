@@ -1,6 +1,6 @@
 package com.paravai.foundation.viewjsonapi.exception;
 
-import com.paravai.foundation.domaincore.exception.CustomException;
+import com.paravai.foundation.domain.exception.CustomException;
 import com.paravai.foundation.localization.MessageService;
 import com.paravai.foundation.viewjsonapi.jsonapi.DetailsError;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiErrorFactory;

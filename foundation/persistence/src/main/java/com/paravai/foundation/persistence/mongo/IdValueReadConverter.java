@@ -1,7 +1,7 @@
 package com.paravai.foundation.persistence.mongo;
 
 
-import com.paravai.foundation.domaincore.value.IdValue;
+import com.paravai.foundation.domain.value.IdValue;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: standards
+    name: community
   main:
     web-application-type: reactive
 
@@ -24,7 +24,7 @@ server:
 kafka:
   enabled: true
   integration:
-    topic-prefix: regulations
+    topic-prefix: communities
     default-topic: domain-events
     pattern: "%s.events.%s"
 
@@ -66,7 +66,7 @@ management:
 
   metrics:
     tags:
-      cmm: test-specification-management
+      cmm: communities-management
       service: ${spring.application.name}
     distribution:
       percentiles-histogram:
@@ -90,9 +90,9 @@ foundation:
     cors:
       allowed-origins:
         - http://localhost:4200
-        - https://dekra-solutionpro.com/dev
-        - https://dekra-solutionpro.com/test
-        - https://dekra-solutionpro.com
+        - https://paravai.com/dev
+        - https://paravai.com/test
+        - https://paravai.com
       allowed-methods: ["*"]
       allowed-headers: ["*"]
       allow-credentials: true

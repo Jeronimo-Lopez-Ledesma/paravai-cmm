@@ -1,6 +1,6 @@
 package com.paravai.foundation.persistence.mongo;
 
-import com.paravai.foundation.domaincore.value.URLValue;
+import com.paravai.foundation.domain.value.URLValue;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 

@@ -1,4 +1,4 @@
-package com.paravai.communities.community.application.common;
+package com.paravai.communities.community.application.event;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.foundation.domain.value.ResourceTypeValue;

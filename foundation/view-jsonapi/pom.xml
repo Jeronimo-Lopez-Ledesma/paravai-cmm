@@ -29,6 +29,10 @@
     <dependencies>
         <dependency>
             <groupId>com.paravai.foundation</groupId>
+            <artifactId>domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.paravai.foundation</groupId>
             <artifactId>localization</artifactId>
         </dependency>
         <dependency>

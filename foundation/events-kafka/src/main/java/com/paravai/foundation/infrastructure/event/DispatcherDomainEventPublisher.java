@@ -1,7 +1,7 @@
 package com.paravai.foundation.infrastructure.event;
 
-import com.paravai.foundation.domaincore.event.DomainEvent;
-import com.paravai.foundation.domaincore.event.ReactiveDomainEventPublisher;
+import com.paravai.foundation.domain.event.DomainEvent;
+import com.paravai.foundation.domain.event.ReactiveDomainEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

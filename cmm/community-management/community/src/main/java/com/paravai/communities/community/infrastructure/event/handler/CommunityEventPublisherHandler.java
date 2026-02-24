@@ -1,11 +1,12 @@
 package com.paravai.communities.community.infrastructure.event.handler;
 
-import com.paravai.foundation.domaincore.event.DomainEventHandler;
-import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+import com.paravai.communities.community.infrastructure.event.mapper.AuditTrailEnvelopeMapper;
+import com.paravai.communities.community.infrastructure.event.mapper.CommunityEventEnvelopeMapper;
+import com.paravai.communities.community.infrastructure.event.mapper.HistorizationEnvelopeMapper;
+import com.paravai.foundation.domain.event.DomainEventHandler;
+import com.paravai.foundation.domain.event.EntityChangedEvent;
 import com.paravai.foundation.infrastructure.kafka.IntegrationEventPublisher;
-import com.paravai.regulations.standards.infrastructure.event.mapper.AuditTrailEnvelopeMapper;
-import com.paravai.regulations.standards.infrastructure.event.mapper.HistorizationEnvelopeMapper;
-import com.paravai.regulations.standards.infrastructure.event.mapper.StandardEventEnvelopeMapper;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +24,15 @@ import reactor.core.publisher.Mono;
  */
 @Component
 @RequiredArgsConstructor
-public class StandardEventPublisherHandler implements DomainEventHandler<EntityChangedEvent> {
+public class CommunityEventPublisherHandler implements DomainEventHandler<EntityChangedEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(StandardEventPublisherHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(CommunityEventPublisherHandler.class);
 
     private final IntegrationEventPublisher publisher;
 
     private final AuditTrailEnvelopeMapper auditMapper;
     private final HistorizationEnvelopeMapper historizationMapper;
-    private final StandardEventEnvelopeMapper integrationMapper;
+    private final CommunityEventEnvelopeMapper integrationMapper;
 
     @Override
     public Mono<Void> handle(EntityChangedEvent event) {

@@ -1,6 +1,7 @@
 package com.paravai.foundation.governance.events.audit.v1;
 
-import com.paravai.foundation.domaincore.event.EntityChangedEvent;
+
+import com.paravai.foundation.domain.event.EntityChangedEvent;
 
 public record AuditTrailPayloadV1(
         String resourceType,

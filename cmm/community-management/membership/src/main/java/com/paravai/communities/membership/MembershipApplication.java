@@ -1,4 +1,4 @@
-package com.paravai.communities.community;
+package com.paravai.communities.membership;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-		"com.paravai.communities.community",
+		"com.paravai.communities.membership",
         "com.paravai.foundation.viewjsonapi.exception",
 		"com.paravai.foundation.localization",
 		"com.paravai.foundation.infrastructure.event",
@@ -23,13 +23,13 @@ import java.util.Locale;
         "com.paravai.foundation.integration",
 
 })
-public class CommunityApplication {
+public class MembershipApplication {
 
 	public static void main(String[] args) {
 
-		Logger log = LoggerFactory.getLogger(CommunityApplication.class);
+		Logger log = LoggerFactory.getLogger(MembershipApplication.class);
 		log.info("PRUEBA DE LOG ACTIVA");
-		SpringApplication.run(CommunityApplication.class, args);
+		SpringApplication.run(MembershipApplication.class, args);
 	}
 
     @Bean

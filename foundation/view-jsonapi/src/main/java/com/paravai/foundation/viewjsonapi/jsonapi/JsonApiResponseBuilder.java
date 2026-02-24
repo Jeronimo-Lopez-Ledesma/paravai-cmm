@@ -1,6 +1,6 @@
 package com.paravai.foundation.viewjsonapi.jsonapi;
 
-import com.paravai.foundation.domaincore.model.Identifiable;
+import com.paravai.foundation.domain.model.Identifiable;
 import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 
 import org.springframework.http.server.reactive.ServerHttpRequest;

@@ -2,7 +2,7 @@ package com.paravai.foundation.persistence.exception;
 
 
 
-import com.paravai.foundation.domaincore.exception.ServiceUnavailableException;
+import com.paravai.foundation.domain.exception.ServiceUnavailableException;
 import com.mongodb.MongoException;
 import org.springframework.dao.DataAccessException;
 

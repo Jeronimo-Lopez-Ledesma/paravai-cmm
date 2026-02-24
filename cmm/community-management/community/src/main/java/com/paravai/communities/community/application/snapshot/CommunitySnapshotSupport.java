@@ -1,4 +1,4 @@
-package com.paravai.communities.community.application.common;
+package com.paravai.communities.community.application.snapshot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.communities.community.domain.model.Community;

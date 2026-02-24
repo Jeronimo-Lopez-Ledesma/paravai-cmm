@@ -20,5 +20,8 @@ public class RequestContext {
         return ctx.getOrDefault(SOURCE_SYSTEM_KEY, "unknown");
     }
 
+    public static String getTenantId(ContextView ctx) {
+        return ctx.getOrDefault(SOURCE_SYSTEM_KEY, "unknown");
+    }
 
 }
