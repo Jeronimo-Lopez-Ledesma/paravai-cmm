@@ -1,0 +1,164 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      #defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: false
+    hostname: ${HOSTNAME}
+spring:
+  application:
+    name: edge-service
+  session:
+    store-type: redis
+    timeout: 30m
+
+  redis:
+    host: valkey
+    port: 6379
+
+  cloud:
+    gateway:
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            series: SERVER_ERROR
+            exceptions: java.io.IOException, java.util.concurrent.TimeoutException
+            backoff:
+              firstBackoff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
+
+      routes:
+        - id: auth-service
+          uri: ${IDENTITY_SERVICE_URL:http://localhost:9002}
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+        - id: form-submission-service
+          uri: ${FORM_SUBMISSION_SERVICE_URL:http://localhost:9001}
+          predicates:
+            - Path=/form-submission/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: history-submission-service
+          uri: lb://history-submission
+          predicates:
+            - Path=/history-submission/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: history-persistance-service
+          uri: lb://history-persistance
+          predicates:
+            - Path=/history-persistance/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: history-query-service
+          uri: lb://history-query
+          predicates:
+            - Path=/history-query/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: audit-log-service
+          uri: lb://audit-log
+          predicates:
+            - Path=/audit-log/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: dynamic-form-service
+          uri: lb://dynamic-forms
+          predicates:
+            - Path=/dynamic-form/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: formCircuitBreaker
+                fallbackUri: forward:/generic-fallback
+            - StripPrefix=1
+
+        - id: portal-access
+          uri: lb://portal-access
+          predicates:
+            - Path=/portal-access/**
+          filters:
+            - StripPrefix=1
+
+        - id: doc-verify
+          uri: lb://DocVerifyService
+          predicates:
+            - Path=/doc-verify/**
+          filters:
+            - StripPrefix=1
+
+        - id: sparta
+          uri: lb://sparta-backend
+          predicates:
+            - Path=/sparta/**
+          filters:
+            - StripPrefix=1
+
+management:
+  metrics:
+    tags:
+      application: edge-service
+    enable:
+      gateway_trace_deduplicated_total: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+        spring.cloud.gateway.requests: true
+      slo:
+        http.server.requests: 100ms,200ms,300ms,500ms,1s,2s
+        spring.cloud.gateway.requests: 100ms,200ms,300ms,500ms,1s,2s
+  otlp:
+    metrics:
+      export:
+        url: http://10.206.14.24:11318/v1/metrics
+        step: 10s
+        batchSize: 10000
+        aggregationTemporality: cumulative
+        resourceAttributes:
+          service.name: edge-service
+logging:
+  level:
+    io.github.resilience4j.circuitbreaker: DEBUG
+    org.springframework.boot.actuate.endpoint.web: DEBUG
+    io.micrometer: DEBUG
+    io.micrometer.registry.otlp: TRACE
+    io.micrometer.core.ipc.http.HttpUrlConnectionSender: TRACE
+    org.springframework.web: DEBUG
