@@ -3,12 +3,17 @@ package com.paravai.communities.community.application.command.create;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.communities.community.application.common.CommunityMetrics;
 import com.paravai.communities.community.application.event.CommunityEventFactory;
+import com.paravai.communities.community.application.exception.CommunityNotFoundException;
+import com.paravai.communities.community.application.exception.ForbiddenCommunityOperationException;
 import com.paravai.communities.community.application.snapshot.CommunitySnapshotSupport;
 import com.paravai.communities.community.domain.model.Community;
+import com.paravai.communities.community.domain.port.CommunityAuthorizationPort;
 import com.paravai.communities.community.domain.repository.CommunityRepository;
+import com.paravai.communities.community.domain.value.CommunityVisibilityValue;
 import com.paravai.foundation.domain.event.EntityChangedEvent;
 import com.paravai.foundation.domain.event.NonBlockingEventPublisher;
 import com.paravai.foundation.domain.event.ReactiveDomainEventPublisher;
+import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.domain.value.OperationTypeValue;
 import com.paravai.foundation.observability.metrics.MetricsSupport;
 import com.paravai.foundation.observability.metrics.OperationCtx;
@@ -28,6 +33,7 @@ public class CreateCommunityService {
     private static final Logger log = LoggerFactory.getLogger(CreateCommunityService.class);
 
     private final CommunityRepository repo;
+    private final CommunityAuthorizationPort authz;
     private final NonBlockingEventPublisher nonBlockingPublisher;
     private final CommunitySnapshotSupport snapshots;
     private final CommunityEventFactory communityEventFactory;
@@ -35,12 +41,14 @@ public class CreateCommunityService {
 
     public CreateCommunityService(
             CommunityRepository repo,
+            CommunityAuthorizationPort authz,
             ReactiveDomainEventPublisher domainEventPublisher,
             SnapshotMapper<Community> snapshotMapper,
             CommunityEventFactory communityEventFactory,
             ReactiveOperationMetrics metrics
     ) {
         this.repo = Objects.requireNonNull(repo, "repo");
+        this.authz = Objects.requireNonNull(authz, "authz");
         this.nonBlockingPublisher = new NonBlockingEventPublisher(
                 Objects.requireNonNull(domainEventPublisher, "domainEventPublisher"),
                 log
@@ -98,6 +106,9 @@ public class CreateCommunityService {
             });
         });
     }
+
+
+    // Helpers
 
     private String buildMessage(OperationTypeValue op, Community c) {
         // Keep it stable and easy to search in logs/AuditLog

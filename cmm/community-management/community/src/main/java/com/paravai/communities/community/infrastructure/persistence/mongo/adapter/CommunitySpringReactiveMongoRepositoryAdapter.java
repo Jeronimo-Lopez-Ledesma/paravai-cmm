@@ -2,6 +2,7 @@ package com.paravai.communities.community.infrastructure.persistence.mongo.adapt
 
 
 import com.paravai.communities.community.application.common.CommunityMetrics;
+import com.paravai.communities.community.domain.exception.DuplicateCommunityBusinessIdentityException;
 import com.paravai.communities.community.domain.model.Community;
 import com.paravai.communities.community.domain.repository.CommunityRepository;
 import com.paravai.communities.community.infrastructure.persistence.mongo.document.CommunityDocument;
@@ -51,7 +52,7 @@ public class CommunitySpringReactiveMongoRepositoryAdapter implements CommunityR
                 springRepo.save(CommunityDocument.fromDomain(community))
                         .map(CommunityDocument::toDomain)
                         .onErrorMap(DuplicateKeyException.class, ex ->
-                                new IllegalArgumentException("Duplicate Community business identity (tenantId+slug)", ex)
+                                new DuplicateCommunityBusinessIdentityException(community.tenantId(), community.slug())
                         )
         );
     }
