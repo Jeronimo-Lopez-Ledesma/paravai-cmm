@@ -105,8 +105,8 @@ resilience4j:
         retryExceptions:
           - java.io.IOException
           - reactor.netty.http.client.PrematureCloseException
-        ignoreExceptions:
-          - com.paravai.regulations.standards.domain.exception.DuplicateStandardVersionException
+
+
 
 # Custom decorator order (used in WebClient config)
 resilience:
@@ -142,4 +142,4 @@ logging:
 # SERVER (DEV)
 # ============================================================
 server:
-  port: 8095
+  port: 8096

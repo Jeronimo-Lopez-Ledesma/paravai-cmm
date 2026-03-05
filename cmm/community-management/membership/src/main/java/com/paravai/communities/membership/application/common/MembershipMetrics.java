@@ -1,4 +1,4 @@
-package com.paravai.communities.membership.common;
+package com.paravai.communities.membership.application.common;
 
 import com.paravai.foundation.observability.metrics.ComponentIdentity;
 import com.paravai.foundation.observability.metrics.ModuleType;

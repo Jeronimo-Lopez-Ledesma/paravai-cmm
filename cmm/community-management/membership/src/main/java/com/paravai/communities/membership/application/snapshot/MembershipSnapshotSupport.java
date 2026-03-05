@@ -1,4 +1,4 @@
-package com.paravai.communities.membership.common;
+package com.paravai.communities.membership.application.snapshot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.communities.membership.domain.model.Membership;
@@ -14,7 +14,7 @@ public final class MembershipSnapshotSupport {
         this.snapshotMapper = Objects.requireNonNull(snapshotMapper, "snapshotMapper");
     }
 
-    public JsonNode snapshot(Membership standard) {
-        return snapshotMapper.toSnapshot(standard);
+    public JsonNode snapshot(Membership membership) {
+        return snapshotMapper.toSnapshot(membership);
     }
 }

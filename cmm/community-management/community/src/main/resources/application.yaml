@@ -20,6 +20,26 @@ server:
     include-message: always
     include-binding-errors: always
 
+# -----------------------------------------------------------------------------
+# gRPC server configuration (net.devh grpc-server-spring-boot-starter)
+# -----------------------------------------------------------------------------
+grpc:
+  server:
+    # gRPC server port for Standards service.
+    # Must be DIFFERENT from HTTP port (8095) and from other services.
+    # Default is 9090 if not specified.
+    port: 9090
+
+    # For local development we use plaintext (no TLS).
+    # In production this should be secured with TLS.
+    security:
+      enabled: false
+
+    # Optional: keepalive tuning (safe defaults for local dev)
+    permitKeepAliveWithoutCalls: true
+    permitKeepAliveTime: 5m
+
+
 # Use integration publisher (DomainEventEnvelope -> KafkaIntegrationEventPublisher)
 kafka:
   enabled: true

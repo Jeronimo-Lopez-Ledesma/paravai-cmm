@@ -1,5 +1,7 @@
 package com.paravai.communities.membership.domain.model;
 
+import com.paravai.communities.membership.domain.value.CommunityRoleValue;
+import com.paravai.communities.membership.domain.value.MembershipStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
 
 import java.time.Instant;
@@ -42,8 +44,8 @@ public final class MembershipFactory {
                 tenantId,
                 communityId,
                 userId,
-                CommunityRole.ADMIN,
-                MembershipStatus.ACTIVE,
+                CommunityRoleValue.ADMIN,
+                MembershipStatusValue.ACTIVE,
                 now,
                 null,
                 now,
@@ -71,8 +73,8 @@ public final class MembershipFactory {
                 tenantId,
                 communityId,
                 inviteeUserId,
-                CommunityRole.MEMBER,
-                MembershipStatus.PENDING,
+                CommunityRoleValue.MEMBER,
+                MembershipStatusValue.PENDING,
                 now,
                 null,
                 now,
@@ -93,8 +95,8 @@ public final class MembershipFactory {
                                       IdValue tenantId,
                                       IdValue communityId,
                                       IdValue userId,
-                                      CommunityRole role,
-                                      MembershipStatus status,
+                                      CommunityRoleValue role,
+                                      MembershipStatusValue status,
                                       Instant since,
                                       Instant deactivatedAt,
                                       Instant createdAt,

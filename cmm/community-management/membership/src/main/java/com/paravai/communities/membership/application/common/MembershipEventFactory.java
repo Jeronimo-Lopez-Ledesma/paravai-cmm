@@ -1,4 +1,4 @@
-package com.paravai.communities.membership.common;
+package com.paravai.communities.membership.application.common;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.foundation.domain.event.EntityChangedEvent;

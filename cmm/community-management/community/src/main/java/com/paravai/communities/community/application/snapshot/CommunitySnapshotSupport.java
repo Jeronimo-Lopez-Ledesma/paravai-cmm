@@ -15,7 +15,7 @@ public final class CommunitySnapshotSupport {
         this.snapshotMapper = Objects.requireNonNull(snapshotMapper, "snapshotMapper");
     }
 
-    public JsonNode snapshot(Community standard) {
-        return snapshotMapper.toSnapshot(standard);
+    public JsonNode snapshot(Community community) {
+        return snapshotMapper.toSnapshot(community);
     }
 }

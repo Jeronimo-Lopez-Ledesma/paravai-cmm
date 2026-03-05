@@ -13,11 +13,17 @@ public final class CommunityRoleValue implements LocalizableValueObject {
     private final String code;
     private final String label;
 
+    // ---- Static constants for type-safe usage (instead of enum) ----
+    public static final CommunityRoleValue OWNER  = new CommunityRoleValue("OWNER", "Owner");
+    public static final CommunityRoleValue ADMIN  = new CommunityRoleValue("ADMIN", "Admin");
+    public static final CommunityRoleValue MEMBER = new CommunityRoleValue("MEMBER", "Member");
+    public static final CommunityRoleValue GUEST  = new CommunityRoleValue("GUEST", "Guest");
+
     private static final Map<String, CommunityRoleValue> CATALOG = Map.ofEntries(
-            Map.entry("OWNER", new CommunityRoleValue("OWNER", "Owner")),
-            Map.entry("ADMIN", new CommunityRoleValue("ADMIN", "Admin")),
-            Map.entry("MEMBER", new CommunityRoleValue("MEMBER", "Member")),
-            Map.entry("GUEST", new CommunityRoleValue("GUEST", "Guest"))
+            Map.entry("OWNER",  OWNER),
+            Map.entry("ADMIN",  ADMIN),
+            Map.entry("MEMBER", MEMBER),
+            Map.entry("GUEST",  GUEST)
     );
 
     private CommunityRoleValue(String code, String label) {
@@ -40,26 +46,26 @@ public final class CommunityRoleValue implements LocalizableValueObject {
     public String getCode() { return code; }
     public String getLabel() { return label; }
 
-    public boolean isOwner() { return "OWNER".equals(code); }
-    public boolean isAdmin() { return "ADMIN".equals(code); }
+    public boolean isOwner() { return this == OWNER; }
+    public boolean isAdmin() { return this == ADMIN; }
 
     public static List<Map<String, String>> catalog() {
-        return CATALOG.values().stream()
+        return values().stream()
                 .map(v -> Map.of("code", v.getCode(), "label", v.getLabel()))
                 .toList();
     }
 
     public static List<CommunityRoleValue> values() {
-        return List.copyOf(CATALOG.values());
+        return List.of(OWNER, ADMIN, MEMBER, GUEST);
     }
 
     @Override
     public String getLocalizedLabel(Locale locale, MessageService messageService) {
-        return messageService.get("community.role." + code, locale);
+        // NOTE: your keys were "membership.communityRole.<CODE>" (per your earlier decision)
+        return messageService.get("membership.communityRole." + code, locale);
     }
 
-    @Override
-    public String toString() { return code; }
+    @Override public String toString() { return code; }
 
     @Override
     public boolean equals(Object o) {
@@ -67,6 +73,5 @@ public final class CommunityRoleValue implements LocalizableValueObject {
                 (o instanceof CommunityRoleValue other && code.equals(other.code));
     }
 
-    @Override
-    public int hashCode() { return Objects.hash(code); }
+    @Override public int hashCode() { return Objects.hash(code); }
 }

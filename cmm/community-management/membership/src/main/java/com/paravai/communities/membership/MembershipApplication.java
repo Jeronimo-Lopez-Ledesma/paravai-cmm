@@ -46,13 +46,6 @@ public class MembershipApplication {
         };
     }
 
-	@Bean
-	CommandLineRunner testMessages(MessageSource messageSource) {
-		return args -> {
-			String message = messageSource.getMessage("standards.standardType.TECHNICAL_STANDARD", null, Locale.ENGLISH);
-			System.out.println("i18n resolved (EN): " + message);
-		};
-	}
 
 
 

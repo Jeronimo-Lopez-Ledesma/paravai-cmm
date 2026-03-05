@@ -1,7 +1,7 @@
 package com.paravai.communities.membership.infrastructure.persistence.mongo.adapter;
 
-import com.paravai.communities.community.infrastructure.persistence.mongo.springdata.MembershipSpringReactiveMongoRepository;
-import com.paravai.communities.membership.common.MembershipMetrics;
+import com.paravai.communities.membership.infrastructure.persistence.mongo.springdata.MembershipSpringReactiveMongoRepository;
+import com.paravai.communities.membership.application.common.MembershipMetrics;
 import com.paravai.communities.membership.domain.model.Membership;
 import com.paravai.communities.membership.domain.repository.MembershipRepository;
 import com.paravai.communities.membership.infrastructure.persistence.mongo.document.MembershipDocument;

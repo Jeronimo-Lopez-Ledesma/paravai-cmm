@@ -1,4 +1,4 @@
-package com.paravai.communities.community.infrastructure.persistence.mongo.springdata;
+package com.paravai.communities.membership.infrastructure.persistence.mongo.springdata;
 
 import com.paravai.communities.membership.infrastructure.persistence.mongo.document.MembershipDocument;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
