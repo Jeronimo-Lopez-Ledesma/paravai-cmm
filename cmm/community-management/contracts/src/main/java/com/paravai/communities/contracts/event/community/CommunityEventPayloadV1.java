@@ -1,4 +1,4 @@
-package com.paravai.communities.community.infrastructure.event;
+package com.paravai.communities.contracts.event.community;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paravai.communities.community.domain.model.Community;

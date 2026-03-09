@@ -1,4 +1,4 @@
-package com.paravai.communities.membership.infrastructure.event.handler;
+package com.paravai.communities.membership.infrastructure.event.handler.outbound;
 
 import com.paravai.communities.membership.infrastructure.event.mapper.AuditTrailEnvelopeMapper;
 import com.paravai.communities.membership.infrastructure.event.mapper.MembershipEventEnvelopeMapper;
@@ -23,9 +23,9 @@ import reactor.core.publisher.Mono;
  */
 @Component
 @RequiredArgsConstructor
-public class MembershipEventPublisherHandler implements DomainEventHandler<EntityChangedEvent> {
+public class MembershipEntityChangedEventPublisherHandler implements DomainEventHandler<EntityChangedEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(MembershipEventPublisherHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(MembershipEntityChangedEventPublisherHandler.class);
 
     private final IntegrationEventPublisher publisher;
 

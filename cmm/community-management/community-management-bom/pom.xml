@@ -23,7 +23,7 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
-    <name>Community Management Management :: BOM</name>
+    <name>Community Management :: BOM</name>
     <description>
         Domain-specific dependency versions for Community Management services.
         Contains internal module versions only. External dependencies come from service-bom.
