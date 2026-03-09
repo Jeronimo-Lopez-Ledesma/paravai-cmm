@@ -38,6 +38,13 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- Contracts -->
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>contracts</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
             <!-- Shared utilities inside this CMM -->
             <dependency>
                 <groupId>com.paravai.communitites</groupId>

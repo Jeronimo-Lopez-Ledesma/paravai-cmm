@@ -41,6 +41,12 @@
                 <artifactId>community-management-common</artifactId>
             </dependency>
 
+            <!-- Contracts -->
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>contracts</artifactId>
+            </dependency>
+
             <!-- Spring Cloud BOM -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
