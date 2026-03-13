@@ -16,8 +16,8 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
-    <name>DEKRA Platform :: Build Parent</name>
-    <description>Build toolchain parent (plugins/extensions) for all DEKRA Java shared services.</description>
+    <name>Paravai Platform :: Build Parent</name>
+    <description>Build toolchain parent (plugins/extensions) for all Paravai Java services.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

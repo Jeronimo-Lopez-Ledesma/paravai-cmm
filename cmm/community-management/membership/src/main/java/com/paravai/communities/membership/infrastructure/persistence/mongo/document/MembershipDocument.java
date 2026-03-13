@@ -5,6 +5,7 @@ import com.paravai.communities.membership.domain.model.MembershipFactory;
 import com.paravai.communities.membership.domain.value.CommunityRoleValue;
 import com.paravai.communities.membership.domain.value.MembershipStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
@@ -31,8 +32,8 @@ public class MembershipDocument {
     private String communityId;
     private String userId;
 
-    private String roleCode;   // catalog code
-    private String statusCode; // catalog code
+    private String roleCode;
+    private String statusCode;
 
     private Instant since;
     private Instant deactivatedAt;
@@ -58,11 +59,11 @@ public class MembershipDocument {
         d.roleCode = m.role().getCode();
         d.statusCode = m.status().getCode();
 
-        d.since = m.since();
-        d.deactivatedAt = m.deactivatedAt();
+        d.since = m.since().getInstant();
+        d.deactivatedAt = m.deactivatedAt().map(TimestampValue::getInstant).orElse(null);
 
-        d.createdAt = m.createdAt();
-        d.updatedAt = m.updatedAt();
+        d.createdAt = m.createdAt().getInstant();
+        d.updatedAt = m.updatedAt().getInstant();
 
         return d;
     }
@@ -104,10 +105,10 @@ public class MembershipDocument {
                 IdValue.of(userId),
                 CommunityRoleValue.of(roleCode),
                 MembershipStatusValue.of(statusCode),
-                since,
-                deactivatedAt,
-                createdAt,
-                updatedAt
+                TimestampValue.of(since),
+                deactivatedAt != null ? TimestampValue.of(deactivatedAt) : null,
+                TimestampValue.of(createdAt),
+                TimestampValue.of(updatedAt)
         );
     }
 

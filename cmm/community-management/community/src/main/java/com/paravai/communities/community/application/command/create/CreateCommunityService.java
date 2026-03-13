@@ -6,9 +6,6 @@ import com.paravai.communities.community.application.event.CommunityEventFactory
 import com.paravai.communities.community.application.snapshot.CommunitySnapshotSupport;
 import com.paravai.communities.community.domain.model.Community;
 import com.paravai.communities.community.domain.repository.CommunityRepository;
-import com.paravai.communities.membership.domain.model.Membership;
-import com.paravai.communities.membership.domain.model.MembershipFactory;
-import com.paravai.communities.membership.domain.repository.MembershipRepository;
 import com.paravai.foundation.domain.event.EntityChangedEvent;
 import com.paravai.foundation.domain.event.NonBlockingEventPublisher;
 import com.paravai.foundation.domain.event.ReactiveDomainEventPublisher;
@@ -31,8 +28,6 @@ public class CreateCommunityService {
     private static final Logger log = LoggerFactory.getLogger(CreateCommunityService.class);
 
     private final CommunityRepository communityRepo;
-    private final MembershipRepository membershipRepo;
-
     private final NonBlockingEventPublisher nonBlockingPublisher;
     private final CommunitySnapshotSupport snapshots;
     private final CommunityEventFactory communityEventFactory;
@@ -40,14 +35,12 @@ public class CreateCommunityService {
 
     public CreateCommunityService(
             CommunityRepository communityRepo,
-            MembershipRepository membershipRepo,
             ReactiveDomainEventPublisher domainEventPublisher,
             SnapshotMapper<Community> snapshotMapper,
             CommunityEventFactory communityEventFactory,
             ReactiveOperationMetrics metrics
     ) {
         this.communityRepo = Objects.requireNonNull(communityRepo, "communityRepo");
-        this.membershipRepo = Objects.requireNonNull(membershipRepo, "membershipRepo");
 
         this.nonBlockingPublisher = new NonBlockingEventPublisher(
                 Objects.requireNonNull(domainEventPublisher, "domainEventPublisher"),
@@ -65,12 +58,10 @@ public class CreateCommunityService {
     /**
      * EPIC A / A1
      * - Persists the Community
-     * - Creates the initial ADMIN membership for the creator (A1 AC2)
      * - Emits EntityChangedEvent(CREATED) for Community
      *
-     * Notes:
-     * - We do NOT call authorization here (creator identity comes from context and is implicit).
-     * - No cross-aggregate transaction guarantee unless Mongo transactions are enabled.
+     * The founder membership is created asynchronously by the Membership module
+     * after consuming the Community CREATED event.
      */
     public Mono<Community> create(Community toCreate) {
         return Mono.deferContextual(ctxView -> {
@@ -98,51 +89,30 @@ public class CreateCommunityService {
 
                 return communityRepo.save(toCreate)
                         .flatMap(savedCommunity -> {
+                            log.info("[{}][{}] Community {} created",
+                                    traceId, userOid, safeValue(() -> savedCommunity.id().value()));
 
-                            log.info("[{}][{}] Community {} created", traceId, userOid, savedCommunity.id());
-
-                            // A1 AC2: creator becomes initial ADMIN membership
-                            Membership adminMembership = MembershipFactory.createAdmin(
-                                    savedCommunity.tenantId(),
-                                    savedCommunity.id(),
-                                    savedCommunity.createdBy()
-                            );
-
-                            return membershipRepo.save(adminMembership)
-                                    .doOnSuccess(m -> log.info(
-                                            "[{}][{}] Initial membership {} created (role={}, status={}) for community {}",
-                                            traceId, userOid,
-                                            safeValue(() -> m.id().value()),
-                                            safeValue(() -> m.role().getCode()),
-                                            safeValue(() -> m.status().getCode()),
-                                            savedCommunity.id()
-                                    ))
-                                    .thenReturn(savedCommunity);
-                        })
-                        .flatMap(savedCommunity -> {
-                            // Event for Community (EntityChangedEvent)
                             final JsonNode currentState = snapshots.snapshot(savedCommunity);
 
                             EntityChangedEvent evt = communityEventFactory.build(
                                     OperationTypeValue.CREATED,
                                     savedCommunity.id(),
-                                    traceId, userOid, sourceSystem,
+                                    traceId,
+                                    userOid,
+                                    sourceSystem,
                                     buildMessage(OperationTypeValue.CREATED, savedCommunity),
                                     null,
                                     currentState
                             );
 
-                            return nonBlockingPublisher.publish(evt).thenReturn(savedCommunity);
+                            return nonBlockingPublisher.publish(evt)
+                                    .thenReturn(savedCommunity);
                         })
                         .doOnError(ex -> log.error("[{}][{}] Failed to create Community {}",
                                 traceId, userOid, safeId(toCreate), ex));
             });
         });
     }
-
-    // -------------------------------------------------
-    // Helpers
-    // -------------------------------------------------
 
     private String buildMessage(OperationTypeValue op, Community c) {
         return "Community " + op.getValue() + ": " + (c != null && c.id() != null ? c.id().value() : "no-id");

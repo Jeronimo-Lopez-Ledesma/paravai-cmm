@@ -57,6 +57,24 @@ kafka:
     default-topic: domain-events        # fallback if entityType is missing
     # pattern: "%s.events.%s"           # optional override (default already set in code)
 
+integration:
+  inbound:
+    kafka:
+      enabled: true
+      consumer-group-id: membership-inbound
+      retry:
+        max-attempts: 2
+        backoff-ms: 250
+        max-backoff-ms: 1000
+      dlq:
+        enabled: true
+        suffix: .dlq
+      bindings:
+        - name: community-created
+          topic: communities.community.events.v1
+          schema-id: communities.community.integration.v1
+          entity-type: Community
+          change-type: CREATED
 
 # ============================================================
 # OUTBOUND HTTP CLIENT (DEV)

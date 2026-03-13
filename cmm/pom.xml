@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.paravai</groupId>
+        <artifactId>paravai-platform</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.paravai.cmm</groupId>
+    <artifactId>cmm</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>Paravai :: CMM Aggregator</name>
+    <description>Aggregator for all Context-Modular Modules (CMMs).</description>
+
+    <modules>
+        <module>community-management</module>
+
+        <!-- Future CMMs -->
+        <!--
+        <module>catalog-management</module>
+        <module>trading-management</module>
+        <module>reputation-management</module>
+        -->
+    </modules>
+</project>

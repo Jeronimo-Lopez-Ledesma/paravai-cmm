@@ -7,6 +7,7 @@ import com.paravai.communities.community.domain.value.CommunityStatusValue;
 import com.paravai.communities.community.domain.value.CommunityVisibilityValue;
 import com.paravai.communities.community.domain.value.ExchangeTypeValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Document("communities")
 @CompoundIndex(
@@ -38,9 +40,9 @@ public class CommunityDocument {
 
     private String description;
 
-    private String visibilityCode; // catalog code
+    private String visibilityCode;
 
-    private String statusCode; // catalog code
+    private String statusCode;
     private Instant archivedAt;
 
     private String createdBy;
@@ -48,15 +50,10 @@ public class CommunityDocument {
     private Instant createdAt;
     private Instant updatedAt;
 
-    // Rules (optional)
     private String rulesText;
-    private List<String> allowedExchangeTypeCodes; // catalog codes
+    private List<String> allowedExchangeTypeCodes;
 
     private int documentVersion = DOCUMENT_VERSION;
-
-    // -------------------------
-    // Mapping
-    // -------------------------
 
     public static CommunityDocument fromDomain(Community c) {
         CommunityDocument d = new CommunityDocument();
@@ -72,12 +69,12 @@ public class CommunityDocument {
         d.visibilityCode = c.visibility().getCode();
 
         d.statusCode = c.status().getCode();
-        d.archivedAt = c.archivedAt().orElse(null);
+        d.archivedAt = c.archivedAt().map(TimestampValue::getInstant).orElse(null);
 
-        d.createdBy = c.createdBy().value();
+        d.createdBy = c.createdBy().toString();
 
-        d.createdAt = c.createdAt();
-        d.updatedAt = c.updatedAt();
+        d.createdAt = c.createdAt().getInstant();
+        d.updatedAt = c.updatedAt().getInstant();
 
         if (c.rules().isPresent()) {
             CommunityRulesValue rules = c.rules().get();
@@ -127,12 +124,13 @@ public class CommunityDocument {
         if (allowedExchangeTypeCodes != null && !allowedExchangeTypeCodes.isEmpty()) {
             Set<ExchangeTypeValue> allowed = allowedExchangeTypeCodes.stream()
                     .map(ExchangeTypeValue::of)
-                    .collect(java.util.stream.Collectors.toSet());
+                    .collect(Collectors.toSet());
 
             rules = CommunityRulesValue.of(rulesText, allowed);
         } else if (rulesText != null && !rulesText.isBlank()) {
-            // If text exists but no allowed types, the document is inconsistent.
-            throw new IllegalStateException("Invalid Community document: rulesText present but allowedExchangeTypeCodes is empty");
+            throw new IllegalStateException(
+                    "Invalid Community document: rulesText present but allowedExchangeTypeCodes is empty"
+            );
         }
 
         return CommunityFactory.recreate(
@@ -144,16 +142,12 @@ public class CommunityDocument {
                 CommunityVisibilityValue.of(visibilityCode),
                 rules,
                 CommunityStatusValue.of(statusCode),
-                archivedAt,
+                archivedAt != null ? TimestampValue.of(archivedAt) : null,
                 IdValue.of(createdBy),
-                createdAt,
-                updatedAt
+                TimestampValue.of(createdAt),
+                TimestampValue.of(updatedAt)
         );
     }
-
-    // -------------------------
-    // Getters/Setters
-    // -------------------------
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

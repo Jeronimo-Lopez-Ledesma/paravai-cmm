@@ -53,6 +53,20 @@ events:
   kafka:
     enabled: false
 
+integration:
+  inbound:
+    kafka:
+      enabled: false
+      consumer-group-id: ${spring.application.name}-inbound
+      retry:
+        max-attempts: 2
+        backoff-ms: 250
+        max-backoff-ms: 1000
+      dlq:
+        enabled: true
+        suffix: .dlq
+      bindings: []
+
 springdoc:
   api-docs:
     enabled: true

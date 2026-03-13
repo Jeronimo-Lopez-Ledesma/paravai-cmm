@@ -4,6 +4,7 @@ import com.paravai.communities.community.domain.value.CommunityRulesValue;
 import com.paravai.communities.community.domain.value.CommunityStatusValue;
 import com.paravai.communities.community.domain.value.CommunityVisibilityValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 
 import java.time.Instant;
 import java.util.Locale;
@@ -37,12 +38,12 @@ public final class Community {
     private CommunityRulesValue rules; // optional until A3
 
     private CommunityStatusValue status; // ACTIVE | ARCHIVED (catalog VO)
-    private Instant archivedAt;          // present only if ARCHIVED
+    private TimestampValue archivedAt;          // present only if ARCHIVED
 
     private final IdValue createdBy;
 
-    private final Instant createdAt;
-    private Instant updatedAt;
+    private final TimestampValue createdAt;
+    private TimestampValue updatedAt;
 
     // -------------------------------------------------
     // Constructor (package-private) — only Factory can call
@@ -55,10 +56,10 @@ public final class Community {
               CommunityVisibilityValue visibility,
               CommunityRulesValue rules,
               CommunityStatusValue status,
-              Instant archivedAt,
+              TimestampValue archivedAt,
               IdValue createdBy,
-              Instant createdAt,
-              Instant updatedAt,
+              TimestampValue createdAt,
+              TimestampValue updatedAt,
               boolean validate) {
 
         this.id = Objects.requireNonNull(id, "Community id is required");
@@ -135,11 +136,11 @@ public final class Community {
         validateInvariants();
     }
 
-    public void archive(Instant when) {
+    public void archive(TimestampValue when) {
         if (isArchived()) return;
 
         this.status = CommunityStatusValue.of("ARCHIVED");
-        this.archivedAt = (when != null ? when : Instant.now());
+        this.archivedAt = (when != null ? when : TimestampValue.now());
         touch();
         validateInvariants();
     }
@@ -192,7 +193,7 @@ public final class Community {
     }
 
     private void touch() {
-        this.updatedAt = Instant.now();
+        this.updatedAt = TimestampValue.now();
     }
 
     // -------------------------------------------------
@@ -211,12 +212,12 @@ public final class Community {
     public Optional<CommunityRulesValue> rules() { return Optional.ofNullable(rules); }
 
     public CommunityStatusValue status() { return status; }
-    public Optional<Instant> archivedAt() { return Optional.ofNullable(archivedAt); }
+    public Optional<TimestampValue> archivedAt() { return Optional.ofNullable(archivedAt); }
 
     public IdValue createdBy() { return createdBy; }
 
-    public Instant createdAt() { return createdAt; }
-    public Instant updatedAt() { return updatedAt; }
+    public TimestampValue createdAt() { return createdAt; }
+    public TimestampValue updatedAt() { return updatedAt; }
 
     // -------------------------------------------------
     // Identity equality

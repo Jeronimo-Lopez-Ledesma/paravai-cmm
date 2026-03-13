@@ -1,6 +1,7 @@
 package com.paravai.communities.membership.api.rest.v1.dto;
 
 import com.paravai.communities.membership.domain.model.Membership;
+import com.paravai.foundation.domain.value.TimestampValue;
 import com.paravai.foundation.localization.MessageService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,11 +53,11 @@ public class MembershipResponse {
                 .statusCode(m.status().getCode())
                 .statusLabel(m.status().getLocalizedLabel(locale, messageService))
 
-                .since(m.since())
-                .deactivatedAt(m.deactivatedAt())
+                .since(m.since().getInstant())
+                .deactivatedAt(m.deactivatedAt().map(TimestampValue::getInstant).orElse(null))
 
-                .createdAt(m.createdAt())
-                .updatedAt(m.updatedAt())
+                .createdAt(m.createdAt().getInstant())
+                .updatedAt(m.updatedAt().getInstant())
                 .build();
     }
 }

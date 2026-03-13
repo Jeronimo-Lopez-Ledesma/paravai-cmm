@@ -3,8 +3,8 @@ package com.paravai.communities.membership.domain.model;
 import com.paravai.communities.membership.domain.value.CommunityRoleValue;
 import com.paravai.communities.membership.domain.value.MembershipStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 
-import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -13,7 +13,9 @@ import java.util.Objects;
  * Encapsulates valid Membership creation and reconstruction.
  *
  * Methods:
- * - create(): for new memberships
+ * - createFounder(): for the initial founder membership after community creation
+ * - createAdmin(): for generic admin memberships
+ * - createInvitation(): for pending invitations
  * - recreate(): for rehydration from persistence
  */
 public final class MembershipFactory {
@@ -27,7 +29,36 @@ public final class MembershipFactory {
     // -------------------------------------------------
 
     /**
-     * Creates the initial ADMIN membership for the community creator (A1 AC2).
+     * Creates the initial founder membership for the community creator.
+     * Current representation: ADMIN + ACTIVE.
+     */
+    public static Membership createFounder(IdValue tenantId,
+                                           IdValue communityId,
+                                           IdValue userId) {
+
+        Objects.requireNonNull(tenantId, "tenantId is required");
+        Objects.requireNonNull(communityId, "communityId is required");
+        Objects.requireNonNull(userId, "userId is required");
+
+        TimestampValue now = TimestampValue.now();
+
+        return new Membership(
+                IdValue.generate(),
+                tenantId,
+                communityId,
+                userId,
+                CommunityRoleValue.ADMIN,
+                MembershipStatusValue.ACTIVE,
+                now,
+                null,
+                now,
+                now,
+                true
+        );
+    }
+
+    /**
+     * Creates a generic ADMIN membership.
      */
     public static Membership createAdmin(IdValue tenantId,
                                          IdValue communityId,
@@ -37,7 +68,7 @@ public final class MembershipFactory {
         Objects.requireNonNull(communityId, "communityId is required");
         Objects.requireNonNull(userId, "userId is required");
 
-        Instant now = Instant.now();
+        TimestampValue now = TimestampValue.now();
 
         return new Membership(
                 IdValue.generate(),
@@ -66,7 +97,7 @@ public final class MembershipFactory {
         Objects.requireNonNull(communityId, "communityId is required");
         Objects.requireNonNull(inviteeUserId, "inviteeUserId is required");
 
-        Instant now = Instant.now();
+        TimestampValue now = TimestampValue.now();
 
         return new Membership(
                 IdValue.generate(),
@@ -97,10 +128,10 @@ public final class MembershipFactory {
                                       IdValue userId,
                                       CommunityRoleValue role,
                                       MembershipStatusValue status,
-                                      Instant since,
-                                      Instant deactivatedAt,
-                                      Instant createdAt,
-                                      Instant updatedAt) {
+                                      TimestampValue since,
+                                      TimestampValue deactivatedAt,
+                                      TimestampValue createdAt,
+                                      TimestampValue updatedAt) {
 
         Objects.requireNonNull(id, "Membership id is required");
         Objects.requireNonNull(tenantId, "tenantId is required");
@@ -123,7 +154,7 @@ public final class MembershipFactory {
                 deactivatedAt,
                 createdAt,
                 updatedAt,
-                false // no domain validation on recreate
+                false
         );
     }
 }

@@ -3,6 +3,7 @@ package com.paravai.communities.membership.domain.model;
 import com.paravai.communities.membership.domain.value.CommunityRoleValue;
 import com.paravai.communities.membership.domain.value.MembershipStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 
 import java.io.Serializable;
 import java.time.Clock;
@@ -10,12 +11,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Aggregate Root: Membership
  *
  * Relationship between user and community.
- *
  *
  * Uniqueness (repository-level):
  * - (tenantId, communityId, userId) is unique
@@ -31,25 +32,22 @@ public final class Membership implements Serializable {
     private CommunityRoleValue role;
     private MembershipStatusValue status;
 
-    private Instant since;
-    private Instant deactivatedAt;
+    private TimestampValue since;
+    private TimestampValue deactivatedAt;
 
-    private final Instant createdAt;
-    private Instant updatedAt;
+    private final TimestampValue createdAt;
+    private TimestampValue updatedAt;
 
-    // -------------------------------------------------
-    // Constructor (package-private) — only Factory can call
-    // -------------------------------------------------
     Membership(IdValue id,
                IdValue tenantId,
                IdValue communityId,
                IdValue userId,
                CommunityRoleValue role,
                MembershipStatusValue status,
-               Instant since,
-               Instant deactivatedAt,
-               Instant createdAt,
-               Instant updatedAt,
+               TimestampValue since,
+               TimestampValue deactivatedAt,
+               TimestampValue createdAt,
+               TimestampValue updatedAt,
                boolean validate) {
 
         this.id = Objects.requireNonNull(id, "Membership id is required");
@@ -72,10 +70,6 @@ public final class Membership implements Serializable {
         }
     }
 
-    // -------------------------------------------------
-    // Domain behavior
-    // -------------------------------------------------
-
     public void changeRole(CommunityRoleValue newRole) {
         this.role = Objects.requireNonNull(newRole, "role is required");
         touch();
@@ -97,7 +91,7 @@ public final class Membership implements Serializable {
      * Invitation revocation:
      * - PENDING -> REVOKED (idempotent)
      */
-    public void revokeInvitation(Instant when) {
+    public void revokeInvitation(TimestampValue when) {
         if (status == MembershipStatusValue.REVOKED) return;
 
         if (status != MembershipStatusValue.PENDING) {
@@ -105,12 +99,12 @@ public final class Membership implements Serializable {
         }
 
         this.status = MembershipStatusValue.REVOKED;
-        this.deactivatedAt = (when != null ? when : Instant.now());
+        this.deactivatedAt = (when != null ? when : TimestampValue.now());
         touch();
         validateInvariants(Clock.systemUTC());
     }
 
-    public void deactivate(Instant when) {
+    public void deactivate(TimestampValue when) {
         if (status == MembershipStatusValue.INACTIVE) return;
 
         if (status == MembershipStatusValue.PENDING) {
@@ -118,12 +112,12 @@ public final class Membership implements Serializable {
         }
 
         this.status = MembershipStatusValue.INACTIVE;
-        this.deactivatedAt = (when != null ? when : Instant.now());
+        this.deactivatedAt = (when != null ? when : TimestampValue.now());
         touch();
         validateInvariants(Clock.systemUTC());
     }
 
-    public void reactivate(Instant newSince) {
+    public void reactivate(TimestampValue newSince) {
         if (status == MembershipStatusValue.ACTIVE) return;
 
         if (status == MembershipStatusValue.PENDING) {
@@ -133,8 +127,8 @@ public final class Membership implements Serializable {
             throw new IllegalStateException("Cannot reactivate a REVOKED invitation");
         }
 
-        Instant effectiveSince = (newSince != null ? newSince : Instant.now());
-        if (effectiveSince.isAfter(Instant.now())) {
+        TimestampValue effectiveSince = (newSince != null ? newSince : TimestampValue.now());
+        if (effectiveSince.getInstant().isAfter(Instant.now())) {
             throw new IllegalArgumentException("since cannot be in the future");
         }
 
@@ -146,17 +140,13 @@ public final class Membership implements Serializable {
         validateInvariants(Clock.systemUTC());
     }
 
-    // -------------------------------------------------
-    // Domain queries (testable with Clock)
-    // -------------------------------------------------
-
     public boolean isActive() {
         return isActive(Clock.systemUTC());
     }
 
     public boolean isActive(Clock clock) {
         if (status != MembershipStatusValue.ACTIVE) return false;
-        return !since.isAfter(clock.instant());
+        return !since.getInstant().isAfter(clock.instant());
     }
 
     public Duration getActiveDuration() {
@@ -164,9 +154,15 @@ public final class Membership implements Serializable {
     }
 
     public Duration getActiveDuration(Clock clock) {
-        Instant end = (status == MembershipStatusValue.ACTIVE ? clock.instant() : deactivatedAt);
-        if (end == null) end = clock.instant();
-        return Duration.between(since, end);
+        Instant end = (status == MembershipStatusValue.ACTIVE
+                ? clock.instant()
+                : deactivatedAt != null ? deactivatedAt.getInstant() : null);
+
+        if (end == null) {
+            end = clock.instant();
+        }
+
+        return Duration.between(since.getInstant(), end);
     }
 
     public long getActiveDays() {
@@ -174,29 +170,30 @@ public final class Membership implements Serializable {
     }
 
     public long getActiveDays(Clock clock) {
-        Instant end = (status == MembershipStatusValue.ACTIVE ? clock.instant() : deactivatedAt);
-        if (end == null) end = clock.instant();
-        return ChronoUnit.DAYS.between(since, end);
-    }
+        Instant end = (status == MembershipStatusValue.ACTIVE
+                ? clock.instant()
+                : deactivatedAt != null ? deactivatedAt.getInstant() : null);
 
-    // -------------------------------------------------
-    // Invariant validation
-    // -------------------------------------------------
+        if (end == null) {
+            end = clock.instant();
+        }
+
+        return ChronoUnit.DAYS.between(since.getInstant(), end);
+    }
 
     private void validateInvariants(Clock clock) {
         if (createdAt.isAfter(updatedAt)) {
             throw new IllegalStateException("createdAt cannot be after updatedAt");
         }
 
-        if (since.isAfter(clock.instant())) {
+        if (since.getInstant().isAfter(clock.instant())) {
             throw new IllegalArgumentException("since cannot be in the future");
         }
 
-        if (deactivatedAt != null && deactivatedAt.isBefore(since)) {
+        if (deactivatedAt != null && deactivatedAt.getInstant().isBefore(since.getInstant())) {
             throw new IllegalArgumentException("deactivatedAt cannot be before since");
         }
 
-        // status <-> deactivatedAt consistency
         if (status == MembershipStatusValue.ACTIVE || status == MembershipStatusValue.PENDING) {
             if (deactivatedAt != null) {
                 throw new IllegalStateException(status + " membership cannot have deactivatedAt");
@@ -209,12 +206,8 @@ public final class Membership implements Serializable {
     }
 
     private void touch() {
-        this.updatedAt = Instant.now();
+        this.updatedAt = TimestampValue.now();
     }
-
-    // -------------------------------------------------
-    // Getters
-    // -------------------------------------------------
 
     public IdValue id() { return id; }
 
@@ -225,15 +218,11 @@ public final class Membership implements Serializable {
     public CommunityRoleValue role() { return role; }
     public MembershipStatusValue status() { return status; }
 
-    public Instant since() { return since; }
-    public Instant deactivatedAt() { return deactivatedAt; }
+    public TimestampValue since() { return since; }
+    public Optional<TimestampValue> deactivatedAt() { return Optional.ofNullable(deactivatedAt); }
 
-    public Instant createdAt() { return createdAt; }
-    public Instant updatedAt() { return updatedAt; }
-
-    // -------------------------------------------------
-    // Identity equality
-    // -------------------------------------------------
+    public TimestampValue createdAt() { return createdAt; }
+    public TimestampValue updatedAt() { return updatedAt; }
 
     @Override
     public boolean equals(Object o) {

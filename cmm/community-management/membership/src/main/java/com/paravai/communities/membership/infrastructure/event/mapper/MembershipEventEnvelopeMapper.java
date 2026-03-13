@@ -1,7 +1,7 @@
 package com.paravai.communities.membership.infrastructure.event.mapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.paravai.communities.membership.infrastructure.event.MembershipEventPayloadV1;
+import com.paravai.communities.contracts.event.membership.MembershipEventPayloadV1;
 import com.paravai.foundation.domain.event.EntityChangedEvent;
 import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
 import com.paravai.foundation.integration.domain.event.EventChannel;
@@ -17,19 +17,28 @@ public class MembershipEventEnvelopeMapper {
     private static final String COMPONENT = "membership";
     private static final int MAJOR = 1;
 
-    public DomainEventEnvelope<MembershipEventPayloadV1> map(EntityChangedEvent e) {
+    private final MembershipSnapshotToEventPayloadMapperV1 snapshotMapper;
 
-        JsonNode snapshot = e.getCurrentState() != null
-                ? e.getCurrentState()
-                : e.getPreviousState();
+    public MembershipEventEnvelopeMapper(MembershipSnapshotToEventPayloadMapperV1 snapshotMapper) {
+        this.snapshotMapper = snapshotMapper;
+    }
 
-        if (snapshot == null || snapshot.isNull()) {
-            throw new IllegalStateException("Cannot build CommunityEventPayloadV1: snapshot is null");
+    public DomainEventEnvelope<MembershipEventPayloadV1> map(EntityChangedEvent event) {
+        if (event == null) {
+            throw new IllegalArgumentException("EntityChangedEvent must not be null");
         }
 
-        MembershipEventPayloadV1 payload = MembershipEventPayloadV1.fromSnapshot(snapshot);
+        JsonNode snapshot = event.getCurrentState() != null
+                ? event.getCurrentState()
+                : event.getPreviousState();
+
+        if (snapshot == null || snapshot.isNull()) {
+            throw new IllegalStateException("Cannot build MembershipEventPayloadV1: snapshot is null");
+        }
+
+        MembershipEventPayloadV1 payload = snapshotMapper.map(snapshot);
 
         String schemaId = SchemaId.of(CMM, COMPONENT, EventChannel.INTEGRATION, MAJOR);
-        return DomainEventEnvelopeFactory.create(e, schemaId, payload);
+        return DomainEventEnvelopeFactory.create(event, schemaId, payload);
     }
 }

@@ -1,6 +1,6 @@
 package com.paravai.communities.membership.infrastructure.config;
 
-import com.paravai.communities.membership.application.common.MembershipEventFactory;
+import com.paravai.communities.membership.application.event.MembershipEventFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class MembershipApplicationConfig {
 
     @Bean
-    public MembershipEventFactory standardEventFactory(@Value("${spring.application.name}") String sourceService) {
+    public MembershipEventFactory membershipEventFactory(@Value("${spring.application.name}") String sourceService) {
         return new MembershipEventFactory(sourceService);
     }
 }

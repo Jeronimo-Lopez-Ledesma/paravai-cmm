@@ -3,6 +3,7 @@ package com.paravai.communities.community.api.rest.v1.dto;
 import com.paravai.communities.community.domain.model.Community;
 import com.paravai.communities.community.domain.value.CommunityRulesValue;
 import com.paravai.communities.community.domain.value.ExchangeTypeValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 import com.paravai.foundation.localization.MessageService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,11 +65,11 @@ public class CommunityResponse {
                 .statusCode(c.status().getCode())
                 .statusLabel(c.status().getLocalizedLabel(locale, messageService))
 
-                .archivedAt(c.archivedAt().orElse(null))
+                .archivedAt(c.archivedAt().map(TimestampValue::getInstant).orElse(null))
 
                 .createdBy(c.createdBy().value())
-                .createdAt(c.createdAt())
-                .updatedAt(c.updatedAt())
+                .createdAt(c.createdAt().getInstant())
+                .updatedAt(c.updatedAt().getInstant())
 
                 .rules(rulesResponse)
                 .build();

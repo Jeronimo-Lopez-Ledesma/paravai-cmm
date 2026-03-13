@@ -1,9 +1,9 @@
 package com.paravai.communities.membership.application.command.create;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.paravai.communities.membership.application.common.MembershipEventFactory;
 import com.paravai.communities.membership.application.common.MembershipMetrics;
 import com.paravai.communities.membership.application.common.MembershipSnapshotSupport;
+import com.paravai.communities.membership.application.event.MembershipEventFactory;
 import com.paravai.communities.membership.domain.model.Membership;
 import com.paravai.communities.membership.domain.model.MembershipFactory;
 import com.paravai.communities.membership.domain.repository.MembershipRepository;

@@ -241,6 +241,12 @@
                 <version>2.0.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>7.4</version>
+            </dependency>
+
             <!-- ========================= RESILIENCE / CIRCUIT BREAKERS ========================= -->
             <dependency>
                 <groupId>io.github.resilience4j</groupId>

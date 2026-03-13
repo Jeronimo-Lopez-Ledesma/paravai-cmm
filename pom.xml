@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Coordinates for the whole workspace -->
+    <groupId>com.paravai</groupId>
+    <artifactId>paravai-platform</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>Paravai :: Platform Root</name>
+    <description>
+        Root aggregator for the Paravai workspace.
+        Builds platform infrastructure, shared foundation modules,
+        and all Context-Modular Modules (CMMs).
+    </description>
+
+    <!-- ========================================================= -->
+    <!-- MODULES                                                   -->
+    <!-- ========================================================= -->
+    <modules>
+
+        <!-- Shared technical foundation -->
+        <module>foundation</module>
+        <!-- Platform / infrastructure services -->
+        <module>eureka-server</module>
+        <module>edge-service</module>
+        <module>platform</module>
+        <!-- CMMs -->
+        <module>cmm</module>
+
+
+
+    </modules>
+
+</project>

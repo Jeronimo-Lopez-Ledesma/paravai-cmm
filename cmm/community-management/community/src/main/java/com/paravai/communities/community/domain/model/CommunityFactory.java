@@ -4,8 +4,8 @@ import com.paravai.communities.community.domain.value.CommunityRulesValue;
 import com.paravai.communities.community.domain.value.CommunityStatusValue;
 import com.paravai.communities.community.domain.value.CommunityVisibilityValue;
 import com.paravai.foundation.domain.value.IdValue;
+import com.paravai.foundation.domain.value.TimestampValue;
 
-import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -51,7 +51,7 @@ public final class CommunityFactory {
         String normalizedName = Community.requireNonBlank(name, "Community name is required");
         String slug = Community.SlugUtil.toSlug(normalizedName);
 
-        Instant now = Instant.now();
+        TimestampValue now = TimestampValue.now();
 
         return new Community(
                 IdValue.generate(),
@@ -86,7 +86,7 @@ public final class CommunityFactory {
         String normalizedName = Community.requireNonBlank(name, "Community name is required");
         String slug = Community.SlugUtil.toSlug(normalizedName);
 
-        Instant now = Instant.now();
+        TimestampValue now = TimestampValue.now();
 
         return new Community(
                 IdValue.generate(),
@@ -121,10 +121,10 @@ public final class CommunityFactory {
                                      CommunityVisibilityValue visibility,
                                      CommunityRulesValue rules,
                                      CommunityStatusValue status,
-                                     Instant archivedAt,
+                                     TimestampValue archivedAt,
                                      IdValue createdBy,
-                                     Instant createdAt,
-                                     Instant updatedAt) {
+                                     TimestampValue createdAt,
+                                     TimestampValue updatedAt) {
 
         Objects.requireNonNull(id, "Community id is required");
         Objects.requireNonNull(tenantId, "tenantId is required");
@@ -149,7 +149,7 @@ public final class CommunityFactory {
                 createdBy,
                 createdAt,
                 updatedAt,
-                false // no domain validation on recreate
+                false
         );
     }
 }

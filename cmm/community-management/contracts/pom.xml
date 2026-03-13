@@ -13,17 +13,15 @@
     </parent>
 
     <artifactId>contracts</artifactId>
-    <name>Community Management :: Contracts</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <spring-cloud.version>2023.0.6</spring-cloud.version>
-    </properties>
+    <name>Community Management :: Contracts</name>
+    <description>
+        Shared API, event, and gRPC contracts for the Community Management CMM.
+    </description>
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- Internal BOM -->
             <dependency>
                 <groupId>com.paravai.communities</groupId>
                 <artifactId>community-management-bom</artifactId>
@@ -31,39 +29,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <!-- Internal Shared Code -->
-            <dependency>
-                <groupId>com.paravai.communities</groupId>
-                <artifactId>community-management-common</artifactId>
-            </dependency>
-
-            <!-- Spring Cloud BOM -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-
-
-        <!-- ====================================================== -->
-        <!-- Protobuf runtime                                       -->
-        <!-- ====================================================== -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
         </dependency>
 
-        <!-- ====================================================== -->
-        <!-- gRPC generated stubs                                   -->
-        <!-- ====================================================== -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
@@ -74,41 +48,29 @@
             <artifactId>grpc-protobuf</artifactId>
         </dependency>
 
-        <!-- ====================================================== -->
-        <!-- Event payload contracts / JSON annotations             -->
-        <!-- ====================================================== -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-        <!-- Lombok (optional, only if you use it in contract classes) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>contracts</finalName>
-
         <plugins>
-
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
-                <configuration>
-                    <clearOutputDirectory>true</clearOutputDirectory>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -118,7 +80,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
