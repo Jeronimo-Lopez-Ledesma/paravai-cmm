@@ -7,9 +7,10 @@ import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
 import com.paravai.foundation.infrastructure.kafka.inbound.config.InboundKafkaProperties;
 import com.paravai.foundation.infrastructure.kafka.inbound.dlq.InboundDlqPublisher;
 import com.paravai.foundation.infrastructure.kafka.inbound.dlq.InboundDlqTopicResolver;
-import com.paravai.foundation.persistence.mongo.resilience.RetryBudgetService;
+
 import jakarta.annotation.PostConstruct;
 import net.logstash.logback.argument.StructuredArguments;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.kafka.receiver.ReceiverRecord;
@@ -25,7 +26,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
-@Component
 public class KafkaInboundEventConsumer {
 
     private static final Logger log =
@@ -37,7 +37,6 @@ public class KafkaInboundEventConsumer {
     private final ObjectMapper objectMapper;
     private final InboundDlqPublisher dlqPublisher;
     private final InboundDlqTopicResolver dlqTopicResolver;
-    private final RetryBudgetService retryBudgetService;
     private final InboundKafkaProperties properties;
 
     public KafkaInboundEventConsumer(
@@ -46,8 +45,7 @@ public class KafkaInboundEventConsumer {
             InboundEventConsumer inboundEventConsumer,
             ObjectMapper objectMapper,
             InboundDlqPublisher dlqPublisher,
-            InboundDlqTopicResolver dlqTopicResolver,
-            RetryBudgetService retryBudgetService
+            InboundDlqTopicResolver dlqTopicResolver
     ) {
 
         this.properties = Objects.requireNonNull(properties);
@@ -55,7 +53,6 @@ public class KafkaInboundEventConsumer {
         this.objectMapper = Objects.requireNonNull(objectMapper);
         this.dlqPublisher = Objects.requireNonNull(dlqPublisher);
         this.dlqTopicResolver = Objects.requireNonNull(dlqTopicResolver);
-        this.retryBudgetService = Objects.requireNonNull(retryBudgetService);
 
         List<String> topics = properties.topics();
 
@@ -124,7 +121,7 @@ public class KafkaInboundEventConsumer {
                                 )
                                 .maxBackoff(Duration.ofMillis(properties.getRetry().getMaxBackoffMs()))
                                 .transientErrors(true)
-                                .filter(ex -> retryBudgetService.tryConsumeRetry(topic))
+
                 )
 
                 .then(record.receiverOffset().commit())

@@ -1,12 +1,12 @@
 package com.paravai.foundation.infrastructure.kafka.inbound.dlq;
 
 import com.paravai.foundation.infrastructure.kafka.inbound.config.InboundKafkaProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import reactor.kafka.receiver.ReceiverRecord;
 
 import java.util.Objects;
 
-@Component
 public class DefaultInboundDlqTopicResolver implements InboundDlqTopicResolver {
 
     private final InboundKafkaProperties properties;

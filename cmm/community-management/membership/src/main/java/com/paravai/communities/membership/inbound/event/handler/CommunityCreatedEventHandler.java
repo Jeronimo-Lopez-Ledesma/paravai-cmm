@@ -5,15 +5,19 @@ import com.paravai.communities.membership.application.command.createfounder.Crea
 import com.paravai.communities.membership.inbound.event.mapper.CommunityEventToCreateFounderMembershipRequestMapper;
 import com.paravai.foundation.integration.application.inbound.dispatcher.EventInboundHandler;
 import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
 public class CommunityCreatedEventHandler implements EventInboundHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(CommunityCreatedEventHandler.class);
+
     private static final String EXPECTED_ENTITY_TYPE = "Community";
-    private static final String EXPECTED_CHANGE_TYPE = "CREATED";
-    private static final String EXPECTED_SCHEMA_ID = "communities.community.integration.v1";
+    private static final String EXPECTED_CHANGE_TYPE = "created";
+    private static final String EXPECTED_SCHEMA_ID = "communities-management.community.integration.v1";
 
     private final CommunityEventToCreateFounderMembershipRequestMapper mapper;
     private final CreateFounderMembershipService service;
@@ -32,10 +36,15 @@ public class CommunityCreatedEventHandler implements EventInboundHandler {
             return false;
         }
 
-        if (!(event.getPayload() instanceof CommunityEventPayloadV1)) {
+/*        if (!(event.getPayload() instanceof CommunityEventPayloadV1)) {
             return false;
-        }
-
+        }*/
+        log.debug(
+                "CommunityCreatedEventHandler checking event schemaId={} entityType={} changeType={}",
+                event.getSchemaId(),
+                event.getEntityType(),
+                event.getChangeType()
+        );
         return EXPECTED_SCHEMA_ID.equals(event.getSchemaId())
                 && EXPECTED_ENTITY_TYPE.equals(event.getEntityType())
                 && EXPECTED_CHANGE_TYPE.equalsIgnoreCase(event.getChangeType());
@@ -48,9 +57,14 @@ public class CommunityCreatedEventHandler implements EventInboundHandler {
             return Mono.empty();
         }
 
-        DomainEventEnvelope<CommunityEventPayloadV1> typedEvent =
-                (DomainEventEnvelope<CommunityEventPayloadV1>) event;
+/*        DomainEventEnvelope<CommunityEventPayloadV1> typedEvent =
+                (DomainEventEnvelope<CommunityEventPayloadV1>) event;*/
 
-        return service.createFounderMembership(mapper.map(typedEvent));
+        log.debug(
+                "CommunityCreatedEventHandler handling community event entityId={} traceId={}",
+                event.getEntityId(),
+                event.getTraceId()
+        );
+        return service.createFounderMembership(mapper.map(event));
     }
 }

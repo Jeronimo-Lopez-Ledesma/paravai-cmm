@@ -71,8 +71,8 @@ integration:
         suffix: .dlq
       bindings:
         - name: community-created
-          topic: communities.community.events.v1
-          schema-id: communities.community.integration.v1
+          topic: communities.communities-management.community.integration.v1
+          schema-id: communities-management.community.integration.v1
           entity-type: Community
           change-type: CREATED
 
@@ -154,6 +154,12 @@ logging:
     org.springframework.web: INFO
     reactor.netty: INFO
     com.paravai.regulations.standards: DEBUG
+    com.paravai.foundation.infrastructure.kafka.inbound: DEBUG
+    com.paravai.foundation.integration.application.inbound: DEBUG
+    com.paravai.foundation.infrastructure.event: DEBUG
+    com.paravai.communities.membership.inbound: DEBUG
+    com.paravai.communities.membership.application: DEBUG
+
 
 
 # ============================================================
