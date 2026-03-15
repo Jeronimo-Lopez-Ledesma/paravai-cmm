@@ -29,8 +29,9 @@ public class MembershipResponse {
     private String statusCode;
     private String statusLabel;
 
-    private Instant since;
-    private Instant deactivatedAt;
+    private Instant requestedAt;
+    private Instant decidedAt;
+    private String rejectionReason;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -47,14 +48,15 @@ public class MembershipResponse {
                 .communityId(m.communityId().value())
                 .userId(m.userId().value())
 
-                .roleCode(m.role().getCode())
-                .roleLabel(m.role().getLocalizedLabel(locale, messageService))
+                .roleCode(m.role().map(r -> r.getCode()).orElse(null))
+                .roleLabel(m.role().map(r -> r.getLocalizedLabel(locale, messageService)).orElse(null))
 
                 .statusCode(m.status().getCode())
                 .statusLabel(m.status().getLocalizedLabel(locale, messageService))
 
-                .since(m.since().getInstant())
-                .deactivatedAt(m.deactivatedAt().map(TimestampValue::getInstant).orElse(null))
+                .requestedAt(m.requestedAt().getInstant())
+                .decidedAt(m.decidedAt().map(TimestampValue::getInstant).orElse(null))
+                .rejectionReason(m.rejectionReason().orElse(null))
 
                 .createdAt(m.createdAt().getInstant())
                 .updatedAt(m.updatedAt().getInstant())

@@ -19,12 +19,13 @@ public class MembershipSnapshotToEventPayloadMapperV1 {
                 requiredText(json, "tenantId"),
                 requiredText(json, "communityId"),
                 requiredText(json, "userId"),
-                requiredText(json, "roleCode"),
+                text(json, "roleCode"),
                 text(json, "roleLabel"),
                 requiredText(json, "statusCode"),
                 text(json, "statusLabel"),
-                instant(json, "since"),
-                instant(json, "deactivatedAt"),
+                instant(json, "requestedAt"),
+                instant(json, "decidedAt"),
+                text(json, "rejectionReason"),
                 instant(json, "createdAt"),
                 instant(json, "updatedAt")
         );

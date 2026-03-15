@@ -1,0 +1,55 @@
+services:
+  eureka-server:
+    build:
+      context: ../platform/eureka-server
+    container_name: paravai-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      HOSTNAME: eureka-server
+    networks:
+      - paravai-net
+
+  edge-service:
+    build:
+      context: ../platform/edge-service
+    container_name: paravai-edge
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      HOSTNAME: edge-service
+    depends_on:
+      - eureka-server
+    networks:
+      - paravai-net
+
+  community:
+    build:
+      context: ../cmm/community-management/community
+    container_name: paravai-community
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      HOSTNAME: community
+    depends_on:
+      - eureka-server
+    networks:
+      - paravai-net
+
+  membership:
+    build:
+      context: ../cmm/community-management/membership
+    container_name: paravai-membership
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      HOSTNAME: membership
+    depends_on:
+      - eureka-server
+    networks:
+      - paravai-net
+
+networks:
+  paravai-net:
+    external: true
+    name: paravai-net

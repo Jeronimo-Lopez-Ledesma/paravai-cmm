@@ -7,8 +7,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Domain port (Hexagonal Architecture).
- * No Spring, no Mongo, no DTOs.
+ * Domain port for Membership aggregate.
+ *
+ * Hexagonal Architecture:
+ * - no Spring
+ * - no persistence technology
+ * - no DTOs
  */
 public interface MembershipRepository {
 
@@ -16,22 +20,50 @@ public interface MembershipRepository {
 
     Mono<Membership> findById(IdValue id);
 
-    Mono<Void> deleteById(IdValue id);
+    /**
+     * Finds the membership relationship by its business key.
+     *
+     * Business key:
+     * - (tenantId, communityId, userId)
+     */
+    Mono<Membership> findByTenantIdAndCommunityIdAndUserId(
+            IdValue tenantId,
+            IdValue communityId,
+            IdValue userId
+    );
 
     /**
-     * Domain uniqueness constraint:
-     * - A user can have only one membership record per (tenantId, communityId).
+     * Returns all memberships of a community.
+     *
+     * Useful for administrative checks and future queries.
      */
-    Mono<Boolean> existsByTenantIdAndCommunityIdAndUserId(IdValue tenantId, IdValue communityId, IdValue userId);
+    Flux<Membership> findByTenantIdAndCommunityId(
+            IdValue tenantId,
+            IdValue communityId
+    );
 
     /**
-     * Find membership by business key (very common for permission checks).
+     * Counts active administrators in a community.
+     *
+     * Needed to enforce the invariant:
+     * - a community must keep at least one ACTIVE ADMIN
      */
-    Mono<Membership> findByTenantIdAndCommunityIdAndUserId(IdValue tenantId, IdValue communityId, IdValue userId);
+    Mono<Long> countActiveAdmins(
+            IdValue tenantId,
+            IdValue communityId
+    );
 
-    // Search with pagination (filters + search + sort + pagination)
+    /**
+     * Generic paginated/filterable search.
+     *
+     * Used for listing memberships with filters, search text, sorting and pagination.
+     */
     Flux<Membership> search(SearchQueryValue query);
 
-    // Needed for pagination
+    /**
+     * Total number of results matching the same search criteria.
+     *
+     * Used together with search(...) for pagination metadata.
+     */
     Mono<Long> count(SearchQueryValue query);
 }

@@ -3,6 +3,7 @@ package com.paravai.communities.membership.api.rest.v1;
 import com.paravai.communities.membership.api.rest.v1.dto.InviteMemberRequest;
 import com.paravai.communities.membership.api.rest.v1.dto.MembershipResponse;
 import com.paravai.communities.membership.application.command.invite.InviteMemberService;
+import com.paravai.communities.membership.application.command.request.RequestMembershipService;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.localization.LocaleContext;
 import com.paravai.foundation.localization.MessageService;
@@ -30,18 +31,21 @@ import java.util.Locale;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/v1/communities/{communityId}/memberships")
+@RequestMapping("/v1/communities/{communityId}")
 @Tag(name = "Memberships", description = "Operations related to Community Memberships")
 public class MembershipController {
 
     private static final Logger log = LoggerFactory.getLogger(MembershipController.class);
 
     private final InviteMemberService inviteService;
+    private final RequestMembershipService requestMembershipService;
     private final MessageService messageService;
 
     public MembershipController(InviteMemberService inviteService,
+                                RequestMembershipService requestMembershipService,
                                 MessageService messageService) {
         this.inviteService = Objects.requireNonNull(inviteService, "inviteService");
+        this.requestMembershipService = Objects.requireNonNull(requestMembershipService, "requestMembershipService");
         this.messageService = Objects.requireNonNull(messageService, "messageService");
     }
 
@@ -49,13 +53,13 @@ public class MembershipController {
      * EPIC A / A4 - Invite initial members
      *
      * REST surface:
-     * - POST /v1/communities/{communityId}/memberships (represents invitation as Membership with status=PENDING)
+     * - POST /v1/communities/{communityId}/memberships
      *
      * Notes:
-     * - tenantId and inviter userOid come from RequestContext (not from payload)
-     * - authorization: inviter must be ADMIN (resolved through Membership aggregate/repo)
+     * - tenantId and inviter userOid come from RequestContext
+     * - authorization: inviter must be ADMIN
      */
-    @PostMapping
+    @PostMapping("/memberships")
     @Operation(summary = "Invite a user to a community (creates a PENDING membership)")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Invitation created successfully"),
@@ -82,11 +86,7 @@ public class MembershipController {
 
             final IdValue tenantIdVo = IdValue.of(tenantId);
             final IdValue communityIdVo = IdValue.of(communityId);
-
-            // For MVP: invitee comes from payload
             final IdValue inviteeUserIdVo = IdValue.of(dto.getInviteeUserId());
-
-            // Inviter comes from context (for permission check)
             final IdValue inviterUserIdVo = IdValue.of(userOid);
 
             return inviteService.invite(tenantIdVo, communityIdVo, inviterUserIdVo, inviteeUserIdVo)
@@ -111,6 +111,88 @@ public class MembershipController {
                                         .body(body);
                             })
                     );
+        });
+    }
+
+    /**
+     * EPIC B / B1 - Request membership
+     *
+     * REST surface:
+     * - POST /v1/communities/{communityId}/membership-requests
+     *
+     * Notes:
+     * - tenantId and requester userOid come from RequestContext
+     * - no request body is required for MVP
+     */
+    @PostMapping("/membership-requests")
+    @Operation(summary = "Request access to a community")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Membership request created successfully"),
+            @ApiResponse(responseCode = "200", description = "Existing pending membership request returned"),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Community not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict (already active member or rejected request)", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<MembershipResponse>>> requestMembership(
+            @PathVariable("communityId") String communityId,
+            ServerHttpRequest httpRequest
+    ) {
+        return Mono.deferContextual(ctx -> {
+            final String traceId = RequestContext.getTraceId(ctx);
+            final String userOid = RequestContext.getUserOid(ctx);
+            final String tenantId = RequestContext.getTenantId(ctx);
+            final Locale locale = LocaleContext.getOrDefault(ctx);
+
+            log.debug("[{}][{}] POST /v1/communities/{}/membership-requests - requesting access (tenantId={})",
+                    traceId, userOid, communityId, tenantId);
+
+            final IdValue tenantIdVo = IdValue.of(tenantId);
+            final IdValue communityIdVo = IdValue.of(communityId);
+            final IdValue requesterUserIdVo = IdValue.of(userOid);
+
+            return requestMembershipService.request(
+                            tenantIdVo,
+                            communityIdVo,
+                            requesterUserIdVo
+                    )
+                    .flatMap(result -> {
+                        MembershipResponse response = MembershipResponse.fromDomain(
+                                result.membership(),
+                                locale,
+                                messageService
+                        );
+
+                        return JsonApiResponseBuilder.buildSingle(
+                                Mono.just(response),
+                                httpRequest,
+                                "membership-requests",
+                                MembershipResponse::getId
+                        ).map(body -> {
+                            if (result.created()) {
+                                URI location = UriComponentsBuilder.fromUri(httpRequest.getURI())
+                                        .path("/{id}")
+                                        .build(response.getId());
+
+                                log.info("[{}][{}] Membership request {} created for community {}",
+                                        traceId, userOid, response.getId(), communityId);
+
+                                return ResponseEntity
+                                        .created(location)
+                                        .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                        .body(body);
+                            }
+
+                            log.info("[{}][{}] Existing pending membership request {} returned for community {}",
+                                    traceId, userOid, response.getId(), communityId);
+
+                            return ResponseEntity
+                                    .ok()
+                                    .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                    .body(body);
+                        });
+                    });
         });
     }
 }

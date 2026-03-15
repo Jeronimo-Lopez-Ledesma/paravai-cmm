@@ -22,7 +22,7 @@ import java.time.Instant;
 )
 public class MembershipDocument {
 
-    public static final int DOCUMENT_VERSION = 1;
+    public static final int DOCUMENT_VERSION = 2;
     private static final Logger log = LoggerFactory.getLogger(MembershipDocument.class);
 
     @Id
@@ -32,11 +32,33 @@ public class MembershipDocument {
     private String communityId;
     private String userId;
 
+    /**
+     * Nullable by design:
+     * - ACTIVE   -> roleCode required
+     * - PENDING  -> roleCode null
+     * - REJECTED -> roleCode null
+     */
     private String roleCode;
+
     private String statusCode;
 
-    private Instant since;
-    private Instant deactivatedAt;
+    /**
+     * Optional reason for rejected membership.
+     * Only meaningful when statusCode == REJECTED.
+     */
+    private String rejectionReason;
+
+    /**
+     * Request creation timestamp.
+     */
+    private Instant requestedAt;
+
+    /**
+     * Decision timestamp:
+     * - null for PENDING
+     * - non-null for ACTIVE / REJECTED
+     */
+    private Instant decidedAt;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -47,25 +69,28 @@ public class MembershipDocument {
     // Mapping
     // -------------------------
 
-    public static MembershipDocument fromDomain(Membership m) {
-        MembershipDocument d = new MembershipDocument();
+    public static MembershipDocument fromDomain(Membership membership) {
+        MembershipDocument document = new MembershipDocument();
 
-        d.id = m.id().value();
+        document.id = membership.id().value();
 
-        d.tenantId = m.tenantId().value();
-        d.communityId = m.communityId().value();
-        d.userId = m.userId().value();
+        document.tenantId = membership.tenantId().value();
+        document.communityId = membership.communityId().value();
+        document.userId = membership.userId().value();
 
-        d.roleCode = m.role().getCode();
-        d.statusCode = m.status().getCode();
+        document.roleCode = membership.role().map(CommunityRoleValue::getCode).orElse(null);
+        document.statusCode = membership.status().getCode();
+        document.rejectionReason = membership.rejectionReason().orElse(null);
 
-        d.since = m.since().getInstant();
-        d.deactivatedAt = m.deactivatedAt().map(TimestampValue::getInstant).orElse(null);
+        document.requestedAt = membership.requestedAt().getInstant();
+        document.decidedAt = membership.decidedAt().map(TimestampValue::getInstant).orElse(null);
 
-        d.createdAt = m.createdAt().getInstant();
-        d.updatedAt = m.updatedAt().getInstant();
+        document.createdAt = membership.createdAt().getInstant();
+        document.updatedAt = membership.updatedAt().getInstant();
 
-        return d;
+        document.documentVersion = DOCUMENT_VERSION;
+
+        return document;
     }
 
     public Membership toDomain() {
@@ -73,6 +98,27 @@ public class MembershipDocument {
             log.warn("Reading older Membership document version {}", documentVersion);
         }
 
+        validateStructure();
+
+        return MembershipFactory.recreate(
+                IdValue.of(id),
+                IdValue.of(tenantId),
+                IdValue.of(communityId),
+                IdValue.of(userId),
+                roleCode != null && !roleCode.isBlank() ? CommunityRoleValue.of(roleCode) : null,
+                MembershipStatusValue.of(statusCode),
+                rejectionReason,
+                TimestampValue.of(requestedAt),
+                decidedAt != null ? TimestampValue.of(decidedAt) : null,
+                TimestampValue.of(createdAt),
+                TimestampValue.of(updatedAt)
+        );
+    }
+
+    private void validateStructure() {
+        if (id == null || id.isBlank()) {
+            throw new IllegalStateException("Invalid Membership document: id is required");
+        }
         if (tenantId == null || tenantId.isBlank()) {
             throw new IllegalStateException("Invalid Membership document: tenantId is required");
         }
@@ -82,14 +128,11 @@ public class MembershipDocument {
         if (userId == null || userId.isBlank()) {
             throw new IllegalStateException("Invalid Membership document: userId is required");
         }
-        if (roleCode == null || roleCode.isBlank()) {
-            throw new IllegalStateException("Invalid Membership document: roleCode is required");
-        }
         if (statusCode == null || statusCode.isBlank()) {
             throw new IllegalStateException("Invalid Membership document: statusCode is required");
         }
-        if (since == null) {
-            throw new IllegalStateException("Invalid Membership document: since is required");
+        if (requestedAt == null) {
+            throw new IllegalStateException("Invalid Membership document: requestedAt is required");
         }
         if (createdAt == null) {
             throw new IllegalStateException("Invalid Membership document: createdAt is required");
@@ -97,55 +140,105 @@ public class MembershipDocument {
         if (updatedAt == null) {
             throw new IllegalStateException("Invalid Membership document: updatedAt is required");
         }
-
-        return MembershipFactory.recreate(
-                IdValue.of(id),
-                IdValue.of(tenantId),
-                IdValue.of(communityId),
-                IdValue.of(userId),
-                CommunityRoleValue.of(roleCode),
-                MembershipStatusValue.of(statusCode),
-                TimestampValue.of(since),
-                deactivatedAt != null ? TimestampValue.of(deactivatedAt) : null,
-                TimestampValue.of(createdAt),
-                TimestampValue.of(updatedAt)
-        );
     }
 
     // -------------------------
-    // Getters/Setters
+    // Getters / Setters
     // -------------------------
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTenantId() { return tenantId; }
-    public void setTenantId(String tenantId) { this.tenantId = tenantId; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getCommunityId() { return communityId; }
-    public void setCommunityId(String communityId) { this.communityId = communityId; }
+    public String getTenantId() {
+        return tenantId;
+    }
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-    public String getRoleCode() { return roleCode; }
-    public void setRoleCode(String roleCode) { this.roleCode = roleCode; }
+    public String getCommunityId() {
+        return communityId;
+    }
 
-    public String getStatusCode() { return statusCode; }
-    public void setStatusCode(String statusCode) { this.statusCode = statusCode; }
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 
-    public Instant getSince() { return since; }
-    public void setSince(Instant since) { this.since = since; }
+    public String getUserId() {
+        return userId;
+    }
 
-    public Instant getDeactivatedAt() { return deactivatedAt; }
-    public void setDeactivatedAt(Instant deactivatedAt) { this.deactivatedAt = deactivatedAt; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public String getRoleCode() {
+        return roleCode;
+    }
 
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
-    public int getDocumentVersion() { return documentVersion; }
-    public void setDocumentVersion(int documentVersion) { this.documentVersion = documentVersion; }
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public Instant getRequestedAt() {
+        return requestedAt;
+    }
+
+    public void setRequestedAt(Instant requestedAt) {
+        this.requestedAt = requestedAt;
+    }
+
+    public Instant getDecidedAt() {
+        return decidedAt;
+    }
+
+    public void setDecidedAt(Instant decidedAt) {
+        this.decidedAt = decidedAt;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getDocumentVersion() {
+        return documentVersion;
+    }
+
+    public void setDocumentVersion(int documentVersion) {
+        this.documentVersion = documentVersion;
+    }
 }

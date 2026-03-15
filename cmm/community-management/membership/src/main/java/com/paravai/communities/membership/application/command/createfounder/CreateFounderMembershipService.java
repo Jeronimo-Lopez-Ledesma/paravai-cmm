@@ -10,6 +10,7 @@ import com.paravai.foundation.domain.event.NonBlockingEventPublisher;
 import com.paravai.foundation.domain.event.ReactiveDomainEventPublisher;
 import com.paravai.foundation.domain.value.OperationTypeValue;
 import com.paravai.foundation.snapshot.SnapshotMapper;
+import com.paravai.communities.membership.application.command.createfounder.CreateFounderMembershipRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

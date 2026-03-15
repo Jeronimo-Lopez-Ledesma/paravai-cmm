@@ -1,0 +1,26 @@
+app:
+  environment: DEV
+
+info:
+  app:
+    name: edge-service
+    description: Edge Service / API Gateway
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: false
+    hostname: localhost

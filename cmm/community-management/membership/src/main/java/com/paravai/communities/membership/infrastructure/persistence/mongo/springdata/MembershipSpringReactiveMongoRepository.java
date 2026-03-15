@@ -2,6 +2,7 @@ package com.paravai.communities.membership.infrastructure.persistence.mongo.spri
 
 import com.paravai.communities.membership.infrastructure.persistence.mongo.document.MembershipDocument;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -23,4 +24,16 @@ public interface MembershipSpringReactiveMongoRepository
      * Lookup by business key (very common for permission checks).
      */
     Mono<MembershipDocument> findByTenantIdAndCommunityIdAndUserId(String tenantId, String communityId, String userId);
+
+    Flux<MembershipDocument> findByTenantIdAndCommunityId(
+            String tenantId,
+            String communityId
+    );
+
+    Mono<Long> countByTenantIdAndCommunityIdAndStatusCodeAndRoleCode(
+            String tenantId,
+            String communityId,
+            String statusCode,
+            String roleCode
+    );
 }

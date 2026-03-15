@@ -7,21 +7,32 @@ import com.paravai.foundation.domain.value.TimestampValue;
 
 import java.io.Serializable;
 import java.time.Clock;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 
 /**
  * Aggregate Root: Membership
  *
- * Relationship between user and community.
+ * Represents the relationship between a user and a community.
  *
- * Uniqueness (repository-level):
- * - (tenantId, communityId, userId) is unique
+ * MVP lifecycle:
+ * - PENDING
+ * - ACTIVE
+ * - REJECTED
+ *
+ * This aggregate models both:
+ * - access request
+ * - active membership
+ *
+ * Repository / application-level invariants (NOT enforceable from a single aggregate instance):
+ * - uniqueness by (tenantId, communityId, userId)
+ * - only one effective relationship per (tenantId, communityId, userId)
+ * - community must keep at least one ACTIVE ADMIN
  */
 public final class Membership implements Serializable {
+
+    private static final int MAX_REJECTION_REASON_LENGTH = 500;
 
     private final IdValue id;
 
@@ -29,23 +40,53 @@ public final class Membership implements Serializable {
     private final IdValue communityId;
     private final IdValue userId;
 
+    /**
+     * Only applicable when status == ACTIVE.
+     * Must be null for PENDING and REJECTED.
+     */
     private CommunityRoleValue role;
+
+    /**
+     * Allowed MVP states:
+     * - PENDING
+     * - ACTIVE
+     * - REJECTED
+     */
     private MembershipStatusValue status;
 
-    private TimestampValue since;
-    private TimestampValue deactivatedAt;
+    /**
+     * Optional reason when membership request is rejected.
+     * Only applicable when status == REJECTED.
+     */
+    private String rejectionReason;
+
+    /**
+     * Instant when the membership request was created.
+     */
+    private final TimestampValue requestedAt;
+
+    /**
+     * Instant when the request was approved or rejected.
+     * Must be null while status == PENDING.
+     * Must be non-null for ACTIVE and REJECTED.
+     */
+    private TimestampValue decidedAt;
 
     private final TimestampValue createdAt;
     private TimestampValue updatedAt;
 
+    /**
+     * Constructor intended for MembershipFactory.create(...) / recreate(...).
+     */
     Membership(IdValue id,
                IdValue tenantId,
                IdValue communityId,
                IdValue userId,
                CommunityRoleValue role,
                MembershipStatusValue status,
-               TimestampValue since,
-               TimestampValue deactivatedAt,
+               String rejectionReason,
+               TimestampValue requestedAt,
+               TimestampValue decidedAt,
                TimestampValue createdAt,
                TimestampValue updatedAt,
                boolean validate) {
@@ -56,11 +97,12 @@ public final class Membership implements Serializable {
         this.communityId = Objects.requireNonNull(communityId, "communityId is required");
         this.userId = Objects.requireNonNull(userId, "userId is required");
 
-        this.role = Objects.requireNonNull(role, "role is required");
+        this.role = role;
         this.status = Objects.requireNonNull(status, "status is required");
+        this.rejectionReason = normalizeReason(rejectionReason);
 
-        this.since = Objects.requireNonNull(since, "since is required");
-        this.deactivatedAt = deactivatedAt;
+        this.requestedAt = Objects.requireNonNull(requestedAt, "requestedAt is required");
+        this.decidedAt = decidedAt;
 
         this.createdAt = Objects.requireNonNull(createdAt, "createdAt is required");
         this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt is required");
@@ -70,159 +112,292 @@ public final class Membership implements Serializable {
         }
     }
 
-    public void changeRole(CommunityRoleValue newRole) {
-        this.role = Objects.requireNonNull(newRole, "role is required");
-        touch();
-        validateInvariants(Clock.systemUTC());
-    }
-
     /**
-     * Invitation acceptance:
-     * - PENDING -> ACTIVE (idempotent)
+     * Approves a pending request and activates the membership with the given initial role.
+     *
+     * Covered invariants:
+     * - only PENDING can transition to ACTIVE
+     * - ACTIVE memberships must have a role
+     * - ACTIVE memberships must not have rejectionReason
+     * - ACTIVE memberships must have decidedAt
+     *
+     * Idempotency:
+     * - if already ACTIVE, returns false and does not mutate state
      */
-    public void acceptInvitation() {
-        if (status != MembershipStatusValue.PENDING) return;
-        this.status = MembershipStatusValue.ACTIVE;
-        touch();
-        validateInvariants(Clock.systemUTC());
-    }
+    public boolean approve(CommunityRoleValue initialRole, TimestampValue when) {
+        Objects.requireNonNull(initialRole, "initialRole is required");
 
-    /**
-     * Invitation revocation:
-     * - PENDING -> REVOKED (idempotent)
-     */
-    public void revokeInvitation(TimestampValue when) {
-        if (status == MembershipStatusValue.REVOKED) return;
+        if (status == MembershipStatusValue.ACTIVE) {
+            return false;
+        }
 
         if (status != MembershipStatusValue.PENDING) {
-            throw new IllegalStateException("Only PENDING invitations can be revoked");
+            throw new IllegalStateException("Only PENDING memberships can be approved");
         }
 
-        this.status = MembershipStatusValue.REVOKED;
-        this.deactivatedAt = (when != null ? when : TimestampValue.now());
-        touch();
-        validateInvariants(Clock.systemUTC());
-    }
-
-    public void deactivate(TimestampValue when) {
-        if (status == MembershipStatusValue.INACTIVE) return;
-
-        if (status == MembershipStatusValue.PENDING) {
-            throw new IllegalStateException("Cannot deactivate a PENDING invitation; revoke it instead");
-        }
-
-        this.status = MembershipStatusValue.INACTIVE;
-        this.deactivatedAt = (when != null ? when : TimestampValue.now());
-        touch();
-        validateInvariants(Clock.systemUTC());
-    }
-
-    public void reactivate(TimestampValue newSince) {
-        if (status == MembershipStatusValue.ACTIVE) return;
-
-        if (status == MembershipStatusValue.PENDING) {
-            throw new IllegalStateException("Cannot reactivate a PENDING invitation; accept it instead");
-        }
-        if (status == MembershipStatusValue.REVOKED) {
-            throw new IllegalStateException("Cannot reactivate a REVOKED invitation");
-        }
-
-        TimestampValue effectiveSince = (newSince != null ? newSince : TimestampValue.now());
-        if (effectiveSince.getInstant().isAfter(Instant.now())) {
-            throw new IllegalArgumentException("since cannot be in the future");
-        }
+        TimestampValue effectiveWhen = (when != null ? when : TimestampValue.now());
 
         this.status = MembershipStatusValue.ACTIVE;
-        this.deactivatedAt = null;
-        this.since = effectiveSince;
+        this.role = initialRole;
+        this.rejectionReason = null;
+        this.decidedAt = effectiveWhen;
 
-        touch();
+        touch(effectiveWhen);
         validateInvariants(Clock.systemUTC());
+        return true;
     }
 
+    /**
+     * Rejects a pending request.
+     *
+     * Covered invariants:
+     * - only PENDING can transition to REJECTED
+     * - REJECTED memberships must not have role
+     * - REJECTED memberships must have decidedAt
+     * - rejectionReason is optional, but if present it must be normalized and within max length
+     *
+     * Idempotency:
+     * - if already REJECTED, returns false and does not mutate state
+     */
+    public boolean reject(String reason, TimestampValue when) {
+        if (status == MembershipStatusValue.REJECTED) {
+            return false;
+        }
+
+        if (status != MembershipStatusValue.PENDING) {
+            throw new IllegalStateException("Only PENDING memberships can be rejected");
+        }
+
+        TimestampValue effectiveWhen = (when != null ? when : TimestampValue.now());
+
+        this.status = MembershipStatusValue.REJECTED;
+        this.role = null;
+        this.rejectionReason = normalizeReason(reason);
+        this.decidedAt = effectiveWhen;
+
+        touch(effectiveWhen);
+        validateInvariants(Clock.systemUTC());
+        return true;
+    }
+
+    /**
+     * Assigns or changes role for an ACTIVE membership.
+     *
+     * Covered invariants:
+     * - only ACTIVE memberships can have role
+     * - role must be non-null when status == ACTIVE
+     *
+     * NOT covered here:
+     * - "community must keep at least one ACTIVE ADMIN"
+     *   This requires querying other memberships in the same community and
+     *   must be enforced by a domain service / application service.
+     *
+     * Idempotency:
+     * - if role is already the requested one, returns false
+     */
+    public boolean changeRole(CommunityRoleValue newRole, TimestampValue when) {
+        Objects.requireNonNull(newRole, "newRole is required");
+
+        if (status != MembershipStatusValue.ACTIVE) {
+            throw new IllegalStateException("Role can only be changed for ACTIVE memberships");
+        }
+
+        if (newRole.equals(this.role)) {
+            return false;
+        }
+
+        TimestampValue effectiveWhen = (when != null ? when : TimestampValue.now());
+
+        this.role = newRole;
+        touch(effectiveWhen);
+        validateInvariants(Clock.systemUTC());
+        return true;
+    }
+
+    /**
+     * Convenience method for approval idempotency checks at application level.
+     *
+     * Covered invariant:
+     * - reflects current aggregate state only
+     */
+    public boolean isPending() {
+        return status == MembershipStatusValue.PENDING;
+    }
+
+    /**
+     * Convenience method for application/domain policies.
+     *
+     * Covered invariant:
+     * - ACTIVE memberships are the only memberships considered real members
+     */
     public boolean isActive() {
-        return isActive(Clock.systemUTC());
+        return status == MembershipStatusValue.ACTIVE;
     }
 
-    public boolean isActive(Clock clock) {
-        if (status != MembershipStatusValue.ACTIVE) return false;
-        return !since.getInstant().isAfter(clock.instant());
+    /**
+     * Convenience method for application/domain policies.
+     */
+    public boolean isRejected() {
+        return status == MembershipStatusValue.REJECTED;
     }
 
-    public Duration getActiveDuration() {
-        return getActiveDuration(Clock.systemUTC());
-    }
-
-    public Duration getActiveDuration(Clock clock) {
-        Instant end = (status == MembershipStatusValue.ACTIVE
-                ? clock.instant()
-                : deactivatedAt != null ? deactivatedAt.getInstant() : null);
-
-        if (end == null) {
-            end = clock.instant();
-        }
-
-        return Duration.between(since.getInstant(), end);
-    }
-
-    public long getActiveDays() {
-        return getActiveDays(Clock.systemUTC());
-    }
-
-    public long getActiveDays(Clock clock) {
-        Instant end = (status == MembershipStatusValue.ACTIVE
-                ? clock.instant()
-                : deactivatedAt != null ? deactivatedAt.getInstant() : null);
-
-        if (end == null) {
-            end = clock.instant();
-        }
-
-        return ChronoUnit.DAYS.between(since.getInstant(), end);
+    /**
+     * Returns true when membership is ACTIVE and role is ADMIN.
+     *
+     * Covered invariants:
+     * - role only applies to ACTIVE memberships
+     */
+    public boolean isActiveAdmin() {
+        return status == MembershipStatusValue.ACTIVE
+                && CommunityRoleValue.ADMIN.equals(role);
     }
 
     private void validateInvariants(Clock clock) {
+        Instant now = clock.instant();
+
         if (createdAt.isAfter(updatedAt)) {
             throw new IllegalStateException("createdAt cannot be after updatedAt");
         }
 
-        if (since.getInstant().isAfter(clock.instant())) {
-            throw new IllegalArgumentException("since cannot be in the future");
+        if (requestedAt.isAfter(updatedAt)) {
+            throw new IllegalStateException("requestedAt cannot be after updatedAt");
         }
 
-        if (deactivatedAt != null && deactivatedAt.getInstant().isBefore(since.getInstant())) {
-            throw new IllegalArgumentException("deactivatedAt cannot be before since");
+        if (requestedAt.getInstant().isAfter(now)) {
+            throw new IllegalArgumentException("requestedAt cannot be in the future");
         }
 
-        if (status == MembershipStatusValue.ACTIVE || status == MembershipStatusValue.PENDING) {
-            if (deactivatedAt != null) {
-                throw new IllegalStateException(status + " membership cannot have deactivatedAt");
+        if (createdAt.getInstant().isAfter(now)) {
+            throw new IllegalArgumentException("createdAt cannot be in the future");
+        }
+
+        if (updatedAt.getInstant().isAfter(now)) {
+            throw new IllegalArgumentException("updatedAt cannot be in the future");
+        }
+
+        if (decidedAt != null) {
+            if (decidedAt.getInstant().isBefore(requestedAt.getInstant())) {
+                throw new IllegalArgumentException("decidedAt cannot be before requestedAt");
             }
-        } else {
-            if (deactivatedAt == null) {
-                throw new IllegalStateException(status + " membership must have deactivatedAt");
+
+            if (decidedAt.getInstant().isAfter(now)) {
+                throw new IllegalArgumentException("decidedAt cannot be in the future");
+            }
+
+            if (decidedAt.isAfter(updatedAt)) {
+                throw new IllegalStateException("decidedAt cannot be after updatedAt");
             }
         }
+
+        if (MembershipStatusValue.PENDING.equals(status)) {
+            if (role != null) {
+                throw new IllegalStateException("PENDING membership cannot have role");
+            }
+            if (decidedAt != null) {
+                throw new IllegalStateException("PENDING membership cannot have decidedAt");
+            }
+            if (rejectionReason != null) {
+                throw new IllegalStateException("PENDING membership cannot have rejectionReason");
+            }
+            return;
+        }
+
+        if (MembershipStatusValue.ACTIVE.equals(status)) {
+            if (role == null) {
+                throw new IllegalStateException("ACTIVE membership must have role");
+            }
+            if (decidedAt == null) {
+                throw new IllegalStateException("ACTIVE membership must have decidedAt");
+            }
+            if (rejectionReason != null) {
+                throw new IllegalStateException("ACTIVE membership cannot have rejectionReason");
+            }
+            return;
+        }
+
+        if (MembershipStatusValue.REJECTED.equals(status)) {
+            if (role != null) {
+                throw new IllegalStateException("REJECTED membership cannot have role");
+            }
+            if (decidedAt == null) {
+                throw new IllegalStateException("REJECTED membership must have decidedAt");
+            }
+            if (rejectionReason != null && rejectionReason.length() > MAX_REJECTION_REASON_LENGTH) {
+                throw new IllegalArgumentException("rejectionReason exceeds maximum allowed length");
+            }
+            return;
+        }
+
+        throw new IllegalStateException("Unsupported membership status: " + status);
     }
 
-    private void touch() {
-        this.updatedAt = TimestampValue.now();
+
+    private void touch(TimestampValue when) {
+        this.updatedAt = (when != null ? when : TimestampValue.now());
     }
 
-    public IdValue id() { return id; }
+    private static String normalizeReason(String reason) {
+        if (reason == null) {
+            return null;
+        }
 
-    public IdValue tenantId() { return tenantId; }
-    public IdValue communityId() { return communityId; }
-    public IdValue userId() { return userId; }
+        String normalized = reason.trim();
+        if (normalized.isEmpty()) {
+            return null;
+        }
 
-    public CommunityRoleValue role() { return role; }
-    public MembershipStatusValue status() { return status; }
+        if (normalized.length() > MAX_REJECTION_REASON_LENGTH) {
+            throw new IllegalArgumentException(
+                    "rejectionReason cannot exceed " + MAX_REJECTION_REASON_LENGTH + " characters"
+            );
+        }
 
-    public TimestampValue since() { return since; }
-    public Optional<TimestampValue> deactivatedAt() { return Optional.ofNullable(deactivatedAt); }
+        return normalized;
+    }
 
-    public TimestampValue createdAt() { return createdAt; }
-    public TimestampValue updatedAt() { return updatedAt; }
+    public IdValue id() {
+        return id;
+    }
+
+    public IdValue tenantId() {
+        return tenantId;
+    }
+
+    public IdValue communityId() {
+        return communityId;
+    }
+
+    public IdValue userId() {
+        return userId;
+    }
+
+    public Optional<CommunityRoleValue> role() {
+        return Optional.ofNullable(role);
+    }
+
+    public MembershipStatusValue status() {
+        return status;
+    }
+
+    public Optional<String> rejectionReason() {
+        return Optional.ofNullable(rejectionReason);
+    }
+
+    public TimestampValue requestedAt() {
+        return requestedAt;
+    }
+
+    public Optional<TimestampValue> decidedAt() {
+        return Optional.ofNullable(decidedAt);
+    }
+
+    public TimestampValue createdAt() {
+        return createdAt;
+    }
+
+    public TimestampValue updatedAt() {
+        return updatedAt;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -232,11 +407,20 @@ public final class Membership implements Serializable {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(id); }
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     @Override
     public String toString() {
-        return "Membership{id=%s, tenantId=%s, communityId=%s, userId=%s, role=%s, status=%s}"
-                .formatted(id.value(), tenantId.value(), communityId.value(), userId.value(), role, status);
+        return "Membership{id=%s, tenantId=%s, communityId=%s, userId=%s, status=%s, role=%s}"
+                .formatted(
+                        id.value(),
+                        tenantId.value(),
+                        communityId.value(),
+                        userId.value(),
+                        status,
+                        role != null ? role : "null"
+                );
     }
 }

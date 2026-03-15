@@ -7,8 +7,6 @@ import com.paravai.communities.membership.application.event.MembershipEventFacto
 import com.paravai.communities.membership.domain.model.Membership;
 import com.paravai.communities.membership.domain.model.MembershipFactory;
 import com.paravai.communities.membership.domain.repository.MembershipRepository;
-import com.paravai.communities.membership.domain.value.CommunityRoleValue;
-import com.paravai.communities.membership.domain.value.MembershipStatusValue;
 import com.paravai.foundation.domain.event.EntityChangedEvent;
 import com.paravai.foundation.domain.event.NonBlockingEventPublisher;
 import com.paravai.foundation.domain.event.ReactiveDomainEventPublisher;
@@ -24,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
 import java.util.Objects;
 
 @Service
@@ -68,34 +65,56 @@ public class CreateCreatorMembershipService {
                     return Mono.error(new IllegalArgumentException("tenantId/communityId/userId cannot be null"));
                 }
 
-                // Idempotent: if already exists, return it
                 return repo.findByTenantIdAndCommunityIdAndUserId(tenantId, communityId, userId)
-                        .switchIfEmpty(Mono.defer(() -> {
-                            Instant now = Instant.now();
-                            Membership m = MembershipFactory.createAdmin(
-                                    tenantId,
-                                    communityId,
-                                    userId
-                            );
-                            return repo.save(m);
-                        }))
-                        .flatMap(saved -> {
-                            JsonNode current = snapshots.snapshot(saved);
-
-                            EntityChangedEvent evt = eventFactory.build(
-                                    OperationTypeValue.CREATED,
-                                    saved.id(),
-                                    traceId, userOid, sourceSystem,
-                                    "Membership CREATED: " + saved.id().toString(),
-                                    null,
-                                    current
-                            );
-
-                            return publisher.publish(evt).thenReturn(saved);
-                        })
-                        .doOnError(ex -> log.error("[{}][{}] Failed to create creator membership for community {}",
-                                traceId, userOid, communityId, ex));
+                        .switchIfEmpty(Mono.defer(() -> createAndPublishFounderMembership(
+                                tenantId,
+                                communityId,
+                                userId,
+                                traceId,
+                                userOid,
+                                sourceSystem
+                        )))
+                        .doOnError(ex -> log.error(
+                                "[{}][{}] Failed to create creator membership for community {}",
+                                traceId,
+                                userOid,
+                                communityId,
+                                ex
+                        ));
             });
         });
+    }
+
+    private Mono<Membership> createAndPublishFounderMembership(
+            IdValue tenantId,
+            IdValue communityId,
+            IdValue userId,
+            String traceId,
+            String userOid,
+            String sourceSystem
+    ) {
+        Membership membership = MembershipFactory.createFounder(
+                tenantId,
+                communityId,
+                userId
+        );
+
+        return repo.save(membership)
+                .flatMap(saved -> {
+                    JsonNode current = snapshots.snapshot(saved);
+
+                    EntityChangedEvent evt = eventFactory.build(
+                            OperationTypeValue.CREATED,
+                            saved.id(),
+                            traceId,
+                            userOid,
+                            sourceSystem,
+                            "Creator membership created: " + saved.id(),
+                            null,
+                            current
+                    );
+
+                    return publisher.publish(evt).thenReturn(saved);
+                });
     }
 }

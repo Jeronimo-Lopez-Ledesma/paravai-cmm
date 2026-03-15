@@ -27,13 +27,14 @@ spring:
       transaction:
         enabled: true
 
-
 # ============================================================
-# GOVERNANCE / INTERNAL INTEGRATIONS (DEV)
+# EUREKA - DEV
 # ============================================================
-governance:
-  entity-change-tracer:
-    base-url: http://10.206.14.185:11036
+eureka:
+  client:
+    enabled: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 
 # ============================================================

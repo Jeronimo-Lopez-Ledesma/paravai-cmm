@@ -1,0 +1,174 @@
+# ============================================================
+# ENV / APP METADATA (DOCKER)
+# ============================================================
+app:
+  environment: DOCKER
+
+info:
+  app:
+    name: community
+    description: Community Aggregate
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López
+
+
+# ============================================================
+# DATA SOURCE (MongoDB) - DOCKER
+# ============================================================
+spring:
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: community
+      username: admin
+      password: admin
+      authentication-database: admin
+      transaction:
+        enabled: true
+
+
+# ============================================================
+# GOVERNANCE / INTERNAL INTEGRATIONS (DOCKER)
+# ============================================================
+governance:
+  entity-change-tracer:
+    base-url: http://entity-change-tracer:8080
+
+
+# ============================================================
+# KAFKA (Integration Events Producer) - DOCKER
+# ============================================================
+kafka:
+  enabled: true
+  bootstrapServers: kafka:9092
+
+  producer:
+    acks: all
+    retries: 3
+    client-id: community
+
+  integration:
+    topic-prefix: communities
+    default-topic: domain-events
+
+
+# ============================================================
+# OUTBOUND HTTP CLIENT (DOCKER)
+# ============================================================
+standards:
+  http:
+    baseUrl: http://standards:9099
+    connectTimeoutMs: 2000
+    responseTimeoutMs: 3000
+    readTimeoutMs: 3000
+    writeTimeoutMs: 3000
+    pool:
+      maxConnections: 200
+      acquireTimeoutMs: 2000
+      maxIdleTimeMs: 30000
+      maxLifeTimeMs: 120000
+
+
+# ============================================================
+# RESILIENCE4J (DOCKER)
+# ============================================================
+resilience4j:
+  bulkhead:
+    instances:
+      standardsBackend:
+        maxConcurrentCalls: 50
+        maxWaitDuration: 0
+
+  circuitbreaker:
+    instances:
+      standardsBackend:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 5
+
+  retry:
+    instances:
+      standardsBackend:
+        maxAttempts: 3
+        waitDuration: 200ms
+        retryExceptions:
+          - java.io.IOException
+          - reactor.netty.http.client.PrematureCloseException
+        ignoreExceptions:
+          - com.paravai.communities.community.domain.exception.DuplicateCommunityBusinessIdentityException
+
+resilience:
+  order:
+    decorators: [bulkhead, circuitbreaker, retry]
+
+
+# ============================================================
+# OBSERVABILITY / ACTUATOR (DOCKER)
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+
+# ============================================================
+# LOGGING (DOCKER)
+# ============================================================
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    reactor.netty: INFO
+    com.paravai.communities.community: DEBUG
+    com.paravai.foundation.infrastructure.event: DEBUG
+
+
+# ============================================================
+# SERVER / GRPC / EUREKA (DOCKER)
+# ============================================================
+server:
+  port: 8095
+
+grpc:
+  server:
+    port: 9090
+    security:
+      enabled: false
+    permitKeepAliveWithoutCalls: true
+    permitKeepAliveTime: 5m
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: false
+    hostname: community
+
+
+# ============================================================
+# FOUNDATION SECURITY / CORS (DOCKER)
+# ============================================================
+foundation:
+  security:
+    cors:
+      allowed-origins:
+        - http://localhost:4200
+        - https://paravai.com/dev
+        - https://paravai.com/test
+        - https://paravai.com
+      allowed-methods: ["*"]
+      allowed-headers: ["*"]
+      allow-credentials: true

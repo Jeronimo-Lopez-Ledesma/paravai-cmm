@@ -1,0 +1,26 @@
+app:
+  environment: DOCKER
+
+info:
+  app:
+    name: edge-service
+    description: Edge Service / API Gateway
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López
+
+spring:
+  data:
+    redis:
+      host: valkey
+      port: 6379
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: false
+    hostname: edge-service

@@ -13,10 +13,11 @@ import java.util.Objects;
  * Encapsulates valid Membership creation and reconstruction.
  *
  * Methods:
- * - createFounder(): for the initial founder membership after community creation
- * - createAdmin(): for generic admin memberships
- * - createInvitation(): for pending invitations
- * - recreate(): for rehydration from persistence
+ * - createFounder(): creates the initial ACTIVE ADMIN membership for the community creator
+ * - createActiveAdmin(): creates an ACTIVE ADMIN membership
+ * - createActiveMember(): creates an ACTIVE MEMBER membership
+ * - createPendingRequest(): creates a PENDING membership request
+ * - recreate(): rehydrates an existing membership from persistence
  */
 public final class MembershipFactory {
 
@@ -30,11 +31,30 @@ public final class MembershipFactory {
 
     /**
      * Creates the initial founder membership for the community creator.
-     * Current representation: ADMIN + ACTIVE.
+     *
+     * Covered invariants:
+     * - ACTIVE membership must have role
+     * - ACTIVE membership must have decidedAt
+     * - ACTIVE membership must not have rejectionReason
+     * - requestedAt / createdAt / updatedAt are initialized consistently
      */
     public static Membership createFounder(IdValue tenantId,
                                            IdValue communityId,
                                            IdValue userId) {
+        return createActiveAdmin(tenantId, communityId, userId);
+    }
+
+    /**
+     * Creates a generic ACTIVE ADMIN membership.
+     *
+     * Covered invariants:
+     * - ACTIVE membership must have role
+     * - ACTIVE membership must have decidedAt
+     * - ACTIVE membership must not have rejectionReason
+     */
+    public static Membership createActiveAdmin(IdValue tenantId,
+                                               IdValue communityId,
+                                               IdValue userId) {
 
         Objects.requireNonNull(tenantId, "tenantId is required");
         Objects.requireNonNull(communityId, "communityId is required");
@@ -49,20 +69,28 @@ public final class MembershipFactory {
                 userId,
                 CommunityRoleValue.ADMIN,
                 MembershipStatusValue.ACTIVE,
-                now,
                 null,
-                now,
-                now,
+                now,   // requestedAt
+                now,   // decidedAt
+                now,   // createdAt
+                now,   // updatedAt
                 true
         );
     }
 
     /**
-     * Creates a generic ADMIN membership.
+     * Creates a generic ACTIVE MEMBER membership.
+     *
+     * Useful for admin tools, imports, migrations or controlled bootstrap scenarios.
+     *
+     * Covered invariants:
+     * - ACTIVE membership must have role
+     * - ACTIVE membership must have decidedAt
+     * - ACTIVE membership must not have rejectionReason
      */
-    public static Membership createAdmin(IdValue tenantId,
-                                         IdValue communityId,
-                                         IdValue userId) {
+    public static Membership createActiveMember(IdValue tenantId,
+                                                IdValue communityId,
+                                                IdValue userId) {
 
         Objects.requireNonNull(tenantId, "tenantId is required");
         Objects.requireNonNull(communityId, "communityId is required");
@@ -75,41 +103,50 @@ public final class MembershipFactory {
                 tenantId,
                 communityId,
                 userId,
-                CommunityRoleValue.ADMIN,
-                MembershipStatusValue.ACTIVE,
-                now,
-                null,
-                now,
-                now,
-                true
-        );
-    }
-
-    /**
-     * Creates a PENDING invitation (A4).
-     * For MVP: invitation is represented as Membership with status=PENDING.
-     */
-    public static Membership createInvitation(IdValue tenantId,
-                                              IdValue communityId,
-                                              IdValue inviteeUserId) {
-
-        Objects.requireNonNull(tenantId, "tenantId is required");
-        Objects.requireNonNull(communityId, "communityId is required");
-        Objects.requireNonNull(inviteeUserId, "inviteeUserId is required");
-
-        TimestampValue now = TimestampValue.now();
-
-        return new Membership(
-                IdValue.generate(),
-                tenantId,
-                communityId,
-                inviteeUserId,
                 CommunityRoleValue.MEMBER,
-                MembershipStatusValue.PENDING,
-                now,
+                MembershipStatusValue.ACTIVE,
                 null,
-                now,
-                now,
+                now,   // requestedAt
+                now,   // decidedAt
+                now,   // createdAt
+                now,   // updatedAt
+                true
+        );
+    }
+
+    /**
+     * Creates a PENDING membership request.
+     *
+     * This is the factory method that should be used for EPIC B / B1:
+     * RequestMembership.
+     *
+     * Covered invariants:
+     * - PENDING membership cannot have role
+     * - PENDING membership cannot have decidedAt
+     * - PENDING membership cannot have rejectionReason
+     */
+    public static Membership createPendingRequest(IdValue tenantId,
+                                                  IdValue communityId,
+                                                  IdValue userId) {
+
+        Objects.requireNonNull(tenantId, "tenantId is required");
+        Objects.requireNonNull(communityId, "communityId is required");
+        Objects.requireNonNull(userId, "userId is required");
+
+        TimestampValue now = TimestampValue.now();
+
+        return new Membership(
+                IdValue.generate(),
+                tenantId,
+                communityId,
+                userId,
+                null,
+                MembershipStatusValue.PENDING,
+                null,
+                now,   // requestedAt
+                null,  // decidedAt
+                now,   // createdAt
+                now,   // updatedAt
                 true
         );
     }
@@ -120,7 +157,17 @@ public final class MembershipFactory {
 
     /**
      * Recreates an existing Membership from persistence.
-     * No extra validations beyond basic null checks (assumes data consistency).
+     *
+     * Assumes the persisted state was already validated when written.
+     * This method performs only structural mandatory checks and delegates
+     * semantic consistency to the persistence/application boundaries.
+     *
+     * Covered invariants:
+     * - mandatory structural fields are present
+     *
+     * NOT covered here:
+     * - repository/application-level invariants such as uniqueness by
+     *   (tenantId, communityId, userId)
      */
     public static Membership recreate(IdValue id,
                                       IdValue tenantId,
@@ -128,8 +175,9 @@ public final class MembershipFactory {
                                       IdValue userId,
                                       CommunityRoleValue role,
                                       MembershipStatusValue status,
-                                      TimestampValue since,
-                                      TimestampValue deactivatedAt,
+                                      String rejectionReason,
+                                      TimestampValue requestedAt,
+                                      TimestampValue decidedAt,
                                       TimestampValue createdAt,
                                       TimestampValue updatedAt) {
 
@@ -137,9 +185,8 @@ public final class MembershipFactory {
         Objects.requireNonNull(tenantId, "tenantId is required");
         Objects.requireNonNull(communityId, "communityId is required");
         Objects.requireNonNull(userId, "userId is required");
-        Objects.requireNonNull(role, "role is required");
         Objects.requireNonNull(status, "status is required");
-        Objects.requireNonNull(since, "since is required");
+        Objects.requireNonNull(requestedAt, "requestedAt is required");
         Objects.requireNonNull(createdAt, "createdAt is required");
         Objects.requireNonNull(updatedAt, "updatedAt is required");
 
@@ -150,8 +197,9 @@ public final class MembershipFactory {
                 userId,
                 role,
                 status,
-                since,
-                deactivatedAt,
+                rejectionReason,
+                requestedAt,
+                decidedAt,
                 createdAt,
                 updatedAt,
                 false

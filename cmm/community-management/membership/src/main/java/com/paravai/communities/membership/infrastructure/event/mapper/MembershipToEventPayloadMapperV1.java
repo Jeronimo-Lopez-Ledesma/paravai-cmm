@@ -9,23 +9,31 @@ import org.springframework.stereotype.Component;
 public class MembershipToEventPayloadMapperV1 {
 
     public MembershipEventPayloadV1 map(Membership membership) {
+
         if (membership == null) {
             throw new IllegalArgumentException("Membership must not be null");
         }
 
         return new MembershipEventPayloadV1(
-                membership.id() != null ? membership.id().value() : null,
-                membership.tenantId() != null ? membership.tenantId().value() : null,
-                membership.communityId() != null ? membership.communityId().value() : null,
-                membership.userId() != null ? membership.userId().value() : null,
-                membership.role() != null ? membership.role().getCode() : null,
-                membership.role() != null ? membership.role().getLabel() : null,
-                membership.status() != null ? membership.status().getCode() : null,
-                membership.status() != null ? membership.status().getLabel() : null,
-                membership.since() != null ? membership.since().getInstant() : null,
-                membership.deactivatedAt().map(TimestampValue::getInstant).orElse(null),
-                membership.createdAt() != null ? membership.createdAt().getInstant() : null,
-                membership.updatedAt() != null ? membership.updatedAt().getInstant() : null
+
+                membership.id().value(),
+                membership.tenantId().value(),
+                membership.communityId().value(),
+                membership.userId().value(),
+
+                membership.role().map(r -> r.getCode()).orElse(null),
+                membership.role().map(r -> r.getLabel()).orElse(null),
+
+                membership.status().getCode(),
+                membership.status().getLabel(),
+
+                membership.requestedAt().getInstant(),
+                membership.decidedAt().map(TimestampValue::getInstant).orElse(null),
+
+                membership.rejectionReason().orElse(null),
+
+                membership.createdAt().getInstant(),
+                membership.updatedAt().getInstant()
         );
     }
 }

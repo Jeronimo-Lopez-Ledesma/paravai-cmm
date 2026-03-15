@@ -11,9 +11,9 @@ public record MembershipEventPayloadV1(
         String roleLabel,
         String statusCode,
         String statusLabel,
-        Instant since,
-        Instant deactivatedAt,
+        Instant requestedAt,
+        Instant decidedAt,
+        String rejectionReason,
         Instant createdAt,
         Instant updatedAt
-) {
-}
+) {}

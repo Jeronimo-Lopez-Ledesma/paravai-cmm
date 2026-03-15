@@ -23,11 +23,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
 import java.util.Objects;
 
 @Service
 public class InviteMemberService {
+
+    private static final Logger log = LoggerFactory.getLogger(InviteMemberService.class);
 
     private final MembershipRepository repo;
     private final MembershipAuthorizationService authorization;
@@ -35,7 +36,6 @@ public class InviteMemberService {
     private final MembershipSnapshotSupport snapshots;
     private final MembershipEventFactory eventFactory;
     private final ReactiveOperationMetrics metrics;
-    private static final Logger log = LoggerFactory.getLogger(InviteMemberService.class);
 
     public InviteMemberService(
             MembershipRepository repo,
@@ -53,7 +53,12 @@ public class InviteMemberService {
         this.metrics = Objects.requireNonNull(metrics);
     }
 
-    public Mono<Membership> invite(IdValue tenantId, IdValue communityId, IdValue inviterUserId, IdValue inviteeUserId) {
+    public Mono<Membership> invite(
+            IdValue tenantId,
+            IdValue communityId,
+            IdValue inviterUserId,
+            IdValue inviteeUserId
+    ) {
         return Mono.deferContextual(ctx -> {
             String traceId = RequestContext.getTraceId(ctx);
             String userOid = RequestContext.getUserOid(ctx);
@@ -66,47 +71,93 @@ public class InviteMemberService {
 
             return MetricsSupport.timedMono(metrics, opCtx, () ->
                     authorization.assertAdmin(tenantId, communityId, inviterUserId)
-                            .then(repo.findByTenantIdAndCommunityIdAndUserId(tenantId, communityId, inviteeUserId))
-                            .flatMap(existing -> {
-                                if (existing.status().isActive()) {
-                                    return Mono.error(new IllegalArgumentException("Invitee already active member"));
-                                }
-                                if (existing.status().isPending()) {
-                                    return Mono.just(existing); // idempotent return existing invite
-                                }
-                                // REVOKED/INACTIVE -> new invitation (policy choice)
-                                Instant now = Instant.now();
-                                Membership invite = MembershipFactory.createInvitation(
-                                        tenantId,
-                                        communityId,
-                                        inviteeUserId
-                                );
-                                return repo.save(invite);
-                            })
-                            .switchIfEmpty(Mono.defer(() -> {
-                                Instant now = Instant.now();
-                                Membership invite = MembershipFactory.createInvitation(
-                                        tenantId,
-                                        communityId,
-                                        inviteeUserId
-                                );
-                                return repo.save(invite);
-                            }))
-                            .flatMap(saved -> {
-                                JsonNode current = snapshots.snapshot(saved);
-
-                                EntityChangedEvent evt = eventFactory.build(
-                                        OperationTypeValue.CREATED,
-                                        saved.id(),
-                                        traceId, userOid, sourceSystem,
-                                        "Membership INVITED: " + saved.id().toString(),
-                                        null,
-                                        current
-                                );
-
-                                return publisher.publish(evt).thenReturn(saved);
-                            })
-            );
+                            .then(findOrCreateInvitation(
+                                    tenantId,
+                                    communityId,
+                                    inviteeUserId,
+                                    traceId,
+                                    userOid,
+                                    sourceSystem
+                            ))
+            ).doOnError(ex -> log.error(
+                    "[{}][{}] Failed to invite user {} to community {}",
+                    traceId,
+                    userOid,
+                    inviteeUserId,
+                    communityId,
+                    ex
+            ));
         });
+    }
+
+    private Mono<Membership> findOrCreateInvitation(
+            IdValue tenantId,
+            IdValue communityId,
+            IdValue inviteeUserId,
+            String traceId,
+            String userOid,
+            String sourceSystem
+    ) {
+        return repo.findByTenantIdAndCommunityIdAndUserId(tenantId, communityId, inviteeUserId)
+                .flatMap(existing -> {
+                    if (existing.status().isActive()) {
+                        return Mono.error(new IllegalStateException("Invitee is already an active member"));
+                    }
+
+                    if (existing.status().isPending()) {
+                        // Functional idempotency: existing pending invitation/request is returned as-is.
+                        return Mono.just(existing);
+                    }
+
+                    if (existing.status().isRejected()) {
+                        // Current MVP policy: rejected memberships cannot be re-invited automatically.
+                        return Mono.error(new IllegalStateException("Invitee has a rejected membership request"));
+                    }
+
+                    return Mono.error(new IllegalStateException(
+                            "Unsupported membership status: " + existing.status().getCode()
+                    ));
+                })
+                .switchIfEmpty(Mono.defer(() -> createAndPublishInvitation(
+                        tenantId,
+                        communityId,
+                        inviteeUserId,
+                        traceId,
+                        userOid,
+                        sourceSystem
+                )));
+    }
+
+    private Mono<Membership> createAndPublishInvitation(
+            IdValue tenantId,
+            IdValue communityId,
+            IdValue inviteeUserId,
+            String traceId,
+            String userOid,
+            String sourceSystem
+    ) {
+        Membership invite = MembershipFactory.createPendingRequest(
+                tenantId,
+                communityId,
+                inviteeUserId
+        );
+
+        return repo.save(invite)
+                .flatMap(saved -> {
+                    JsonNode current = snapshots.snapshot(saved);
+
+                    EntityChangedEvent evt = eventFactory.build(
+                            OperationTypeValue.CREATED,
+                            saved.id(),
+                            traceId,
+                            userOid,
+                            sourceSystem,
+                            "Membership invitation created: " + saved.id(),
+                            null,
+                            current
+                    );
+
+                    return publisher.publish(evt).thenReturn(saved);
+                });
     }
 }

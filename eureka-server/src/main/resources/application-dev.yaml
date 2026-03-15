@@ -1,0 +1,10 @@
+app:
+  environment: DEV
+
+info:
+  app:
+    name: eureka-server
+    description: Eureka Service Registry
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López

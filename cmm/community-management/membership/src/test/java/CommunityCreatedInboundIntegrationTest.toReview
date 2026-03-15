@@ -1,0 +1,117 @@
+package com.paravai.communities.membership.integration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paravai.communities.contracts.event.community.CommunityEventPayloadV1;
+import com.paravai.communities.membership.domain.model.Membership;
+import com.paravai.communities.membership.domain.repository.MembershipRepository;
+import com.paravai.foundation.integration.domain.event.DomainEventEnvelope;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import reactor.core.publisher.Mono;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+@ActiveProfiles("test")
+class CommunityCreatedInboundIntegrationTest {
+
+    private static final String TOPIC =
+            "communities.communities-management.community.integration.v1";
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
+
+    @Test
+    void shouldCreateFounderMembershipWhenCommunityCreatedEventIsConsumed() throws Exception {
+        String communityId = UUID.randomUUID().toString();
+        String tenantId = UUID.randomUUID().toString();
+        String founderUserId = UUID.randomUUID().toString();
+        String traceId = UUID.randomUUID().toString();
+
+        CommunityEventPayloadV1 payload = new CommunityEventPayloadV1(
+                communityId,
+                tenantId,
+                "Barcelona Book Exchange",
+                "barcelona-book-exchange",
+                "Community for exchanging books",
+                "PRIVATE",
+                "Private",
+                "ACTIVE",
+                "Active",
+                null,
+                Instant.now(),
+                Instant.now(),
+                founderUserId,
+                null
+        );
+
+        DomainEventEnvelope<CommunityEventPayloadV1> envelope =
+                new DomainEventEnvelope<>(
+                        UUID.randomUUID().toString(),
+                        communityId,
+                        "Community",
+                        "created",
+                        "community",
+                        Instant.now(),
+                        traceId,
+                        founderUserId,
+                        "communities-management.community.integration.v1",
+                        null,
+                        payload
+                );
+
+        String json = objectMapper.writeValueAsString(envelope);
+
+        kafkaTemplate.send(TOPIC, communityId, json).get();
+
+        Membership created = waitUntilMembershipExists(tenantId, communityId, founderUserId);
+
+        assertThat(created).isNotNull();
+        assertThat(created.tenantId().value()).isEqualTo(tenantId);
+        assertThat(created.communityId().value()).isEqualTo(communityId);
+        assertThat(created.userId().value()).isEqualTo(founderUserId);
+        assertThat(created.role().getCode()).isEqualTo("ADMIN");
+        assertThat(created.status().getCode()).isEqualTo("ACTIVE");
+    }
+
+    private Membership waitUntilMembershipExists(
+            String tenantId,
+            String communityId,
+            String founderUserId
+    ) throws InterruptedException {
+
+        int maxAttempts = 20;
+        long sleepMs = 300;
+
+        for (int i = 0; i < maxAttempts; i++) {
+            Membership membership = membershipRepository
+                    .findByTenantIdAndCommunityIdAndUserId(
+                            com.paravai.foundation.domain.value.IdValue.of(tenantId),
+                            com.paravai.foundation.domain.value.IdValue.of(communityId),
+                            com.paravai.foundation.domain.value.IdValue.of(founderUserId)
+                    )
+                    .block();
+
+            if (membership != null) {
+                return membership;
+            }
+
+            Thread.sleep(sleepMs);
+        }
+
+        return null;
+    }
+}

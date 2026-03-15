@@ -8,22 +8,33 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Value Object: CommunityRoleValue
+ *
+ * Represents the role of an ACTIVE membership inside a community.
+ *
+ * MVP supported roles:
+ * - ADMIN
+ * - MEMBER
+ *
+ * Notes:
+ * - Role only applies when Membership.status == ACTIVE
+ * - Users with no membership relation are represented by Membership state NONE
+ *   at query level, not by a role such as GUEST
+ */
 public final class CommunityRoleValue implements LocalizableValueObject {
 
     private final String code;
     private final String label;
 
-    // ---- Static constants for type-safe usage (instead of enum) ----
-    public static final CommunityRoleValue OWNER  = new CommunityRoleValue("OWNER", "Owner");
+    // ---- Static constants (catalog-style VO instead of enum) ----
+
     public static final CommunityRoleValue ADMIN  = new CommunityRoleValue("ADMIN", "Admin");
     public static final CommunityRoleValue MEMBER = new CommunityRoleValue("MEMBER", "Member");
-    public static final CommunityRoleValue GUEST  = new CommunityRoleValue("GUEST", "Guest");
 
     private static final Map<String, CommunityRoleValue> CATALOG = Map.ofEntries(
-            Map.entry("OWNER",  OWNER),
-            Map.entry("ADMIN",  ADMIN),
-            Map.entry("MEMBER", MEMBER),
-            Map.entry("GUEST",  GUEST)
+            Map.entry("ADMIN", ADMIN),
+            Map.entry("MEMBER", MEMBER)
     );
 
     private CommunityRoleValue(String code, String label) {
@@ -35,37 +46,81 @@ public final class CommunityRoleValue implements LocalizableValueObject {
         if (code == null || code.isBlank()) {
             throw new IllegalArgumentException("CommunityRole code cannot be null or blank");
         }
+
         final String key = code.trim().toUpperCase(Locale.ROOT);
-        CommunityRoleValue v = CATALOG.get(key);
-        if (v == null) {
+        CommunityRoleValue value = CATALOG.get(key);
+
+        if (value == null) {
             throw new IllegalArgumentException("Unknown community role code: " + code);
         }
-        return v;
+
+        return value;
     }
 
-    public String getCode() { return code; }
-    public String getLabel() { return label; }
+    public String getCode() {
+        return code;
+    }
 
-    public boolean isOwner() { return this == OWNER; }
-    public boolean isAdmin() { return this == ADMIN; }
+    public String getLabel() {
+        return label;
+    }
+
+    // -------------------------------------------------
+    // Domain semantics helpers
+    // -------------------------------------------------
+
+    public boolean isAdmin() {
+        return this == ADMIN;
+    }
+
+    public boolean isMember() {
+        return this == MEMBER;
+    }
+
+    /**
+     * Returns true if this role can manage membership requests and roles.
+     *
+     * MVP:
+     * - only ADMIN has management permissions
+     */
+    public boolean canManageMembership() {
+        return this == ADMIN;
+    }
+
+    // -------------------------------------------------
+    // Catalog exposure
+    // -------------------------------------------------
 
     public static List<Map<String, String>> catalog() {
         return values().stream()
-                .map(v -> Map.of("code", v.getCode(), "label", v.getLabel()))
+                .map(v -> Map.of(
+                        "code", v.getCode(),
+                        "label", v.getLabel()
+                ))
                 .toList();
     }
 
     public static List<CommunityRoleValue> values() {
-        return List.of(OWNER, ADMIN, MEMBER, GUEST);
+        return List.of(ADMIN, MEMBER);
     }
+
+    // -------------------------------------------------
+    // Localization
+    // -------------------------------------------------
 
     @Override
     public String getLocalizedLabel(Locale locale, MessageService messageService) {
-        // NOTE: your keys were "membership.communityRole.<CODE>" (per your earlier decision)
         return messageService.get("membership.communityRole." + code, locale);
     }
 
-    @Override public String toString() { return code; }
+    // -------------------------------------------------
+    // Object methods
+    // -------------------------------------------------
+
+    @Override
+    public String toString() {
+        return code;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -73,5 +128,8 @@ public final class CommunityRoleValue implements LocalizableValueObject {
                 (o instanceof CommunityRoleValue other && code.equals(other.code));
     }
 
-    @Override public int hashCode() { return Objects.hash(code); }
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
 }

@@ -18,12 +18,18 @@ public class MembershipAuthorizationService {
         return repo.findByTenantIdAndCommunityIdAndUserId(tenantId, communityId, userId)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Membership not found")))
                 .flatMap(m -> {
-                    if (!m.status().isActive()) {
+                    if (!m.isActive()) {
                         return Mono.error(new IllegalArgumentException("Membership not active"));
                     }
-                    if (!m.role().isAdmin() && !m.role().isOwner()) {
+
+                    boolean isAdmin = m.role()
+                            .map(role -> role.isAdmin())
+                            .orElse(false);
+
+                    if (!isAdmin) {
                         return Mono.error(new IllegalArgumentException("User is not admin"));
                     }
+
                     return Mono.empty();
                 });
     }

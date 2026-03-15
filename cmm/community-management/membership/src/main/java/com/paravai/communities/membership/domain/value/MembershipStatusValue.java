@@ -8,22 +8,40 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Value Object: MembershipStatusValue
+ *
+ * Represents the lifecycle state of a membership relationship.
+ *
+ * MVP lifecycle:
+ *
+ * PENDING  -> request created but not yet decided
+ * ACTIVE   -> user is an active member of the community
+ * REJECTED -> request was rejected by an administrator
+ *
+ * State transitions (MVP):
+ *
+ * NONE    -> PENDING
+ * PENDING -> ACTIVE
+ * PENDING -> REJECTED
+ *
+ * REJECTED is considered a terminal state in MVP.
+ */
 public final class MembershipStatusValue implements LocalizableValueObject {
 
     private final String code;
     private final String label;
 
-    // ---- Static constants for type-safe usage (instead of enum) ----
+    // ---- Static constants (catalog-style VO instead of enum) ----
+
+    public static final MembershipStatusValue PENDING  = new MembershipStatusValue("PENDING", "Pending");
     public static final MembershipStatusValue ACTIVE   = new MembershipStatusValue("ACTIVE", "Active");
-    public static final MembershipStatusValue PENDING  = new MembershipStatusValue("PENDING", "Pending Invitation");
-    public static final MembershipStatusValue REVOKED  = new MembershipStatusValue("REVOKED", "Revoked");
-    public static final MembershipStatusValue INACTIVE = new MembershipStatusValue("INACTIVE", "Inactive");
+    public static final MembershipStatusValue REJECTED = new MembershipStatusValue("REJECTED", "Rejected");
 
     private static final Map<String, MembershipStatusValue> CATALOG = Map.ofEntries(
-            Map.entry("ACTIVE",   ACTIVE),
             Map.entry("PENDING",  PENDING),
-            Map.entry("REVOKED",  REVOKED),
-            Map.entry("INACTIVE", INACTIVE)
+            Map.entry("ACTIVE",   ACTIVE),
+            Map.entry("REJECTED", REJECTED)
     );
 
     private MembershipStatusValue(String code, String label) {
@@ -35,38 +53,85 @@ public final class MembershipStatusValue implements LocalizableValueObject {
         if (code == null || code.isBlank()) {
             throw new IllegalArgumentException("MembershipStatus code cannot be null or blank");
         }
+
         final String key = code.trim().toUpperCase(Locale.ROOT);
-        MembershipStatusValue v = CATALOG.get(key);
-        if (v == null) {
+
+        MembershipStatusValue value = CATALOG.get(key);
+
+        if (value == null) {
             throw new IllegalArgumentException("Unknown membership status code: " + code);
         }
-        return v;
+
+        return value;
     }
 
-    public String getCode() { return code; }
-    public String getLabel() { return label; }
+    public String getCode() {
+        return code;
+    }
 
-    public boolean isActive() { return this == ACTIVE; }
-    public boolean isPending() { return this == PENDING; }
+    public String getLabel() {
+        return label;
+    }
+
+    // -------------------------------------------------
+    // Domain semantics helpers
+    // -------------------------------------------------
+
+    public boolean isPending() {
+        return this == PENDING;
+    }
+
+    public boolean isActive() {
+        return this == ACTIVE;
+    }
+
+    public boolean isRejected() {
+        return this == REJECTED;
+    }
+
+    /**
+     * Returns true if this status represents a final state
+     * in the MVP membership lifecycle.
+     */
+    public boolean isTerminal() {
+        return this == REJECTED;
+    }
+
+    // -------------------------------------------------
+    // Catalog exposure
+    // -------------------------------------------------
 
     public static List<Map<String, String>> catalog() {
         return CATALOG.values().stream()
                 .distinct()
-                .map(v -> Map.of("code", v.getCode(), "label", v.getLabel()))
+                .map(v -> Map.of(
+                        "code", v.getCode(),
+                        "label", v.getLabel()
+                ))
                 .toList();
     }
 
     public static List<MembershipStatusValue> values() {
-        return List.of(ACTIVE, PENDING, REVOKED, INACTIVE);
+        return List.of(PENDING, ACTIVE, REJECTED);
     }
+
+    // -------------------------------------------------
+    // Localization
+    // -------------------------------------------------
 
     @Override
     public String getLocalizedLabel(Locale locale, MessageService messageService) {
         return messageService.get("community.membershipStatus." + code, locale);
     }
 
+    // -------------------------------------------------
+    // Object methods
+    // -------------------------------------------------
+
     @Override
-    public String toString() { return code; }
+    public String toString() {
+        return code;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -75,5 +140,7 @@ public final class MembershipStatusValue implements LocalizableValueObject {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(code); }
+    public int hashCode() {
+        return Objects.hash(code);
+    }
 }
