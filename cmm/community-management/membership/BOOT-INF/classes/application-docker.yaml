@@ -1,0 +1,186 @@
+# ============================================================
+# ENV / APP METADATA (DOCKER)
+# ============================================================
+app:
+  environment: DOCKER
+
+info:
+  app:
+    name: membership
+    description: Membership Aggregate
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López
+
+
+# ============================================================
+# DATA SOURCE (MongoDB) - DOCKER
+# ============================================================
+spring:
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: membership
+      username: admin
+      password: admin
+      authentication-database: admin
+      transaction:
+        enabled: true
+
+
+# ============================================================
+# KAFKA (Integration Events Producer / Consumer) - DOCKER
+# ============================================================
+kafka:
+  enabled: true
+  bootstrap-servers: kafka:9092
+
+  producer:
+    acks: all
+    retries: 3
+    client-id: membership
+
+  integration:
+    topic-prefix: communities
+    default-topic: domain-events
+
+integration:
+  inbound:
+    kafka:
+      enabled: true
+      consumer-group-id: membership-inbound
+      retry:
+        max-attempts: 2
+        backoff-ms: 250
+        max-backoff-ms: 1000
+      dlq:
+        enabled: true
+        suffix: .dlq
+      bindings:
+        - name: community-created
+          topic: communities.communities-management.community.integration.v1
+          schema-id: communities-management.community.integration.v1
+          entity-type: Community
+          change-type: CREATED
+
+
+# ============================================================
+# OUTBOUND HTTP CLIENT (DOCKER)
+# ============================================================
+standards:
+  http:
+    baseUrl: http://standards:9099
+    connectTimeoutMs: 2000
+    responseTimeoutMs: 3000
+    readTimeoutMs: 3000
+    writeTimeoutMs: 3000
+    pool:
+      maxConnections: 200
+      acquireTimeoutMs: 2000
+      maxIdleTimeMs: 30000
+      maxLifeTimeMs: 120000
+
+
+# ============================================================
+# RESILIENCE4J (DOCKER)
+# ============================================================
+resilience4j:
+  bulkhead:
+    instances:
+      standardsBackend:
+        maxConcurrentCalls: 50
+        maxWaitDuration: 0
+
+  circuitbreaker:
+    instances:
+      standardsBackend:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 5
+
+  retry:
+    instances:
+      standardsBackend:
+        maxAttempts: 3
+        waitDuration: 200ms
+        retryExceptions:
+          - java.io.IOException
+          - reactor.netty.http.client.PrematureCloseException
+
+resilience:
+  order:
+    decorators: [bulkhead, circuitbreaker, retry]
+
+
+# ============================================================
+# OBSERVABILITY / ACTUATOR (DOCKER)
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+
+# ============================================================
+# LOGGING (DOCKER)
+# ============================================================
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    reactor.netty: INFO
+    com.paravai.communities.membership.inbound: DEBUG
+    com.paravai.communities.membership.application: DEBUG
+    com.paravai.foundation.infrastructure.kafka.inbound: DEBUG
+    com.paravai.foundation.integration.application.inbound: DEBUG
+    com.paravai.foundation.infrastructure.event: DEBUG
+
+
+# ============================================================
+# SERVER / GRPC / EUREKA (DOCKER)
+# ============================================================
+server:
+  port: 8096
+
+grpc:
+  server:
+    port: 9091
+    security:
+      enabled: false
+    permitKeepAliveWithoutCalls: true
+    permitKeepAliveTime: 5m
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: false
+    hostname: membership
+
+
+# ============================================================
+# FOUNDATION SECURITY / CORS (DOCKER)
+# ============================================================
+foundation:
+  security:
+    cors:
+      allowed-origins:
+        - http://localhost:4200
+        - https://paravai.com/dev
+        - https://paravai.com/test
+        - https://paravai.com
+      allowed-methods: ["*"]
+      allowed-headers: ["*"]
+      allow-credentials: true
