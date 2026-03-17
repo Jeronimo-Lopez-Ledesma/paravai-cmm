@@ -42,7 +42,7 @@ governance:
 # ============================================================
 kafka:
   enabled: true
-  bootstrapServers: kafka:9092
+  bootstrap-servers: kafka:9092
 
   producer:
     acks: all

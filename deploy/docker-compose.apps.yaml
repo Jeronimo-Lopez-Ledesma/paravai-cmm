@@ -1,7 +1,7 @@
 services:
   eureka-server:
     build:
-      context: ../platform/eureka-server
+      context: ../eureka-server
     container_name: paravai-eureka
     ports:
       - "8761:8761"
@@ -13,7 +13,7 @@ services:
 
   edge-service:
     build:
-      context: ../platform/edge-service
+      context: ../edge-service
     container_name: paravai-edge
     ports:
       - "8080:8080"

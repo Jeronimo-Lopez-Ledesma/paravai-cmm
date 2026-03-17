@@ -1,0 +1,5 @@
+.git
+.gitignore
+src/test
+target/test-classes
+target/*.original

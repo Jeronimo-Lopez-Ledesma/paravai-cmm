@@ -44,7 +44,7 @@ eureka:
 # ============================================================
 kafka:
   enabled: true
-  bootstrapServers: 10.206.14.185:9092
+  bootstrap-servers: 10.206.14.185:9092
 
   # Optional (producer tuning)
   producer:
