@@ -35,10 +35,6 @@ public class CommunityCreatedEventHandler implements EventInboundHandler {
         if (event == null) {
             return false;
         }
-
-/*        if (!(event.getPayload() instanceof CommunityEventPayloadV1)) {
-            return false;
-        }*/
         log.debug(
                 "CommunityCreatedEventHandler checking event schemaId={} entityType={} changeType={}",
                 event.getSchemaId(),
@@ -56,10 +52,6 @@ public class CommunityCreatedEventHandler implements EventInboundHandler {
         if (event == null) {
             return Mono.empty();
         }
-
-/*        DomainEventEnvelope<CommunityEventPayloadV1> typedEvent =
-                (DomainEventEnvelope<CommunityEventPayloadV1>) event;*/
-
         log.debug(
                 "CommunityCreatedEventHandler handling community event entityId={} traceId={}",
                 event.getEntityId(),

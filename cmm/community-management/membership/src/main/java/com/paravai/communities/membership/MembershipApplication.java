@@ -20,7 +20,7 @@ import java.util.Locale;
 		"com.paravai.foundation.localization",
 		"com.paravai.foundation.infrastructure.event",
 		"com.paravai.foundation.infrastructure.kafka",
-        "com.paravai.foundation.integration",
+        "com.paravai.foundation.integration"
 
 })
 public class MembershipApplication {

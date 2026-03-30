@@ -17,7 +17,7 @@ public class MembershipInboundKafkaReceiverConfig {
 
     @Bean
     public ReceiverOptions<String, byte[]> inboundKafkaReceiverOptions(
-            @Value("${kafka.bootstrapServers}") String bootstrapServers,
+            @Value("${kafka.bootstrap-servers}") String bootstrapServers,
             InboundKafkaProperties inboundKafkaProperties
     ) {
         Map<String, Object> props = new HashMap<>();

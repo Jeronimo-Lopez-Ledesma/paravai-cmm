@@ -35,6 +35,8 @@ import java.net.URI;
 import java.util.Locale;
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+
 @RestController
 @RequestMapping("/v1/communities")
 @Tag(name = "Communities", description = "Operations related to Communities")
@@ -64,22 +66,29 @@ public class CommunityController {
     })
     public Mono<ResponseEntity<JsonApiSingleResponse<CommunityResponse>>> create(
             @Valid @RequestBody JsonApiRequest<CreateCommunityRequest> request,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
             ServerHttpRequest httpRequest
     ) {
         final CreateCommunityRequest dto = request.getData().getAttributes();
 
+        final String traceId = traceIdHeader != null ? traceIdHeader : "missing-trace-id";
+        final String userOid = userOidHeader != null ? userOidHeader : "anonymous";
+        final String sourceSystem = sourceSystemHeader != null ? sourceSystemHeader : "unknown";
+
         return Mono.deferContextual(ctx -> {
-            final String traceId = RequestContext.getTraceId(ctx);
-            final String userOid = RequestContext.getUserOid(ctx);
+            final String ctxTraceId = RequestContext.getTraceId(ctx);
+            final String ctxUserOid = RequestContext.getUserOid(ctx);
             final String tenantId = RequestContext.getTenantId(ctx);
             final Locale locale = LocaleContext.getOrDefault(ctx);
 
             log.debug("[{}][{}] POST /v1/communities - creating community (tenantId={})",
-                    traceId, userOid, tenantId);
+                    ctxTraceId, ctxUserOid, tenantId);
 
             // Multi-tenant boundary and creator identity always come from context, not from payload
             final IdValue tenantIdVo = IdValue.of(tenantId);
-            final IdValue createdByVo = IdValue.of(userOid);
+            final IdValue createdByVo = IdValue.of(ctxUserOid);
 
             final Community toCreate = dto.toDomain(tenantIdVo, createdByVo);
 
@@ -96,7 +105,7 @@ public class CommunityController {
                                         .path("/{id}")
                                         .build(resp.getId());
 
-                                log.info("[{}][{}] Community {} created", traceId, userOid, resp.getId());
+                                log.info("[{}][{}] Community {} created", ctxTraceId, ctxUserOid, resp.getId());
 
                                 return ResponseEntity
                                         .created(location)
@@ -104,7 +113,11 @@ public class CommunityController {
                                         .body(body);
                             })
                     );
-        });
+        }).contextWrite(ctx -> ctx
+                .put(RequestContext.TRACE_ID_KEY, traceId)
+                .put(RequestContext.USER_OID_KEY, userOid)
+                .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
+        );
     }
 
 
@@ -119,16 +132,23 @@ public class CommunityController {
     public Mono<ResponseEntity<JsonApiSingleResponse<CommunityResponse>>> changeVisibility(
             @PathVariable("id") String id,
             @Valid @RequestBody JsonApiRequest<ChangeCommunityVisibilityRequest> request,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
             ServerHttpRequest httpRequest
     ) {
         final ChangeCommunityVisibilityRequest dto = request.getData().getAttributes();
 
+        final String traceId = traceIdHeader != null ? traceIdHeader : "missing-trace-id";
+        final String userOid = userOidHeader != null ? userOidHeader : "anonymous";
+        final String sourceSystem = sourceSystemHeader != null ? sourceSystemHeader : "unknown";
+
         return Mono.deferContextual(ctx -> {
-            final String traceId = RequestContext.getTraceId(ctx);
-            final String userOid = RequestContext.getUserOid(ctx);
+            final String ctxTraceId = RequestContext.getTraceId(ctx);
+            final String ctxUserOid = RequestContext.getUserOid(ctx);
             final Locale locale = LocaleContext.getOrDefault(ctx);
 
-            log.debug("[{}][{}] PATCH /v1/communities/{}/visibility", traceId, userOid, id);
+            log.debug("[{}][{}] PATCH /v1/communities/{}/visibility", ctxTraceId, ctxUserOid, id);
 
             final IdValue communityId = IdValue.of(id);
             final var visibility = CommunityVisibilityValue.of(dto.getVisibilityCode());
@@ -146,6 +166,10 @@ public class CommunityController {
                                     .contentType(MediaType.valueOf("application/vnd.api+json"))
                                     .body(body))
                     );
-        });
+        }).contextWrite(ctx -> ctx
+                .put(RequestContext.TRACE_ID_KEY, traceId)
+                .put(RequestContext.USER_OID_KEY, userOid)
+                .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
+        );
     }
 }

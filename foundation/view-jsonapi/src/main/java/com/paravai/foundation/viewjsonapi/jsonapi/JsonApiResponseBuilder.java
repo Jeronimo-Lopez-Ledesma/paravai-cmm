@@ -39,6 +39,23 @@ public class JsonApiResponseBuilder {
         });
     }
 
+    public static <T> Mono<JsonApiSingleResponse<T>> buildSingle(
+            Mono<T> monoItem,
+            String resourceType,
+            Function<T, String> idExtractor,
+            Function<T, String> selfUrlExtractor
+    ) {
+        return monoItem.map(item -> JsonApiSingleResponse.<T>builder()
+                .data(JsonApiResource.<T>builder()
+                        .id(idExtractor.apply(item))
+                        .type(resourceType)
+                        .attributes(item)
+                        .build())
+                .link("self", selfUrlExtractor.apply(item))
+                .build());
+    }
+
+
     public static <T extends Identifiable> JsonApiResponse<T> buildSingleSync(
             T item,
             ServerHttpRequest request,
