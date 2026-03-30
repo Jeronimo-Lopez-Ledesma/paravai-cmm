@@ -2,10 +2,12 @@ package com.paravai.communities.community.api.rest.v1;
 
 
 import com.paravai.communities.community.api.rest.v1.dto.ChangeCommunityVisibilityRequest;
+import com.paravai.communities.community.api.rest.v1.dto.CommunityPoliciesResponse;
 import com.paravai.communities.community.api.rest.v1.dto.CommunityResponse;
 import com.paravai.communities.community.api.rest.v1.dto.CreateCommunityRequest;
 import com.paravai.communities.community.application.command.create.CreateCommunityService;
 import com.paravai.communities.community.application.command.visibility.ChangeCommunityVisibilityService;
+import com.paravai.communities.community.application.query.getpolicies.GetCommunityPoliciesService;
 import com.paravai.communities.community.domain.model.Community;
 import com.paravai.communities.community.domain.value.CommunityVisibilityValue;
 import com.paravai.foundation.domain.value.IdValue;
@@ -47,13 +49,16 @@ public class CommunityController {
     private final CreateCommunityService createService;
     private final ChangeCommunityVisibilityService changeVisibilityService;
     private final MessageService messageService;
+    private final GetCommunityPoliciesService getCommunityPoliciesService;
 
     public CommunityController(CreateCommunityService createService,
                                ChangeCommunityVisibilityService changeVisibilityService,
-                               MessageService messageService) {
+                               MessageService messageService,
+                               GetCommunityPoliciesService getCommunityPoliciesService) {
         this.createService = Objects.requireNonNull(createService, "createService");
         this.changeVisibilityService = Objects.requireNonNull(changeVisibilityService, "changeVisibiltyService");
         this.messageService = Objects.requireNonNull(messageService, "messageService");
+        this.getCommunityPoliciesService = Objects.requireNonNull(getCommunityPoliciesService, "getCommunityPoliciesService");
     }
 
     @PostMapping
@@ -167,6 +172,83 @@ public class CommunityController {
                                     .body(body))
                     );
         }).contextWrite(ctx -> ctx
+                .put(RequestContext.TRACE_ID_KEY, traceId)
+                .put(RequestContext.USER_OID_KEY, userOid)
+                .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
+        );
+    }
+
+    /**
+     * EPIC B / B5 - Get community policies
+     *
+     * REST surface:
+     * - GET /v1/communities/{communityId}/policies
+     *
+     * Notes:
+     * - read-only operation
+     * - no events are emitted
+     * - policies reflect current state of Community aggregate
+     * - for MVP, access is always allowed (even for PRIVATE communities)
+     */
+    @GetMapping("/{communityId}/policies")
+    @Operation(summary = "Get community policies and rules")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Policies retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Community not found", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<CommunityPoliciesResponse>>> getPolicies(
+            @PathVariable("communityId") String communityId,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+
+                    log.debug("[{}][{}] GET /v1/communities/{}/policies",
+                            traceId, userOid, communityId);
+
+                    final IdValue communityIdVo = IdValue.of(communityId);
+
+                    return getCommunityPoliciesService.getPolicies(communityIdVo)
+                            .map(CommunityPoliciesResponse::fromDomain)
+                            .flatMap(resp ->
+                                    JsonApiResponseBuilder.buildSingle(
+                                            Mono.just(resp),
+                                            "community-policies",
+                                            CommunityPoliciesResponse::getId,
+                                            r -> "/v1/communities/" + communityId + "/policies"
+                                    ).map(body -> {
+
+                                        log.info("[{}][{}] Policies retrieved for community {}",
+                                                traceId, userOid, communityId);
+
+                                        return ResponseEntity
+                                                .ok()
+                                                .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                                .body(body);
+                                    })
+                            );
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
+    private <T> Mono<T> withRequestContext(
+            Mono<T> mono,
+            String traceIdHeader,
+            String userOidHeader,
+            String sourceSystemHeader
+    ) {
+        final String traceId = defaultIfBlank(traceIdHeader, "missing-trace-id");
+        final String userOid = defaultIfBlank(userOidHeader, "anonymous");
+        final String sourceSystem = defaultIfBlank(sourceSystemHeader, "unknown");
+
+        return mono.contextWrite(ctx -> ctx
                 .put(RequestContext.TRACE_ID_KEY, traceId)
                 .put(RequestContext.USER_OID_KEY, userOid)
                 .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)

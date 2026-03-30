@@ -220,6 +220,39 @@ public final class Community {
     public TimestampValue updatedAt() { return updatedAt; }
 
     // -------------------------------------------------
+// Derived read accessors (B5 - policies)
+// -------------------------------------------------
+
+    /**
+     * Returns allowed exchange types from current rules.
+     * Empty if no rules defined yet.
+     */
+    public java.util.List<String> allowedExchangeTypes() {
+        if (rules == null) {
+            return java.util.List.of();
+        }
+
+        return rules.getAllowedExchangeTypes()
+                .stream()
+                .map(e -> e.getCode())
+                .toList();
+    }
+
+    /**
+     * Returns a simple policy summary (MVP).
+     * For now, derived directly from rules text.
+     */
+    public java.util.Optional<String> policySummary() {
+        if (rules == null) {
+            return java.util.Optional.empty();
+        }
+
+        // MVP: reuse rules text as summary
+        // future: could be a separate field or computed projection
+        return Optional.of(rules.getText());
+    }
+
+    // -------------------------------------------------
     // Identity equality
     // -------------------------------------------------
 

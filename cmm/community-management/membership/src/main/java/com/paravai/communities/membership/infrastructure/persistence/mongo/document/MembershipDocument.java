@@ -22,7 +22,7 @@ import java.time.Instant;
 )
 public class MembershipDocument {
 
-    public static final int DOCUMENT_VERSION = 2;
+    public static final int DOCUMENT_VERSION = 1;
     private static final Logger log = LoggerFactory.getLogger(MembershipDocument.class);
 
     @Id

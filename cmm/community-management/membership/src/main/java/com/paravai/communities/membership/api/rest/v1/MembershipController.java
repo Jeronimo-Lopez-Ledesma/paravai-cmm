@@ -1,12 +1,13 @@
 package com.paravai.communities.membership.api.rest.v1;
 
-import com.paravai.communities.membership.api.rest.v1.dto.InviteMemberRequest;
-import com.paravai.communities.membership.api.rest.v1.dto.MembershipResponse;
-import com.paravai.communities.membership.api.rest.v1.dto.RejectMembershipRequest;
+import com.paravai.communities.membership.api.rest.v1.dto.*;
 import com.paravai.communities.membership.application.command.approve.ApproveMembershipService;
+import com.paravai.communities.membership.application.command.assignrole.AssignCommunityRoleService;
 import com.paravai.communities.membership.application.command.invite.InviteMemberService;
 import com.paravai.communities.membership.application.command.reject.RejectMembershipService;
 import com.paravai.communities.membership.application.command.request.RequestMembershipService;
+import com.paravai.communities.membership.application.query.getmy.GetMyMembershipService;
+import com.paravai.communities.membership.domain.value.CommunityRoleValue;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.localization.LocaleContext;
 import com.paravai.foundation.localization.MessageService;
@@ -44,18 +45,24 @@ public class MembershipController {
     private final RequestMembershipService requestMembershipService;
     private final ApproveMembershipService approveMembershipService;
     private final RejectMembershipService rejectMembershipService;
+    private final AssignCommunityRoleService assignCommunityRoleService;
     private final MessageService messageService;
+    private final GetMyMembershipService getMyMembershipService;
 
     public MembershipController(InviteMemberService inviteService,
                                 RequestMembershipService requestMembershipService,
                                 ApproveMembershipService approveMembershipService,
                                 RejectMembershipService rejectMembershipService,
-                                MessageService messageService) {
+                                AssignCommunityRoleService assignCommunityRoleService,
+                                MessageService messageService,
+                                GetMyMembershipService getMyMembershipService) {
         this.inviteService = Objects.requireNonNull(inviteService, "inviteService");
         this.requestMembershipService = Objects.requireNonNull(requestMembershipService, "requestMembershipService");
         this.approveMembershipService = Objects.requireNonNull(approveMembershipService, "approveMembershipService");
         this.rejectMembershipService = Objects.requireNonNull(rejectMembershipService, "rejectMembershipService");
+        this.assignCommunityRoleService = Objects.requireNonNull(assignCommunityRoleService, "assignCommunityRoleService");
         this.messageService = Objects.requireNonNull(messageService, "messageService");
+        this.getMyMembershipService = Objects.requireNonNull(getMyMembershipService, "getMyMembershipService");
     }
 
     /**
@@ -394,6 +401,96 @@ public class MembershipController {
         );
     }
 
+    /**
+     * EPIC B / B4 - Assign or change a member role inside the community
+     *
+     * REST surface:
+     * - PUT /v1/communities/{communityId}/members/{memberId}/role
+     *
+     * Notes:
+     * - tenantId and acting userOid come from RequestContext
+     * - acting user must be ADMIN of the community
+     * - target membership must be ACTIVE
+     * - if membership already has the requested role, returns 200 OK with current membership (idempotent)
+     * - the community must keep at least one ACTIVE ADMIN
+     */
+    @PutMapping("/members/{memberId}/role")
+    @Operation(summary = "Assign or change a member role inside the community")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Role assigned successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Membership not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<MembershipResponse>>> assignRole(
+            @PathVariable("communityId") String communityId,
+            @PathVariable("memberId") String memberId,
+            @Valid @RequestBody JsonApiRequest<AssignCommunityRoleRequest> request,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader
+    ) {
+        final AssignCommunityRoleRequest dto = request.getData().getAttributes();
+
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+                    final String tenantId = RequestContext.getTenantId(ctx);
+                    final Locale locale = LocaleContext.getOrDefault(ctx);
+
+                    log.debug("[{}][{}] PUT /v1/communities/{}/members/{}/role (tenantId={})",
+                            traceId, userOid, communityId, memberId, tenantId);
+
+                    final IdValue tenantIdVo = IdValue.of(tenantId);
+                    final IdValue communityIdVo = IdValue.of(communityId);
+                    final IdValue actingUserIdVo = IdValue.of(userOid);
+                    final IdValue targetMembershipIdVo = IdValue.of(memberId);
+                    final CommunityRoleValue newRole = CommunityRoleValue.of(dto.getRoleCode());
+
+                    return assignCommunityRoleService.assignRole(
+                                    tenantIdVo,
+                                    communityIdVo,
+                                    actingUserIdVo,
+                                    targetMembershipIdVo,
+                                    newRole
+                            )
+                            .flatMap(result -> {
+                                MembershipResponse response = MembershipResponse.fromDomain(
+                                        result.membership(),
+                                        locale,
+                                        messageService
+                                );
+
+                                return JsonApiResponseBuilder.buildSingle(
+                                        Mono.just(response),
+                                        "memberships",
+                                        MembershipResponse::getId,
+                                        resp -> membershipSelfLink(communityId, resp.getId())
+                                ).map(body -> {
+                                    if (result.changed()) {
+                                        log.info("[{}][{}] Membership {} role changed in community {}",
+                                                traceId, userOid, response.getId(), communityId);
+                                    } else {
+                                        log.info("[{}][{}] Membership {} already had requested role in community {}",
+                                                traceId, userOid, response.getId(), communityId);
+                                    }
+
+                                    return ResponseEntity
+                                            .ok()
+                                            .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                            .body(body);
+                                });
+                            });
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
     private static String extractRejectReason(JsonApiRequest<RejectMembershipRequest> request) {
         if (request == null || request.getData() == null || request.getData().getAttributes() == null) {
             return null;
@@ -419,6 +516,77 @@ public class MembershipController {
                 .put(RequestContext.TRACE_ID_KEY, traceId)
                 .put(RequestContext.USER_OID_KEY, userOid)
                 .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
+        );
+    }
+
+    /**
+     * EPIC B / B6 - Get my membership status
+     *
+     * REST surface:
+     * - GET /v1/communities/{communityId}/me
+     *
+     * Notes:
+     * - tenantId and userOid come from RequestContext
+     * - authentication is required
+     * - returns membership state for the current user in the given community
+     * - no events are emitted
+     */
+    @GetMapping("/me")
+    @Operation(summary = "Get current user's membership status in the community")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Membership status retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Community not found", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<MyMembershipResponse>>> getMyMembership(
+            @PathVariable("communityId") String communityId,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+                    final String tenantId = RequestContext.getTenantId(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    log.debug("[{}][{}] GET /v1/communities/{}/me",
+                            traceId, userOid, communityId);
+
+                    final IdValue tenantIdVo = IdValue.of(tenantId);
+                    final IdValue communityIdVo = IdValue.of(communityId);
+                    final IdValue userIdVo = IdValue.of(userOid);
+
+                    return getMyMembershipService.getMyMembership(
+                                    tenantIdVo,
+                                    communityIdVo,
+                                    userIdVo
+                            )
+                            .map(MyMembershipResponse::fromResult)
+                            .flatMap(resp ->
+                                    JsonApiResponseBuilder.buildSingle(
+                                            Mono.just(resp),
+                                            "my-membership",
+                                            r -> communityId,
+                                            r -> "/v1/communities/" + communityId + "/me"
+                                    ).map(body -> {
+                                        log.info("[{}][{}] Membership status retrieved for community {}",
+                                                traceId, userOid, communityId);
+
+                                        return ResponseEntity
+                                                .ok()
+                                                .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                                .body(body);
+                                    })
+                            );
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
         );
     }
 
