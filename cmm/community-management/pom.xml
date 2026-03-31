@@ -30,6 +30,8 @@
         <module>community</module>
         <module>membership</module>
         <module>resource</module>
+        <module>offer</module>
+        <module>composition</module>
     </modules>
 
     <dependencyManagement>

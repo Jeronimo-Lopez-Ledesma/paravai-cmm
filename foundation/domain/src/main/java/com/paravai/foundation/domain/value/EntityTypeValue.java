@@ -10,6 +10,8 @@ public final class EntityTypeValue {
     public static final EntityTypeValue COMMUNITY = new EntityTypeValue("Community");
     public static final EntityTypeValue MEMBERSHIP = new EntityTypeValue("Membership");
     public static final EntityTypeValue RESOURCE = new EntityTypeValue("Resource");
+    public static final EntityTypeValue OFFER = new EntityTypeValue("Offer");
+
     private final String value;
 
     private EntityTypeValue(String value) {
@@ -22,6 +24,7 @@ public final class EntityTypeValue {
             case "Community" -> COMMUNITY;
             case "Membership" -> MEMBERSHIP;
             case "Resource" -> RESOURCE;
+            case "Offer" -> OFFER;
             default -> throw new IllegalArgumentException("Unsupported entity type: " + value);
         };
     }

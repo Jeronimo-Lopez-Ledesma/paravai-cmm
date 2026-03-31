@@ -34,6 +34,25 @@
                 <artifactId>membership</artifactId>
                 <version>1.0.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>resource</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>offer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>composition</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

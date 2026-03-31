@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.paravai.communities</groupId>
+        <artifactId>community-management</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>composition</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Community Management :: Composition</name>
+    <description>
+        Cross-module orchestration layer for Community Management.
+        Coordinates use cases involving multiple aggregates (Offer, Membership, Resource, Community).
+    </description>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.paravai.communities</groupId>
+                <artifactId>community-management-bom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- Módulos del dominio (solo para orquestación) -->
+        <dependency>
+            <groupId>com.paravai.communities</groupId>
+            <artifactId>offer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.paravai.communities</groupId>
+            <artifactId>membership</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.paravai.communities</groupId>
+            <artifactId>resource</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.paravai.communities</groupId>
+            <artifactId>community</artifactId>
+        </dependency>
+
+        <!-- Contracts -->
+        <dependency>
+            <groupId>com.paravai.communities</groupId>
+            <artifactId>contracts</artifactId>
+        </dependency>
+
+        <!-- Foundation -->
+        <dependency>
+            <groupId>com.paravai.foundation</groupId>
+            <artifactId>domain</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.paravai.foundation</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.paravai.foundation</groupId>
+            <artifactId>observability</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.paravai.foundation</groupId>
+            <artifactId>view-jsonapi</artifactId>
+        </dependency>
+
+        <!-- Reactive stack -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+        </dependency>
+
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
