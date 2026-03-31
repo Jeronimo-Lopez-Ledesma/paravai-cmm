@@ -29,6 +29,7 @@
         <module>contracts</module>
         <module>community</module>
         <module>membership</module>
+        <module>resource</module>
     </modules>
 
     <dependencyManagement>

@@ -9,6 +9,8 @@ public final class ResourceTypeValue {
 
     public static final ResourceTypeValue COMMUNITIES = new ResourceTypeValue("communities");
     public static final ResourceTypeValue MEMBERSHIPS = new ResourceTypeValue("memberships");
+    public static final ResourceTypeValue RESOURCES = new ResourceTypeValue("resources");
+
 
 
     private final String value;
@@ -22,6 +24,7 @@ public final class ResourceTypeValue {
         return switch (value.trim().toLowerCase()) {
             case "communities" -> COMMUNITIES;
             case "memberships" -> MEMBERSHIPS;
+            case "resources" -> RESOURCES;
 
             default -> throw new IllegalArgumentException("Unsupported resource type: " + value);
         };
