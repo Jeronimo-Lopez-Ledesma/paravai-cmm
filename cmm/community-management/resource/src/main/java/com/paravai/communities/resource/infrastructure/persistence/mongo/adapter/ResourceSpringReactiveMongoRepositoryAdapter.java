@@ -12,6 +12,7 @@ import com.paravai.foundation.observability.metrics.ReactiveOperationMetrics;
 import com.paravai.foundation.persistence.mongo.MongoReactiveEntityFilter;
 import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -99,7 +100,9 @@ public class ResourceSpringReactiveMongoRepositoryAdapter implements ResourceRep
     @Override
     public Flux<Resource> findByTenantIdAndOwnerId(
             IdValue tenantId,
-            IdValue ownerId
+            IdValue ownerId,
+            int page,
+            int size
     ) {
         if (tenantId == null) {
             return Flux.error(new IllegalArgumentException("tenantId cannot be null"));
@@ -107,15 +110,44 @@ public class ResourceSpringReactiveMongoRepositoryAdapter implements ResourceRep
         if (ownerId == null) {
             return Flux.error(new IllegalArgumentException("ownerId cannot be null"));
         }
+        if (page < 1) {
+            return Flux.error(new IllegalArgumentException("page must be greater than or equal to 1"));
+        }
+        if (size <= 0) {
+            return Flux.error(new IllegalArgumentException("size must be greater than zero"));
+        }
 
-        OperationCtx opCtx = ResourceMetrics.ID.outbound(ADAPTER_NAME, "findResourcesByTenantIdAndOwnerId");
+        OperationCtx opCtx = ResourceMetrics.ID.outbound(ADAPTER_NAME, "findResourcesByTenantIdAndOwnerIdPaged");
 
         return MetricsSupport.timedOutboundFlux(metrics, opCtx, () ->
                 springRepo.findByTenantIdAndOwnerId(
                                 tenantId.value(),
-                                ownerId.value()
+                                ownerId.value(),
+                                PageRequest.of(page - 1, size)
                         )
                         .map(ResourceDocument::toDomain)
+        );
+    }
+
+    @Override
+    public Mono<Long> countByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId
+    ) {
+        if (tenantId == null) {
+            return Mono.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (ownerId == null) {
+            return Mono.error(new IllegalArgumentException("ownerId cannot be null"));
+        }
+
+        OperationCtx opCtx = ResourceMetrics.ID.outbound(ADAPTER_NAME, "countResourcesByTenantIdAndOwnerId");
+
+        return MetricsSupport.timedOutboundMono(metrics, opCtx, () ->
+                springRepo.countByTenantIdAndOwnerId(
+                        tenantId.value(),
+                        ownerId.value()
+                )
         );
     }
 

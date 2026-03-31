@@ -4,11 +4,14 @@ import com.paravai.communities.resource.api.rest.v1.dto.RegisterResourceRequest;
 import com.paravai.communities.resource.api.rest.v1.dto.ResourceResponse;
 import com.paravai.communities.resource.application.command.register.RegisterResourceService;
 import com.paravai.communities.resource.application.query.get.GetResourceService;
+import com.paravai.communities.resource.application.query.listmy.ListMyResourcesService;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiRequest;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponse;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponseBuilder;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiSingleResponse;
+import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -36,11 +40,16 @@ public class ResourceController {
 
     private final RegisterResourceService registerResourceService;
     private final GetResourceService getResourceService;
+    private final ListMyResourcesService listMyResourcesService;
 
-    public ResourceController(RegisterResourceService registerResourceService,
-                              GetResourceService getResourceService) {
+    public ResourceController(
+            RegisterResourceService registerResourceService,
+            GetResourceService getResourceService,
+            ListMyResourcesService listMyResourcesService
+    ) {
         this.registerResourceService = Objects.requireNonNull(registerResourceService, "registerResourceService");
         this.getResourceService = Objects.requireNonNull(getResourceService, "getResourceService");
+        this.listMyResourcesService = Objects.requireNonNull(listMyResourcesService, "listMyResourcesService");
     }
 
 
@@ -188,6 +197,93 @@ public class ResourceController {
                 sourceSystemHeader
         );
     }
+
+    /**
+     * EPIC C / C6 - List my resources
+     *
+     * REST surface:
+     * - GET /v1/me/resources?page=...&size=...
+     *
+     * Notes:
+     * - tenantId and owner userOid come from RequestContext
+     * - only resources owned by the authenticated user are returned
+     * - supports basic pagination
+     * - no events are emitted
+     */
+    @GetMapping("/me/resources")
+    @Operation(summary = "List resources owned by the authenticated user")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Resources retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid pagination parameters", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiResponse<ResourceResponse>>> listMyResources(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
+            ServerHttpRequest httpRequest
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+                    final String tenantId = RequestContext.getTenantId(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    final int effectivePage = (page == null ? 1 : page);
+                    final int effectiveSize = (size == null ? 20 : size);
+
+                    log.debug("[{}][{}] GET /v1/me/resources?page={}&size={} (tenantId={})",
+                            traceId, userOid, effectivePage, effectiveSize, tenantId);
+
+                    final IdValue tenantIdVo = IdValue.of(tenantId);
+                    final IdValue ownerIdVo = IdValue.of(userOid);
+
+                    Flux<ResourceResponse> dataFlux = listMyResourcesService.list(
+                                    tenantIdVo,
+                                    ownerIdVo,
+                                    effectivePage,
+                                    effectiveSize
+                            )
+                            .map(ResourceResponse::fromDomain);
+
+                    Mono<Long> totalMono = listMyResourcesService.count(
+                            tenantIdVo,
+                            ownerIdVo
+                    );
+
+                    PaginationRequest pagination = new PaginationRequest(effectivePage, effectiveSize);
+
+                    return JsonApiResponseBuilder.buildPaginated(
+                                    dataFlux,
+                                    totalMono,
+                                    pagination,
+                                    httpRequest,
+                                    "resources",
+                                    ResourceResponse::getId
+                            )
+                            .map(body -> {
+                                log.info("[{}][{}] Retrieved paginated resources for owner {}",
+                                        traceId, userOid, userOid);
+
+                                return ResponseEntity
+                                        .ok()
+                                        .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                        .body(body);
+                            });
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
+
 
     private static String defaultIfBlank(String value, String fallback) {
         return (value == null || value.isBlank()) ? fallback : value;

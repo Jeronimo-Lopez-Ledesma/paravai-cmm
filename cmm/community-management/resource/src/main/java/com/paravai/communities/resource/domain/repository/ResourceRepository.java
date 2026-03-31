@@ -28,11 +28,27 @@ public interface ResourceRepository {
     Mono<Resource> findByIdAndOwnerId(IdValue id, IdValue ownerId);
 
     /**
-     * Returns all resources owned by a user inside a tenant.
+     * Returns a page of resources owned by a user inside a tenant.
      *
-     * Useful for "ListMyResources".
+     * Useful for "ListMyResources" with pagination.
+     *
+     * Notes:
+     * - page is zero-based
+     * - size must be greater than zero
      */
     Flux<Resource> findByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId,
+            int page,
+            int size
+    );
+
+    /**
+     * Returns the total number of resources owned by a user inside a tenant.
+     *
+     * Used together with the paginated method to build pagination metadata.
+     */
+    Mono<Long> countByTenantIdAndOwnerId(
             IdValue tenantId,
             IdValue ownerId
     );
