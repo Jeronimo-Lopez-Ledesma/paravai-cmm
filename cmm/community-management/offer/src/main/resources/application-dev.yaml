@@ -1,0 +1,135 @@
+# ============================================================
+# ENV / APP METADATA (DEV)
+# ============================================================
+app:
+  environment: DEV
+
+info:
+  app:
+    name: offer
+    description: Offer Aggregate
+    environment: ${app.environment:UNKNOWN}
+    version: 1.0.0
+    owner: Jerónimo López
+
+
+# ============================================================
+# DATA SOURCE (MongoDB) - DEV
+# ============================================================
+spring:
+  data:
+    mongodb:
+      host: 10.206.14.185
+      port: 11046
+      database: OPPORTUNITIES
+      username: developer
+      password: 0dMnPJ1Seb9jZgz540E9
+      transaction:
+        enabled: true
+
+# ============================================================
+# EUREKA - DEV
+# ============================================================
+eureka:
+  client:
+    enabled: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+# ============================================================
+# KAFKA (Integration Events Producer) - DEV
+# NOTE:
+# - Use kebab-case keys because Service Foundation reads them via @Value
+# ============================================================
+kafka:
+  enabled: true
+  bootstrap-servers: 10.206.14.185:9092
+
+  # Optional (producer tuning)
+  producer:
+    acks: all
+    retries: 3
+    client-id: resource
+
+  # Topic resolution strategy for DomainEventEnvelope publishing
+  integration:
+    topic-prefix: communities           # optional prefix for topics
+    default-topic: domain-events        # fallback if entityType is missing
+    # pattern: "%s.events.%s"           # optional override (default already set in code)
+
+
+# ============================================================
+# RESILIENCE4J (DEV)
+# ============================================================
+resilience4j:
+  bulkhead:
+    instances:
+      standardsBackend:
+        maxConcurrentCalls: 50
+        maxWaitDuration: 0
+
+  circuitbreaker:
+    instances:
+      standardsBackend:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 5
+
+  retry:
+    instances:
+      standardsBackend:
+        maxAttempts: 3
+        waitDuration: 200ms
+        retryExceptions:
+          - java.io.IOException
+          - reactor.netty.http.client.PrematureCloseException
+
+
+
+# Custom decorator order (used in WebClient config)
+resilience:
+  order:
+    decorators: [bulkhead, circuitbreaker, retry]
+
+
+# ============================================================
+# OBSERVABILITY / ACTUATOR (DEV)
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, beans, env, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+
+# ============================================================
+# LOGGING (DEV)
+# ============================================================
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    reactor.netty: INFO
+    com.paravai.regulations.standards: DEBUG
+    com.paravai.foundation.infrastructure.kafka.inbound: DEBUG
+    com.paravai.foundation.integration.application.inbound: DEBUG
+    com.paravai.foundation.infrastructure.event: DEBUG
+    com.paravai.communities.membership.inbound: DEBUG
+    com.paravai.communities.membership.application: DEBUG
+
+
+
+# ============================================================
+# SERVER (DEV)
+# ============================================================
+server:
+  port: 8098
