@@ -1,6 +1,6 @@
 package com.paravai.communities.composition.offer.application.publish;
 
-import com.paravai.communities.offer.domain.model.Offer;
+import com.paravai.communities.composition.offer.port.OfferSummary;
 
 import java.util.Objects;
 
@@ -8,22 +8,22 @@ import java.util.Objects;
  * Result of PublishOffer use case (composition layer).
  *
  * Notes:
- * - This is a thin wrapper around Offer
- * - No additional state is required for MVP
+ * - Composition layer must not expose Offer domain aggregate directly
+ * - It returns OfferSummary, which is a composition-facing model
  */
 public final class PublishOfferResult {
 
-    private final Offer offer;
+    private final OfferSummary offer;
 
-    private PublishOfferResult(Offer offer) {
+    private PublishOfferResult(OfferSummary offer) {
         this.offer = Objects.requireNonNull(offer, "offer is required");
     }
 
-    public static PublishOfferResult created(Offer offer) {
+    public static PublishOfferResult created(OfferSummary offer) {
         return new PublishOfferResult(offer);
     }
 
-    public Offer offer() {
+    public OfferSummary offer() {
         return offer;
     }
 }

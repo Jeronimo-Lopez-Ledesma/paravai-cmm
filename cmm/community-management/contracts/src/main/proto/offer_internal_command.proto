@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package paravai.communities.offer.v1;
+
+option java_multiple_files = true;
+option java_package = "com.paravai.communities.contracts.grpc.offer.v1";
+option java_outer_classname = "OfferInternalCommandApiProto";
+
+/**
+ * Internal gRPC command API for Offer module.
+ *
+ * Used by composition/orchestration use cases once all cross-module
+ * validations have already been completed.
+ */
+service OfferInternalCommandApi {
+
+  /**
+   * Creates a new ACTIVE Offer.
+   *
+   * Covered by Offer module:
+   * - duplicate ACTIVE offer validation
+   * - aggregate creation
+   * - persistence
+   * - OfferPublished event emission
+   *
+   * NOT covered here:
+   * - community existence
+   * - membership ACTIVE validation
+   * - resource ownership validation
+   * - community exchange-type policy validation
+   */
+  rpc CreateOffer(CreateOfferRequest)
+      returns (CreateOfferResponse);
+}
+
+message CreateOfferRequest {
+  string tenant_id = 1;
+  string community_id = 2;
+  string resource_id = 3;
+  string owner_id = 4;
+
+  /**
+   * Exchange type code.
+   * Examples:
+   * - LEND
+   * - BORROW
+   * - GIVE
+   * - TRADE
+   */
+  string exchange_type_code = 5;
+
+  /**
+   * Optional free-text offer description.
+   */
+  string description = 6;
+}
+
+message CreateOfferResponse {
+  string offer_id = 1;
+  string tenant_id = 2;
+  string community_id = 3;
+  string resource_id = 4;
+  string owner_id = 5;
+  string exchange_type_code = 6;
+  string description = 7;
+
+  /**
+   * Offer status code.
+   * Expected initial value:
+   * - ACTIVE
+   */
+  string status_code = 8;
+
+  /**
+   * Timestamps encoded as ISO-8601 strings for simplicity and consistency
+   * with the current project style.
+   */
+  string created_at = 9;
+  string updated_at = 10;
+}

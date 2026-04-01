@@ -69,8 +69,6 @@ public class OfferController {
             @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
             ServerHttpRequest httpRequest
     ) {
-        final PublishOfferRequest dto = request.getData().getAttributes();
-
         return withRequestContext(
                 Mono.deferContextual(ctx -> {
                     final String traceId = RequestContext.getTraceId(ctx);
@@ -80,6 +78,8 @@ public class OfferController {
                     if ("anonymous".equals(userOid)) {
                         return Mono.error(new IllegalArgumentException("User must be authenticated"));
                     }
+
+                    final PublishOfferRequest dto = extractAttributes(request);
 
                     log.debug("[{}][{}] POST /v1/offers - publishing offer (tenantId={}, communityId={}, resourceId={})",
                             traceId, userOid, tenantId, dto.getCommunityId(), dto.getResourceId());
@@ -97,7 +97,7 @@ public class OfferController {
                                     dto.getExchangeTypeCode(),
                                     dto.getDescription()
                             )
-                            .map(result -> OfferResponse.fromDomain(result.offer()))
+                            .map(result -> OfferResponse.fromSummary(result.offer()))
                             .flatMap(resp ->
                                     JsonApiResponseBuilder.buildSingle(
                                             Mono.just(resp),
@@ -123,6 +123,13 @@ public class OfferController {
                 userOidHeader,
                 sourceSystemHeader
         );
+    }
+
+    private static PublishOfferRequest extractAttributes(JsonApiRequest<PublishOfferRequest> request) {
+        if (request == null || request.getData() == null || request.getData().getAttributes() == null) {
+            throw new IllegalArgumentException("Request body must contain data.attributes");
+        }
+        return request.getData().getAttributes();
     }
 
     private static String defaultIfBlank(String value, String fallback) {

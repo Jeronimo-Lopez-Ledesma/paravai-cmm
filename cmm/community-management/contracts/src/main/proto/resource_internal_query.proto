@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package paravai.communities.resource.v1;
+
+option java_multiple_files = true;
+option java_package = "com.paravai.communities.contracts.grpc.resource.v1";
+option java_outer_classname = "ResourceInternalQueryApiProto";
+
+/**
+ * Internal gRPC query API for Resource module.
+ *
+ * Used by composition/orchestration use cases that need to verify:
+ * - resource existence
+ * - ownership
+ */
+service ResourceInternalQueryApi {
+
+  /**
+   * Returns the resource only if it belongs to the provided owner.
+   *
+   * Expected behavior:
+   * - if resource does not exist, return NOT_FOUND
+   * - if resource exists but does not belong to the owner, also return NOT_FOUND
+   *
+   * This supports ownership-safe lookups without leaking resource existence.
+   */
+  rpc GetOwnedResource(GetOwnedResourceRequest)
+      returns (GetOwnedResourceResponse);
+}
+
+message GetOwnedResourceRequest {
+  string resource_id = 1;
+  string owner_id = 2;
+}
+
+message GetOwnedResourceResponse {
+  string resource_id = 1;
+  string owner_id = 2;
+
+  /**
+   * Optional title for lightweight display/logging/debugging purposes.
+   */
+  string title = 3;
+}

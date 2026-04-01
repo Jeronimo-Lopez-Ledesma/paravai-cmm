@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package paravai.communities.community.v1;
+
+option java_multiple_files = true;
+option java_package = "com.paravai.communities.contracts.grpc.community.v1";
+option java_outer_classname = "CommunityInternalQueryApiProto";
+
+service CommunityInternalQueryApi {
+
+  /**
+   * Returns minimal policy information required to validate offer publishing.
+   */
+  rpc GetCommunityOfferPolicy (GetCommunityOfferPolicyRequest)
+      returns (GetCommunityOfferPolicyResponse);
+}
+
+message GetCommunityOfferPolicyRequest {
+  string community_id = 1;
+}
+
+message GetCommunityOfferPolicyResponse {
+  string community_id = 1;
+
+  /**
+   * Allowed exchange types defined by the community.
+   */
+  repeated string allowed_exchange_types = 2;
+}

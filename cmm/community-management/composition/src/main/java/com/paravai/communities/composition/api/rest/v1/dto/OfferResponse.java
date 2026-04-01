@@ -1,5 +1,6 @@
 package com.paravai.communities.composition.api.rest.v1.dto;
 
+import com.paravai.communities.composition.offer.port.OfferSummary;
 import com.paravai.communities.offer.domain.model.Offer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,18 +30,18 @@ public class OfferResponse {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static OfferResponse fromDomain(Offer offer) {
+    public static OfferResponse fromSummary(OfferSummary offer) {
         return OfferResponse.builder()
-                .id(offer.id().value())
-                .tenantId(offer.tenantId().value())
-                .communityId(offer.communityId().value())
-                .resourceId(offer.resourceId().value())
-                .ownerId(offer.ownerId().value())
-                .exchangeTypeCode(offer.exchangeType().value())
-                .description(offer.description().orElse(null))
-                .statusCode(offer.status().value())
-                .createdAt(offer.createdAt().getInstant())
-                .updatedAt(offer.updatedAt().getInstant())
+                .id(offer.offerId())
+                .tenantId(offer.tenantId())
+                .communityId(offer.communityId())
+                .resourceId(offer.resourceId())
+                .ownerId(offer.ownerId())
+                .exchangeTypeCode(offer.exchangeType())
+                .description(offer.description())
+                .statusCode(offer.status())
+                .createdAt(offer.createdAt())
+                .updatedAt(offer.updatedAt())
                 .build();
     }
 }

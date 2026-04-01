@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package paravai.communities.membership.v1;
+
+option java_multiple_files = true;
+option java_package = "com.paravai.communities.contracts.grpc.membership.v1";
+option java_outer_classname = "MembershipInternalQueryApiProto";
+
+/**
+ * Internal gRPC query API for Membership module.
+ *
+ * Used by composition/orchestration use cases that need
+ * membership state for a specific user in a specific community.
+ */
+service MembershipInternalQueryApi {
+
+  /**
+   * Returns the membership state of a user in a community.
+   *
+   * Expected behavior:
+   * - if no membership exists, the implementation should return NOT_FOUND
+   */
+  rpc GetMembershipStatusForCommunity(GetMembershipStatusForCommunityRequest)
+      returns (GetMembershipStatusForCommunityResponse);
+}
+
+message GetMembershipStatusForCommunityRequest {
+  string tenant_id = 1;
+  string community_id = 2;
+  string user_id = 3;
+}
+
+message GetMembershipStatusForCommunityResponse {
+  string membership_id = 1;
+
+  /**
+   * Membership status code.
+   * Examples:
+   * - PENDING
+   * - ACTIVE
+   * - REJECTED
+   */
+  string status_code = 2;
+
+  /**
+   * Optional role code when membership is ACTIVE.
+   * Examples:
+   * - ADMIN
+   * - MEMBER
+   */
+  string role_code = 3;
+}

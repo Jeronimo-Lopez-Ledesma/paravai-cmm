@@ -1,7 +1,14 @@
 package com.paravai.communities.composition.offer.application.publish;
 
-import com.paravai.communities.composition.offer.port.*;
-import com.paravai.communities.offer.application.command.create.CreateOfferService;
+import com.paravai.communities.composition.offer.port.CommunityQueryPort;
+import com.paravai.communities.composition.offer.port.CommunitySummary;
+import com.paravai.communities.composition.offer.port.CreateOfferCommand;
+import com.paravai.communities.composition.offer.port.MembershipQueryPort;
+import com.paravai.communities.composition.offer.port.MembershipSummary;
+import com.paravai.communities.composition.offer.port.OfferCommandPort;
+import com.paravai.communities.composition.offer.port.OfferSummary;
+import com.paravai.communities.composition.offer.port.ResourceQueryPort;
+import com.paravai.communities.composition.offer.port.ResourceSummary;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import org.slf4j.Logger;
@@ -19,18 +26,18 @@ public class PublishOfferOrchestrator {
     private final CommunityQueryPort communityPort;
     private final MembershipQueryPort membershipPort;
     private final ResourceQueryPort resourcePort;
-    private final CreateOfferService createOfferService;
+    private final OfferCommandPort offerCommandPort;
 
     public PublishOfferOrchestrator(
             CommunityQueryPort communityPort,
             MembershipQueryPort membershipPort,
             ResourceQueryPort resourcePort,
-            CreateOfferService createOfferService
+            OfferCommandPort offerCommandPort
     ) {
         this.communityPort = Objects.requireNonNull(communityPort);
         this.membershipPort = Objects.requireNonNull(membershipPort);
         this.resourcePort = Objects.requireNonNull(resourcePort);
-        this.createOfferService = Objects.requireNonNull(createOfferService);
+        this.offerCommandPort = Objects.requireNonNull(offerCommandPort);
     }
 
     public Mono<PublishOfferResult> publish(
@@ -50,20 +57,16 @@ public class PublishOfferOrchestrator {
             log.debug("[{}][{}] PublishOffer start", traceId, userOid);
 
             Mono<CommunitySummary> communityMono =
-                    communityPort.findById(communityId.value())
-                            .switchIfEmpty(Mono.error(
-                                    new IllegalArgumentException("Community not found")
-                            ));
+                    communityPort.findOfferPolicy(communityId.value())
+                            .switchIfEmpty(Mono.error(new IllegalArgumentException("Community not found")));
 
             Mono<MembershipSummary> membershipMono =
-                    membershipPort.findByTenantAndCommunityAndUser(
+                    membershipPort.findByUserInCommunity(
                                     tenantId.value(),
                                     communityId.value(),
                                     actingUserId.value()
                             )
-                            .switchIfEmpty(Mono.error(
-                                    new IllegalArgumentException("User is not a member of the community")
-                            ))
+                            .switchIfEmpty(Mono.error(new IllegalArgumentException("User is not a member")))
                             .flatMap(m -> m.isActive()
                                     ? Mono.just(m)
                                     : Mono.error(new IllegalArgumentException("User is not ACTIVE"))
@@ -74,34 +77,37 @@ public class PublishOfferOrchestrator {
                                     resourceId.value(),
                                     actingUserId.value()
                             )
-                            .switchIfEmpty(Mono.error(
-                                    new IllegalArgumentException("Resource not found")
-                            ));
+                            .switchIfEmpty(Mono.error(new IllegalArgumentException("Resource not found")));
 
             return Mono.zip(communityMono, membershipMono, resourceMono)
                     .flatMap(tuple -> {
 
                         CommunitySummary community = tuple.getT1();
-
-                        // regla comunidad
-                        if (!community.allows(exchangeTypeCode)) {
-                            return Mono.error(new IllegalArgumentException(
-                                    "Exchange type not allowed"
-                            ));
+                        log.info("[{}][{}] Community {} allows exchange types: {}. Requested: {}",
+                                traceId,
+                                userOid,
+                                community.communityId(),
+                                community.allowedExchangeTypes(),
+                                exchangeTypeCode
+                        );
+                        if (!community.allowsExchangeType(exchangeTypeCode)) {
+                            return Mono.error(new IllegalArgumentException("Exchange type not allowed"));
                         }
 
-                        return createOfferService.create(
-                                        tenantId,
-                                        communityId,
-                                        resourceId,
-                                        actingUserId,
-                                        exchangeTypeCode,
-                                        description
-                                )
-                                .map(r -> PublishOfferResult.created(r.offer()));
+                        CreateOfferCommand command = new CreateOfferCommand(
+                                tenantId.value(),
+                                communityId.value(),
+                                resourceId.value(),
+                                actingUserId.value(),
+                                exchangeTypeCode,
+                                description
+                        );
+
+                        return offerCommandPort.createOffer(command)
+                                .map(PublishOfferResult::created);
                     })
                     .doOnSuccess(r ->
-                            log.info("[{}][{}] Offer published {}", traceId, userOid, r.offer().id())
+                            log.info("[{}][{}] Offer published {}", traceId, userOid, r.offer().offerId())
                     )
                     .doOnError(e ->
                             log.error("[{}][{}] PublishOffer failed", traceId, userOid, e)
