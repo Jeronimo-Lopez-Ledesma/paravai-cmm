@@ -31,6 +31,37 @@ service OfferInternalCommandApi {
    */
   rpc CreateOffer(CreateOfferRequest)
       returns (CreateOfferResponse);
+
+  /**
+   * Updates the availability of an existing Offer.
+   *
+   * Covered by Offer module:
+   * - offer existence
+   * - ownership validation
+   * - withdrawn validation
+   * - locked validation
+   * - idempotency by domain
+   * - persistence
+   * - Offer availability update event emission
+   */
+  rpc UpdateOfferAvailability(UpdateOfferAvailabilityRequest)
+      returns (UpdateOfferAvailabilityResponse);
+
+  /**
+   * Pauses an existing Offer.
+   *
+   * Covered by Offer module:
+   * - offer existence
+   * - ownership validation
+   * - ACTIVE -> PAUSED transition validation
+   * - withdrawn validation
+   * - locked validation
+   * - idempotency by domain
+   * - persistence
+   * - Offer paused event emission
+   */
+  rpc PauseOffer(PauseOfferRequest)
+      returns (PauseOfferResponse);
 }
 
 message CreateOfferRequest {
@@ -77,4 +108,59 @@ message CreateOfferResponse {
    */
   string created_at = 9;
   string updated_at = 10;
+}
+
+message UpdateOfferAvailabilityRequest {
+  string offer_id = 1;
+
+  /**
+   * Availability status code.
+   * Supported values:
+   * - AVAILABLE
+   * - UNAVAILABLE
+   */
+  string availability_status_code = 2;
+}
+
+message UpdateOfferAvailabilityResponse {
+  string offer_id = 1;
+  string tenant_id = 2;
+  string community_id = 3;
+  string resource_id = 4;
+  string owner_id = 5;
+  string exchange_type_code = 6;
+  string description = 7;
+  string status_code = 8;
+  string availability_status_code = 9;
+  bool locked = 10;
+  string created_at = 11;
+  string updated_at = 12;
+}
+
+message PauseOfferRequest {
+  string offer_id = 1;
+}
+
+message PauseOfferResponse {
+  string offer_id = 1;
+  string tenant_id = 2;
+  string community_id = 3;
+  string resource_id = 4;
+  string owner_id = 5;
+  string exchange_type_code = 6;
+  string description = 7;
+
+  /**
+   * Expected resulting status:
+   * - PAUSED
+   *
+   * Idempotent case:
+   * - PAUSED
+   */
+  string status_code = 8;
+
+  string availability_status_code = 9;
+  bool locked = 10;
+  string created_at = 11;
+  string updated_at = 12;
 }

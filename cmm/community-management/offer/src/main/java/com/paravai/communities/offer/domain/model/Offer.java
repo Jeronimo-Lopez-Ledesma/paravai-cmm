@@ -1,6 +1,7 @@
 package com.paravai.communities.offer.domain.model;
 
 import com.paravai.communities.offer.domain.value.ExchangeTypeValue;
+import com.paravai.communities.offer.domain.value.OfferAvailabilityStatusValue;
 import com.paravai.communities.offer.domain.value.OfferStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.domain.value.TimestampValue;
@@ -21,6 +22,8 @@ import java.util.Optional;
  * - one offer references exactly one resource
  * - one offer is owned by exactly one user
  * - the offer starts in ACTIVE status
+ * - the offer starts in AVAILABLE availability status
+ * - the offer starts unlocked
  * - no pricing
  * - no geolocation
  * - no reservation calendar
@@ -33,6 +36,7 @@ import java.util.Optional;
  * - every Offer must have an ownerId
  * - every Offer must have an exchangeType
  * - every Offer must have a status
+ * - every Offer must have an availabilityStatus
  * - createdAt cannot be after updatedAt
  *
  * Repository / application-level invariants (NOT enforceable from a single aggregate instance):
@@ -40,6 +44,7 @@ import java.util.Optional;
  * - resource.ownerId must match the authenticated user
  * - exchangeType must be allowed by community rules
  * - there can be at most one ACTIVE offer by (tenantId, communityId, resourceId)
+ * - lock/unlock transitions may be coordinated by exchange lifecycle outside this aggregate
  */
 public final class Offer implements Serializable {
 
@@ -65,6 +70,22 @@ public final class Offer implements Serializable {
      */
     private OfferStatusValue status;
 
+    /**
+     * MVP availability lifecycle:
+     * - AVAILABLE
+     * - UNAVAILABLE
+     */
+    private OfferAvailabilityStatusValue availabilityStatus;
+
+    /**
+     * Indicates whether the offer is temporarily blocked by an active exchange.
+     *
+     * Business meaning in MVP:
+     * - locked = true  -> availability cannot be modified
+     * - locked = false -> availability can be modified, subject to other invariants
+     */
+    private boolean locked;
+
     private final TimestampValue createdAt;
     private TimestampValue updatedAt;
 
@@ -79,6 +100,8 @@ public final class Offer implements Serializable {
           ExchangeTypeValue exchangeType,
           String description,
           OfferStatusValue status,
+          OfferAvailabilityStatusValue availabilityStatus,
+          boolean locked,
           TimestampValue createdAt,
           TimestampValue updatedAt,
           boolean validate) {
@@ -93,6 +116,8 @@ public final class Offer implements Serializable {
         this.exchangeType = Objects.requireNonNull(exchangeType, "exchangeType is required");
         this.description = normalizeDescription(description);
         this.status = Objects.requireNonNull(status, "status is required");
+        this.availabilityStatus = Objects.requireNonNull(availabilityStatus, "availabilityStatus is required");
+        this.locked = locked;
 
         this.createdAt = Objects.requireNonNull(createdAt, "createdAt is required");
         this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt is required");
@@ -103,22 +128,34 @@ public final class Offer implements Serializable {
     }
 
     /**
-     * Pauses an ACTIVE offer.
+     * C4 - Pauses an offer owned by the current user.
      *
      * Covered invariants:
+     * - only the owner can pause the offer
      * - only ACTIVE offers can transition to PAUSED
      * - WITHDRAWN offers cannot be paused
+     * - locked offers cannot be paused
      *
      * Idempotency:
      * - if already PAUSED, returns false
      */
-    public boolean pause(TimestampValue when) {
+    public boolean pause(IdValue currentUserId, TimestampValue when) {
+        Objects.requireNonNull(currentUserId, "currentUserId is required");
+
+        if (!ownerId.equals(currentUserId)) {
+            throw new IllegalStateException("Only the owner can pause the offer");
+        }
+
         if (OfferStatusValue.PAUSED.equals(status)) {
             return false;
         }
 
         if (OfferStatusValue.WITHDRAWN.equals(status)) {
             throw new IllegalStateException("WITHDRAWN offers cannot be paused");
+        }
+
+        if (locked) {
+            throw new IllegalStateException("Locked offers cannot be paused");
         }
 
         if (!OfferStatusValue.ACTIVE.equals(status)) {
@@ -158,6 +195,48 @@ public final class Offer implements Serializable {
         return true;
     }
 
+    /**
+     * Updates the availability status of the offer.
+     *
+     * Covered invariants:
+     * - only the owner can modify availability
+     * - WITHDRAWN offers cannot update availability
+     * - locked offers cannot update availability
+     *
+     * Idempotency:
+     * - if the requested availabilityStatus is already the current one, returns false
+     */
+    public boolean updateAvailability(IdValue currentUserId,
+                                      OfferAvailabilityStatusValue newAvailabilityStatus,
+                                      TimestampValue when) {
+
+        Objects.requireNonNull(currentUserId, "currentUserId is required");
+        Objects.requireNonNull(newAvailabilityStatus, "newAvailabilityStatus is required");
+
+        if (!ownerId.equals(currentUserId)) {
+            throw new IllegalStateException("Only the owner can update offer availability");
+        }
+
+        if (OfferStatusValue.WITHDRAWN.equals(status)) {
+            throw new IllegalStateException("WITHDRAWN offers cannot update availability");
+        }
+
+        if (locked) {
+            throw new IllegalStateException("Locked offers cannot update availability");
+        }
+
+        if (availabilityStatus.equals(newAvailabilityStatus)) {
+            return false;
+        }
+
+        TimestampValue effectiveWhen = (when != null ? when : TimestampValue.now());
+
+        this.availabilityStatus = newAvailabilityStatus;
+        touch(effectiveWhen);
+        validateInvariants(Clock.systemUTC());
+        return true;
+    }
+
     public boolean isActive() {
         return OfferStatusValue.ACTIVE.equals(status);
     }
@@ -168,6 +247,18 @@ public final class Offer implements Serializable {
 
     public boolean isWithdrawn() {
         return OfferStatusValue.WITHDRAWN.equals(status);
+    }
+
+    public boolean isAvailable() {
+        return availabilityStatus.isAvailable();
+    }
+
+    public boolean isUnavailable() {
+        return availabilityStatus.isUnavailable();
+    }
+
+    public boolean isLocked() {
+        return locked;
     }
 
     public boolean isOwnedBy(IdValue userId) {
@@ -235,6 +326,14 @@ public final class Offer implements Serializable {
         return status;
     }
 
+    public OfferAvailabilityStatusValue availabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public boolean locked() {
+        return locked;
+    }
+
     public TimestampValue createdAt() {
         return createdAt;
     }
@@ -257,7 +356,7 @@ public final class Offer implements Serializable {
 
     @Override
     public String toString() {
-        return "Offer{id=%s, tenantId=%s, communityId=%s, resourceId=%s, ownerId=%s, exchangeType=%s, status=%s}"
+        return "Offer{id=%s, tenantId=%s, communityId=%s, resourceId=%s, ownerId=%s, exchangeType=%s, status=%s, availabilityStatus=%s, locked=%s}"
                 .formatted(
                         id.value(),
                         tenantId.value(),
@@ -265,7 +364,9 @@ public final class Offer implements Serializable {
                         resourceId.value(),
                         ownerId.value(),
                         exchangeType.value(),
-                        status.value()
+                        status.value(),
+                        availabilityStatus.code(),
+                        locked
                 );
     }
 }

@@ -1,12 +1,17 @@
 package com.paravai.communities.composition.offer.application.publish;
 
+import com.paravai.communities.composition.offer.application.exception.CommunityNotFoundException;
+import com.paravai.communities.composition.offer.application.exception.ExchangeTypeNotAllowedException;
+import com.paravai.communities.composition.offer.application.exception.ResourceNotFoundException;
+import com.paravai.communities.composition.offer.application.exception.UnauthenticatedUserException;
+import com.paravai.communities.composition.offer.application.exception.UserNotActiveException;
+import com.paravai.communities.composition.offer.application.exception.UserNotMemberException;
 import com.paravai.communities.composition.offer.port.CommunityQueryPort;
 import com.paravai.communities.composition.offer.port.CommunitySummary;
 import com.paravai.communities.composition.offer.port.CreateOfferCommand;
 import com.paravai.communities.composition.offer.port.MembershipQueryPort;
 import com.paravai.communities.composition.offer.port.MembershipSummary;
 import com.paravai.communities.composition.offer.port.OfferCommandPort;
-import com.paravai.communities.composition.offer.port.OfferSummary;
 import com.paravai.communities.composition.offer.port.ResourceQueryPort;
 import com.paravai.communities.composition.offer.port.ResourceSummary;
 import com.paravai.foundation.domain.value.IdValue;
@@ -48,17 +53,33 @@ public class PublishOfferOrchestrator {
             String exchangeTypeCode,
             String description
     ) {
-
         return Mono.deferContextual(ctx -> {
 
             final String traceId = RequestContext.getTraceId(ctx);
             final String userOid = RequestContext.getUserOid(ctx);
+            final String sourceSystem = RequestContext.getSourceSystem(ctx);
+
+            log.info("[{}][{}][{}] PublishOffer context in composition - tenantId={}, communityId={}, resourceId={}",
+                    traceId,
+                    userOid,
+                    sourceSystem,
+                    tenantId.value(),
+                    communityId.value(),
+                    resourceId.value()
+            );
+
+
+            if (userOid == null || userOid.isBlank()) {
+                return Mono.error(new UnauthenticatedUserException());
+            }
 
             log.debug("[{}][{}] PublishOffer start", traceId, userOid);
 
             Mono<CommunitySummary> communityMono =
                     communityPort.findOfferPolicy(communityId.value())
-                            .switchIfEmpty(Mono.error(new IllegalArgumentException("Community not found")));
+                            .switchIfEmpty(Mono.error(
+                                    new CommunityNotFoundException(communityId.value())
+                            ));
 
             Mono<MembershipSummary> membershipMono =
                     membershipPort.findByUserInCommunity(
@@ -66,10 +87,15 @@ public class PublishOfferOrchestrator {
                                     communityId.value(),
                                     actingUserId.value()
                             )
-                            .switchIfEmpty(Mono.error(new IllegalArgumentException("User is not a member")))
+                            .switchIfEmpty(Mono.error(
+                                    new UserNotMemberException(actingUserId.value(), communityId.value())
+                            ))
                             .flatMap(m -> m.isActive()
-                                    ? Mono.just(m)
-                                    : Mono.error(new IllegalArgumentException("User is not ACTIVE"))
+                                            ? Mono.just(m)
+                                            : Mono.error(new UserNotActiveException(
+                                            actingUserId.value(),
+                                            communityId.value()
+                                    ))
                             );
 
             Mono<ResourceSummary> resourceMono =
@@ -77,21 +103,31 @@ public class PublishOfferOrchestrator {
                                     resourceId.value(),
                                     actingUserId.value()
                             )
-                            .switchIfEmpty(Mono.error(new IllegalArgumentException("Resource not found")));
+                            .switchIfEmpty(Mono.error(
+                                    new ResourceNotFoundException(resourceId.value())
+                            ));
 
             return Mono.zip(communityMono, membershipMono, resourceMono)
                     .flatMap(tuple -> {
 
                         CommunitySummary community = tuple.getT1();
-                        log.info("[{}][{}] Community {} allows exchange types: {}. Requested: {}",
+                        MembershipSummary membership = tuple.getT2();
+                        ResourceSummary resource = tuple.getT3();
+
+                        log.info(
+                                "[{}][{}] Community {} allows exchange types: {}. Requested: {}",
                                 traceId,
                                 userOid,
                                 community.communityId(),
                                 community.allowedExchangeTypes(),
                                 exchangeTypeCode
                         );
+
                         if (!community.allowsExchangeType(exchangeTypeCode)) {
-                            return Mono.error(new IllegalArgumentException("Exchange type not allowed"));
+                            return Mono.error(new ExchangeTypeNotAllowedException(
+                                    exchangeTypeCode,
+                                    community.communityId()
+                            ));
                         }
 
                         CreateOfferCommand command = new CreateOfferCommand(
@@ -109,9 +145,13 @@ public class PublishOfferOrchestrator {
                     .doOnSuccess(r ->
                             log.info("[{}][{}] Offer published {}", traceId, userOid, r.offer().offerId())
                     )
-                    .doOnError(e ->
-                            log.error("[{}][{}] PublishOffer failed", traceId, userOid, e)
-                    );
+                    .doOnError(e -> {
+                        if (e instanceof com.paravai.foundation.domain.exception.CustomException) {
+                            log.warn("[{}][{}] PublishOffer business error: {}", traceId, userOid, e.getMessage());
+                        } else {
+                            log.error("[{}][{}] PublishOffer failed", traceId, userOid, e);
+                        }
+                    });
         });
     }
 }

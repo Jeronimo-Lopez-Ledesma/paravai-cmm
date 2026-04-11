@@ -1,7 +1,6 @@
 package com.paravai.communities.composition.api.rest.v1.dto;
 
 import com.paravai.communities.composition.offer.port.OfferSummary;
-import com.paravai.communities.offer.domain.model.Offer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +25,8 @@ public class OfferResponse {
     private String description;
 
     private String statusCode;
+    private String availabilityStatusCode;
+    private boolean locked;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -37,9 +38,11 @@ public class OfferResponse {
                 .communityId(offer.communityId())
                 .resourceId(offer.resourceId())
                 .ownerId(offer.ownerId())
-                .exchangeTypeCode(offer.exchangeType())
+                .exchangeTypeCode(offer.exchangeTypeCode())
                 .description(offer.description())
-                .statusCode(offer.status())
+                .statusCode(offer.statusCode())
+                .availabilityStatusCode(offer.availabilityStatusCode())
+                .locked(offer.locked())
                 .createdAt(offer.createdAt())
                 .updatedAt(offer.updatedAt())
                 .build();

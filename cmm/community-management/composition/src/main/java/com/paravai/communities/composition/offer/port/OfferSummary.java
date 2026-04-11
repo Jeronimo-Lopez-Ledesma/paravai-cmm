@@ -8,9 +8,11 @@ public record OfferSummary(
         String communityId,
         String resourceId,
         String ownerId,
-        String exchangeType,
+        String exchangeTypeCode,
         String description,
-        String status,
+        String statusCode,
+        String availabilityStatusCode,
+        boolean locked,
         Instant createdAt,
         Instant updatedAt
 ) {}

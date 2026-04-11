@@ -2,7 +2,10 @@ package com.paravai.communities.composition.api.rest.v1;
 
 import com.paravai.communities.composition.api.rest.v1.dto.OfferResponse;
 import com.paravai.communities.composition.api.rest.v1.dto.PublishOfferRequest;
+import com.paravai.communities.composition.api.rest.v1.dto.UpdateOfferAvailabilityRequest;
+import com.paravai.communities.composition.offer.application.pause.PauseOfferOrchestrator;
 import com.paravai.communities.composition.offer.application.publish.PublishOfferOrchestrator;
+import com.paravai.communities.composition.offer.application.updateavailability.UpdateOfferAvailabilityOrchestrator;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiRequest;
@@ -34,9 +37,16 @@ public class OfferController {
     private static final Logger log = LoggerFactory.getLogger(OfferController.class);
 
     private final PublishOfferOrchestrator publishOfferOrchestrator;
+    private final UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator;
+    private final PauseOfferOrchestrator pauseOfferOrchestrator;
 
-    public OfferController(PublishOfferOrchestrator publishOfferOrchestrator) {
+    public OfferController(PublishOfferOrchestrator publishOfferOrchestrator,
+                           UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator,
+                           PauseOfferOrchestrator pauseOfferOrchestrator) {
+
         this.publishOfferOrchestrator = Objects.requireNonNull(publishOfferOrchestrator, "publishOfferOrchestrator");
+        this.updateOfferAvailabilityOrchestrator = Objects.requireNonNull(updateOfferAvailabilityOrchestrator, "updateOfferAvailabilityOrchestrator");
+        this.pauseOfferOrchestrator = Objects.requireNonNull(pauseOfferOrchestrator, "pauseOfferOrchestrator");
     }
 
     /**
@@ -125,7 +135,148 @@ public class OfferController {
         );
     }
 
-    private static PublishOfferRequest extractAttributes(JsonApiRequest<PublishOfferRequest> request) {
+    /**
+     * EPIC C / C3 - Update offer availability
+     *
+     * REST surface:
+     * - PUT /v1/offers/{offerId}/availability
+     *
+     * Notes:
+     * - acting userOid comes from RequestContext
+     * - only the owner can update availability
+     * - WITHDRAWN offers cannot update availability
+     * - locked offers cannot update availability
+     * - idempotent if the requested availability is already the current one
+     */
+    @PutMapping("/{offerId}/availability")
+    @Operation(summary = "Update availability of an existing offer")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Offer availability updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Offer not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<OfferResponse>>> updateAvailability(
+            @PathVariable("offerId") String offerId,
+            @Valid @RequestBody JsonApiRequest<UpdateOfferAvailabilityRequest> request,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
+            ServerHttpRequest httpRequest
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    final UpdateOfferAvailabilityRequest dto = extractAttributes(request);
+
+                    log.debug("[{}][{}] PUT /v1/offers/{}/availability - availabilityStatusCode={}",
+                            traceId, userOid, offerId, dto.getAvailabilityStatusCode());
+
+                    return updateOfferAvailabilityOrchestrator.update(
+                                    IdValue.of(offerId),
+                                    dto.getAvailabilityStatusCode()
+                            )
+                            .map(result -> OfferResponse.fromSummary(result.offer()))
+                            .flatMap(resp ->
+                                    JsonApiResponseBuilder.buildSingle(
+                                            Mono.just(resp),
+                                            httpRequest,
+                                            "offers",
+                                            OfferResponse::getId
+                                    ).map(body -> {
+                                        log.info("[{}][{}] Offer {} availability updated to {}",
+                                                traceId, userOid, offerId, dto.getAvailabilityStatusCode());
+
+                                        return ResponseEntity
+                                                .ok()
+                                                .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                                .body(body);
+                                    })
+                            );
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
+    /**
+     * EPIC C / C4 - Pause offer
+     *
+     * REST surface:
+     * - POST /v1/offers/{offerId}/pause
+     *
+     * Notes:
+     * - acting userOid comes from RequestContext
+     * - only the owner can pause the offer
+     * - only ACTIVE offers can transition to PAUSED
+     * - WITHDRAWN offers cannot be paused
+     * - idempotent if the offer is already PAUSED
+     */
+    @PostMapping("/{offerId}/pause")
+    @Operation(summary = "Pause an existing offer")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Offer paused successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Offer not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<OfferResponse>>> pause(
+            @PathVariable("offerId") String offerId,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
+            ServerHttpRequest httpRequest
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    log.debug("[{}][{}] POST /v1/offers/{}/pause",
+                            traceId, userOid, offerId);
+
+                    return pauseOfferOrchestrator.pause(IdValue.of(offerId))
+                            .map(result -> OfferResponse.fromSummary(result.offer()))
+                            .flatMap(resp ->
+                                    JsonApiResponseBuilder.buildSingle(
+                                            Mono.just(resp),
+                                            httpRequest,
+                                            "offers",
+                                            OfferResponse::getId
+                                    ).map(body -> {
+                                        log.info("[{}][{}] Offer {} paused",
+                                                traceId, userOid, offerId);
+
+                                        return ResponseEntity
+                                                .ok()
+                                                .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                                .body(body);
+                                    })
+                            );
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
+
+    private static <T> T extractAttributes(JsonApiRequest<T> request) {
         if (request == null || request.getData() == null || request.getData().getAttributes() == null) {
             throw new IllegalArgumentException("Request body must contain data.attributes");
         }

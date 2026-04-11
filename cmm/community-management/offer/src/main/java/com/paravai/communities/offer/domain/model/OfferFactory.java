@@ -1,6 +1,7 @@
 package com.paravai.communities.offer.domain.model;
 
 import com.paravai.communities.offer.domain.value.ExchangeTypeValue;
+import com.paravai.communities.offer.domain.value.OfferAvailabilityStatusValue;
 import com.paravai.communities.offer.domain.value.OfferStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.domain.value.TimestampValue;
@@ -13,7 +14,7 @@ import java.util.Objects;
  * Encapsulates valid Offer creation and reconstruction.
  *
  * Methods:
- * - create(): creates a new ACTIVE offer
+ * - create(): creates a new ACTIVE and AVAILABLE offer
  * - recreate(): rehydrates an existing offer from persistence
  */
 public final class OfferFactory {
@@ -27,7 +28,7 @@ public final class OfferFactory {
     // -------------------------------------------------
 
     /**
-     * Creates a new ACTIVE offer.
+     * Creates a new ACTIVE and AVAILABLE offer.
      *
      * Covered invariants:
      * - offer must have id
@@ -37,6 +38,8 @@ public final class OfferFactory {
      * - offer must have ownerId
      * - offer must have exchangeType
      * - offer starts in ACTIVE state
+     * - offer starts in AVAILABLE availability state
+     * - offer starts unlocked
      * - createdAt / updatedAt are initialized consistently
      */
     public static Offer create(IdValue tenantId,
@@ -63,6 +66,8 @@ public final class OfferFactory {
                 exchangeType,
                 description,
                 OfferStatusValue.ACTIVE,
+                OfferAvailabilityStatusValue.available(),
+                false,
                 now,
                 now,
                 true
@@ -87,6 +92,8 @@ public final class OfferFactory {
                                  ExchangeTypeValue exchangeType,
                                  String description,
                                  OfferStatusValue status,
+                                 OfferAvailabilityStatusValue availabilityStatus,
+                                 boolean locked,
                                  TimestampValue createdAt,
                                  TimestampValue updatedAt) {
 
@@ -97,6 +104,7 @@ public final class OfferFactory {
         Objects.requireNonNull(ownerId, "ownerId is required");
         Objects.requireNonNull(exchangeType, "exchangeType is required");
         Objects.requireNonNull(status, "status is required");
+        Objects.requireNonNull(availabilityStatus, "availabilityStatus is required");
         Objects.requireNonNull(createdAt, "createdAt is required");
         Objects.requireNonNull(updatedAt, "updatedAt is required");
 
@@ -109,6 +117,8 @@ public final class OfferFactory {
                 exchangeType,
                 description,
                 status,
+                availabilityStatus,
+                locked,
                 createdAt,
                 updatedAt,
                 false

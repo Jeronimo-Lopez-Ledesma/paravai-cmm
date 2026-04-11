@@ -3,6 +3,7 @@ package com.paravai.communities.offer.infrastructure.persistence.mongo.document;
 import com.paravai.communities.offer.domain.model.Offer;
 import com.paravai.communities.offer.domain.model.OfferFactory;
 import com.paravai.communities.offer.domain.value.ExchangeTypeValue;
+import com.paravai.communities.offer.domain.value.OfferAvailabilityStatusValue;
 import com.paravai.communities.offer.domain.value.OfferStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.domain.value.TimestampValue;
@@ -36,6 +37,8 @@ public class OfferDocument {
     private String exchangeTypeCode;
     private String description;
     private String statusCode;
+    private String availabilityStatusCode;
+    private boolean locked;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -59,6 +62,8 @@ public class OfferDocument {
         document.exchangeTypeCode = offer.exchangeType().value();
         document.description = offer.description().orElse(null);
         document.statusCode = offer.status().value();
+        document.availabilityStatusCode = offer.availabilityStatus().code();
+        document.locked = offer.locked();
 
         document.createdAt = offer.createdAt().getInstant();
         document.updatedAt = offer.updatedAt().getInstant();
@@ -84,6 +89,8 @@ public class OfferDocument {
                 ExchangeTypeValue.of(exchangeTypeCode),
                 description,
                 OfferStatusValue.of(statusCode),
+                OfferAvailabilityStatusValue.of(availabilityStatusCode),
+                locked,
                 TimestampValue.of(createdAt),
                 TimestampValue.of(updatedAt)
         );
@@ -110,6 +117,9 @@ public class OfferDocument {
         }
         if (statusCode == null || statusCode.isBlank()) {
             throw new IllegalStateException("Invalid Offer document: statusCode is required");
+        }
+        if (availabilityStatusCode == null || availabilityStatusCode.isBlank()) {
+            throw new IllegalStateException("Invalid Offer document: availabilityStatusCode is required");
         }
         if (createdAt == null) {
             throw new IllegalStateException("Invalid Offer document: createdAt is required");
@@ -185,6 +195,22 @@ public class OfferDocument {
 
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public String getAvailabilityStatusCode() {
+        return availabilityStatusCode;
+    }
+
+    public void setAvailabilityStatusCode(String availabilityStatusCode) {
+        this.availabilityStatusCode = availabilityStatusCode;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public Instant getCreatedAt() {

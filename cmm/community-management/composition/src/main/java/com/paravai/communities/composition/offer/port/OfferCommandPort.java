@@ -9,4 +9,8 @@ import reactor.core.publisher.Mono;
 public interface OfferCommandPort {
 
     Mono<OfferSummary> createOffer(CreateOfferCommand command);
+
+    Mono<OfferSummary> updateOfferAvailability(UpdateOfferAvailabilityCommand command);
+
+    Mono<OfferSummary> pauseOffer(PauseOfferCommand command);
 }
