@@ -8,6 +8,8 @@ import com.paravai.communities.composition.offer.port.OfferCommandPort;
 import com.paravai.communities.composition.offer.port.OfferSummary;
 import com.paravai.communities.composition.offer.port.PauseOfferCommand;
 import com.paravai.communities.composition.offer.port.UpdateOfferAvailabilityCommand;
+import com.paravai.communities.composition.offer.port.WithdrawOfferCommand;
+import com.paravai.communities.contracts.grpc.offer.v1.WithdrawOfferRequest;
 import com.paravai.communities.contracts.grpc.offer.v1.CreateOfferRequest;
 import com.paravai.communities.contracts.grpc.offer.v1.OfferInternalCommandApiGrpc;
 import com.paravai.communities.contracts.grpc.offer.v1.PauseOfferRequest;
@@ -229,6 +231,71 @@ public class GrpcOfferCommandAdapter implements OfferCommandPort {
             return Mono.fromCallable(() ->
                             stubWithHeaders.pauseOffer(
                                     PauseOfferRequest.newBuilder()
+                                            .setOfferId(command.offerId())
+                                            .build()
+                            )
+                    )
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .map(response -> new OfferSummary(
+                            response.getOfferId(),
+                            response.getTenantId(),
+                            response.getCommunityId(),
+                            response.getResourceId(),
+                            response.getOwnerId(),
+                            response.getExchangeTypeCode(),
+                            emptyToNull(response.getDescription()),
+                            response.getStatusCode(),
+                            response.getAvailabilityStatusCode(),
+                            response.getLocked(),
+                            parseInstant(response.getCreatedAt()),
+                            parseInstant(response.getUpdatedAt())
+                    ))
+                    .onErrorMap(this::mapToDomainException);
+        });
+    }
+
+    @Override
+    public Mono<OfferSummary> withdrawOffer(WithdrawOfferCommand command) {
+        Objects.requireNonNull(command, "command is required");
+
+        return Mono.deferContextual(ctx -> {
+
+            String traceId = RequestContext.getTraceId(ctx);
+            String userOid = RequestContext.getUserOid(ctx);
+            String sourceSystem = RequestContext.getSourceSystem(ctx);
+
+            log.info(
+                    "[grpc-client][composition] Enviando metadata a offer - traceId={}, userOid={}, sourceSystem={}",
+                    traceId, userOid, sourceSystem
+            );
+
+            ClientInterceptor metadataInterceptor = new ClientInterceptor() {
+                @Override
+                public <ReqT, RespT> io.grpc.ClientCall<ReqT, RespT> interceptCall(
+                        MethodDescriptor<ReqT, RespT> method,
+                        CallOptions callOptions,
+                        Channel next
+                ) {
+                    return new ForwardingClientCall.SimpleForwardingClientCall<>(
+                            next.newCall(method, callOptions)
+                    ) {
+                        @Override
+                        public void start(Listener<RespT> responseListener, Metadata headers) {
+                            headers.put(TRACE_ID_HEADER, traceId);
+                            headers.put(USER_OID_HEADER, userOid);
+                            headers.put(SOURCE_SYSTEM_HEADER, sourceSystem);
+                            super.start(responseListener, headers);
+                        }
+                    };
+                }
+            };
+
+            OfferInternalCommandApiGrpc.OfferInternalCommandApiBlockingStub stubWithHeaders =
+                    stub.withInterceptors(metadataInterceptor);
+
+            return Mono.fromCallable(() ->
+                            stubWithHeaders.withdrawOffer(
+                                    WithdrawOfferRequest.newBuilder()
                                             .setOfferId(command.offerId())
                                             .build()
                             )

@@ -3,13 +3,16 @@ package com.paravai.communities.offer.api.grpc;
 import com.paravai.communities.contracts.grpc.offer.v1.CreateOfferRequest;
 import com.paravai.communities.contracts.grpc.offer.v1.CreateOfferResponse;
 import com.paravai.communities.contracts.grpc.offer.v1.OfferInternalCommandApiGrpc;
-import com.paravai.communities.contracts.grpc.offer.v1.UpdateOfferAvailabilityRequest;
-import com.paravai.communities.contracts.grpc.offer.v1.UpdateOfferAvailabilityResponse;
 import com.paravai.communities.contracts.grpc.offer.v1.PauseOfferRequest;
 import com.paravai.communities.contracts.grpc.offer.v1.PauseOfferResponse;
+import com.paravai.communities.contracts.grpc.offer.v1.UpdateOfferAvailabilityRequest;
+import com.paravai.communities.contracts.grpc.offer.v1.UpdateOfferAvailabilityResponse;
+import com.paravai.communities.contracts.grpc.offer.v1.WithdrawOfferRequest;
+import com.paravai.communities.contracts.grpc.offer.v1.WithdrawOfferResponse;
 import com.paravai.communities.offer.application.command.create.CreateOfferService;
 import com.paravai.communities.offer.application.command.pause.PauseOfferService;
 import com.paravai.communities.offer.application.command.updateavailability.UpdateOfferAvailabilityService;
+import com.paravai.communities.offer.application.command.withdraw.WithdrawOfferService;
 import com.paravai.foundation.domain.exception.CustomException;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
@@ -38,13 +41,16 @@ public class OfferInternalCommandGrpcAdapter extends OfferInternalCommandApiGrpc
     private final CreateOfferService createOfferService;
     private final UpdateOfferAvailabilityService updateOfferAvailabilityService;
     private final PauseOfferService pauseOfferService;
+    private final WithdrawOfferService withdrawOfferService;
 
     public OfferInternalCommandGrpcAdapter(CreateOfferService createOfferService,
                                            UpdateOfferAvailabilityService updateOfferAvailabilityService,
-                                           PauseOfferService pauseOfferService) {
+                                           PauseOfferService pauseOfferService,
+                                           WithdrawOfferService withdrawOfferService) {
         this.createOfferService = Objects.requireNonNull(createOfferService, "createOfferService");
         this.updateOfferAvailabilityService = Objects.requireNonNull(updateOfferAvailabilityService, "updateOfferAvailabilityService");
         this.pauseOfferService = Objects.requireNonNull(pauseOfferService, "pauseOfferService");
+        this.withdrawOfferService = Objects.requireNonNull(withdrawOfferService, "withdrawOfferService");
     }
 
     @Override
@@ -148,6 +154,37 @@ public class OfferInternalCommandGrpcAdapter extends OfferInternalCommandApiGrpc
         );
     }
 
+    @Override
+    public void withdrawOffer(WithdrawOfferRequest request,
+                              StreamObserver<WithdrawOfferResponse> responseObserver) {
+
+        String traceId = defaultIfBlank(TRACE_ID_CTX_KEY.get(), FALLBACK_TRACE_ID);
+        String userOid = defaultIfBlank(USER_OID_CTX_KEY.get(), FALLBACK_USER_OID);
+        String sourceSystem = defaultIfBlank(SOURCE_SYSTEM_CTX_KEY.get(), FALLBACK_SOURCE_SYSTEM);
+
+        org.slf4j.LoggerFactory.getLogger(OfferInternalCommandGrpcAdapter.class)
+                .info("[grpc-adapter][offer] Context values resolved - traceId={}, userOid={}, sourceSystem={}",
+                        traceId, userOid, sourceSystem);
+
+        Mono<WithdrawOfferResponse> pipeline =
+                withdrawOfferService.withdraw(
+                                IdValue.of(request.getOfferId()),
+                                IdValue.of(userOid)
+                        )
+                        .map(result -> OfferGrpcMapper.toWithdrawOfferResponse(result.offer()))
+                        .contextWrite(ctx -> ctx
+                                .put(RequestContext.TRACE_ID_KEY, traceId)
+                                .put(RequestContext.USER_OID_KEY, userOid)
+                                .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
+                        )
+                        .onErrorMap(this::mapToGrpcException);
+
+        pipeline.subscribe(
+                responseObserver::onNext,
+                responseObserver::onError,
+                responseObserver::onCompleted
+        );
+    }
 
     private Throwable mapToGrpcException(Throwable ex) {
 

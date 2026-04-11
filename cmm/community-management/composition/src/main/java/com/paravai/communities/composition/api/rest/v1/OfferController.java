@@ -6,6 +6,7 @@ import com.paravai.communities.composition.api.rest.v1.dto.UpdateOfferAvailabili
 import com.paravai.communities.composition.offer.application.pause.PauseOfferOrchestrator;
 import com.paravai.communities.composition.offer.application.publish.PublishOfferOrchestrator;
 import com.paravai.communities.composition.offer.application.updateavailability.UpdateOfferAvailabilityOrchestrator;
+import com.paravai.communities.composition.offer.application.withdraw.WithdrawOfferOrchestrator;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiRequest;
@@ -39,14 +40,17 @@ public class OfferController {
     private final PublishOfferOrchestrator publishOfferOrchestrator;
     private final UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator;
     private final PauseOfferOrchestrator pauseOfferOrchestrator;
+    private final WithdrawOfferOrchestrator withdrawOfferOrchestrator;
 
     public OfferController(PublishOfferOrchestrator publishOfferOrchestrator,
                            UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator,
-                           PauseOfferOrchestrator pauseOfferOrchestrator) {
+                           PauseOfferOrchestrator pauseOfferOrchestrator,
+                           WithdrawOfferOrchestrator withdrawOfferOrchestrator) {
 
         this.publishOfferOrchestrator = Objects.requireNonNull(publishOfferOrchestrator, "publishOfferOrchestrator");
         this.updateOfferAvailabilityOrchestrator = Objects.requireNonNull(updateOfferAvailabilityOrchestrator, "updateOfferAvailabilityOrchestrator");
         this.pauseOfferOrchestrator = Objects.requireNonNull(pauseOfferOrchestrator, "pauseOfferOrchestrator");
+        this.withdrawOfferOrchestrator = Objects.requireNonNull(withdrawOfferOrchestrator, "withdrawOfferOrchestrator");
     }
 
     /**
@@ -255,9 +259,9 @@ public class OfferController {
                             .flatMap(resp ->
                                     JsonApiResponseBuilder.buildSingle(
                                             Mono.just(resp),
-                                            httpRequest,
                                             "offers",
-                                            OfferResponse::getId
+                                            OfferResponse::getId,
+                                            item -> "/v1/offers/" + item.getId()
                                     ).map(body -> {
                                         log.info("[{}][{}] Offer {} paused",
                                                 traceId, userOid, offerId);
@@ -268,6 +272,73 @@ public class OfferController {
                                                 .body(body);
                                     })
                             );
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
+
+    /**
+     * EPIC C / C5 - Withdraw offer
+     *
+     * REST surface:
+     * - DELETE /v1/offers/{offerId}
+     *
+     * Notes:
+     * - acting userOid comes from RequestContext
+     * - only the owner can withdraw the offer
+     * - only ACTIVE or PAUSED offers can transition to WITHDRAWN
+     * - locked offers cannot be withdrawn
+     * - idempotent if the offer is already WITHDRAWN
+     */
+    @DeleteMapping("/{offerId}")
+    @Operation(summary = "Withdraw an existing offer")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Offer withdrawn successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Offer not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiSingleResponse<OfferResponse>>> withdraw(
+            @PathVariable("offerId") String offerId,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
+            ServerHttpRequest httpRequest
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    log.debug("[{}][{}] DELETE /v1/offers/{}",
+                            traceId, userOid, offerId);
+
+                    return withdrawOfferOrchestrator.withdraw(IdValue.of(offerId))
+                            .map(OfferResponse::fromSummary)
+                            .flatMap(resp ->
+                            JsonApiResponseBuilder.buildSingle(
+                                    Mono.just(resp),
+                                    "offers",
+                                    OfferResponse::getId,
+                                    item -> "/v1/offers/" + item.getId()
+                            ).map(body -> {
+                                log.info("[{}][{}] Offer {} withdrawn",
+                                        traceId, userOid, offerId);
+
+                                return ResponseEntity
+                                        .ok()
+                                        .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                        .body(body);
+                            })
+                    );
                 }),
                 traceIdHeader,
                 userOidHeader,

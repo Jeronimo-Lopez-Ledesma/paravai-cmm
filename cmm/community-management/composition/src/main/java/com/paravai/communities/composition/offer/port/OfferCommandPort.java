@@ -13,4 +13,6 @@ public interface OfferCommandPort {
     Mono<OfferSummary> updateOfferAvailability(UpdateOfferAvailabilityCommand command);
 
     Mono<OfferSummary> pauseOffer(PauseOfferCommand command);
+
+    Mono<OfferSummary> withdrawOffer(WithdrawOfferCommand command);
 }

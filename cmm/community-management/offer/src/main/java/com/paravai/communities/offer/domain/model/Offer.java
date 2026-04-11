@@ -171,16 +171,31 @@ public final class Offer implements Serializable {
     }
 
     /**
-     * Withdraws an offer.
+     * C5 - Withdraws an offer owned by the current user.
      *
      * Covered invariants:
+     * - only the owner can withdraw the offer
      * - ACTIVE -> WITHDRAWN is valid
      * - PAUSED -> WITHDRAWN is valid
      * - WITHDRAWN -> WITHDRAWN is idempotent
+     * - locked offers cannot be withdrawn (active exchange)
+     *
+     * Idempotency:
+     * - if already WITHDRAWN, returns false
      */
-    public boolean withdraw(TimestampValue when) {
+    public boolean withdraw(IdValue currentUserId, TimestampValue when) {
+        Objects.requireNonNull(currentUserId, "currentUserId is required");
+
+        if (!ownerId.equals(currentUserId)) {
+            throw new IllegalStateException("Only the owner can withdraw the offer");
+        }
+
         if (OfferStatusValue.WITHDRAWN.equals(status)) {
             return false;
+        }
+
+        if (locked) {
+            throw new IllegalStateException("Offer cannot be withdrawn while locked (active exchange)");
         }
 
         if (!OfferStatusValue.ACTIVE.equals(status) && !OfferStatusValue.PAUSED.equals(status)) {
