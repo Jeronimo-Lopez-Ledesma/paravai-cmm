@@ -34,4 +34,27 @@ public interface OfferQueryPort {
             String ownerId,
             String statusCode
     );
+
+    /**
+     * Returns a paginated slice of ACTIVE offers visible inside the provided community.
+     *
+     * Expected behavior:
+     * - only ACTIVE offers belonging to communityId are returned
+     * - tenant isolation is preserved
+     * - pagination is applied
+     */
+    Flux<OfferSummary> listCommunityOffers(
+            String tenantId,
+            String communityId,
+            int page,
+            int size
+    );
+
+    /**
+     * Returns the total number of ACTIVE offers visible inside the provided community.
+     */
+    Mono<Long> countCommunityOffers(
+            String tenantId,
+            String communityId
+    );
 }

@@ -8,6 +8,7 @@ import com.paravai.communities.composition.offer.application.publish.PublishOffe
 import com.paravai.communities.composition.offer.application.updateavailability.UpdateOfferAvailabilityOrchestrator;
 import com.paravai.communities.composition.offer.application.withdraw.WithdrawOfferOrchestrator;
 import com.paravai.communities.composition.offer.application.listmy.ListMyOffersOrchestrator;
+import com.paravai.communities.composition.offer.application.listcommunity.ListCommunityOffersOrchestrator;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponse;
 import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 import com.paravai.foundation.domain.value.IdValue;
@@ -46,18 +47,22 @@ public class OfferController {
     private final PauseOfferOrchestrator pauseOfferOrchestrator;
     private final WithdrawOfferOrchestrator withdrawOfferOrchestrator;
     private final ListMyOffersOrchestrator listMyOffersOrchestrator;
+    private final ListCommunityOffersOrchestrator listCommunityOffersOrchestrator;
+
 
     public OfferController(PublishOfferOrchestrator publishOfferOrchestrator,
                            UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator,
                            PauseOfferOrchestrator pauseOfferOrchestrator,
                            WithdrawOfferOrchestrator withdrawOfferOrchestrator,
-                           ListMyOffersOrchestrator listMyOffersOrchestrator) {
+                           ListMyOffersOrchestrator listMyOffersOrchestrator,
+                           ListCommunityOffersOrchestrator listCommunityOffersOrchestrator) {
 
         this.publishOfferOrchestrator = Objects.requireNonNull(publishOfferOrchestrator, "publishOfferOrchestrator");
         this.updateOfferAvailabilityOrchestrator = Objects.requireNonNull(updateOfferAvailabilityOrchestrator, "updateOfferAvailabilityOrchestrator");
         this.pauseOfferOrchestrator = Objects.requireNonNull(pauseOfferOrchestrator, "pauseOfferOrchestrator");
         this.withdrawOfferOrchestrator = Objects.requireNonNull(withdrawOfferOrchestrator, "withdrawOfferOrchestrator");
         this.listMyOffersOrchestrator = Objects.requireNonNull(listMyOffersOrchestrator, "listMyOffersOrchestrator");
+        this.listCommunityOffersOrchestrator = Objects.requireNonNull(listCommunityOffersOrchestrator, "listCommunityOffersOrchestrator");
     }
 
     /**
@@ -466,4 +471,7 @@ public class OfferController {
                 .put(RequestContext.SOURCE_SYSTEM_KEY, sourceSystem)
         );
     }
+
+
+
 }

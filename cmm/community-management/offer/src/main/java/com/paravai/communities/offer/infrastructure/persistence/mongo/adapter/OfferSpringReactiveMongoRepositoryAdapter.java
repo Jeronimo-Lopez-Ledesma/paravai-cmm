@@ -255,6 +255,74 @@ public class OfferSpringReactiveMongoRepositoryAdapter implements OfferRepositor
     }
 
     @Override
+    public Flux<Offer> findActiveByTenantIdAndCommunityId(
+            IdValue tenantId,
+            IdValue communityId,
+            int page,
+            int size
+    ) {
+        if (tenantId == null) {
+            return Flux.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (communityId == null) {
+            return Flux.error(new IllegalArgumentException("communityId cannot be null"));
+        }
+        if (page < 1) {
+            return Flux.error(new IllegalArgumentException("page must be greater than or equal to 1"));
+        }
+        if (size <= 0) {
+            return Flux.error(new IllegalArgumentException("size must be greater than zero"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(
+                ADAPTER_NAME,
+                "findActiveOffersByTenantIdAndCommunityIdPaged"
+        );
+
+        long skip = (long) (page - 1) * size;
+
+        return MetricsSupport.timedOutboundFlux(metrics, opCtx, () ->
+                springRepo.findByTenantIdAndCommunityIdAndStatusCode(
+                                tenantId.value(),
+                                communityId.value(),
+                                ACTIVE_STATUS
+                        )
+                        .skip(skip)
+                        .take(size)
+                        .map(OfferDocument::toDomain)
+        );
+    }
+
+    @Override
+    public Mono<Long> countActiveByTenantIdAndCommunityId(
+            IdValue tenantId,
+            IdValue communityId
+    ) {
+        if (tenantId == null) {
+            return Mono.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (communityId == null) {
+            return Mono.error(new IllegalArgumentException("communityId cannot be null"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(
+                ADAPTER_NAME,
+                "countActiveOffersByTenantIdAndCommunityId"
+        );
+
+        return MetricsSupport.timedOutboundMono(metrics, opCtx, () ->
+                springRepo.countByTenantIdAndCommunityIdAndStatusCode(
+                        tenantId.value(),
+                        communityId.value(),
+                        ACTIVE_STATUS
+                )
+        );
+    }
+
+
+
+
+    @Override
     public Flux<Offer> search(SearchQueryValue q) {
         if (q == null) {
             return Flux.error(new IllegalArgumentException("q cannot be null"));

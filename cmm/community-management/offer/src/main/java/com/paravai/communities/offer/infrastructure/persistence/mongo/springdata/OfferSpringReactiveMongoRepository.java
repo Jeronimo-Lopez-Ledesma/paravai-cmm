@@ -73,4 +73,29 @@ public interface OfferSpringReactiveMongoRepository
             String ownerId,
             String statusCode
     );
+
+    /**
+     * Returns all ACTIVE offers inside a community within a tenant.
+     *
+     * Useful for:
+     * - D1 ListCommunityOffers
+     */
+    Flux<OfferDocument> findByTenantIdAndCommunityIdAndStatusCode(
+            String tenantId,
+            String communityId,
+            String statusCode
+    );
+
+    /**
+     * Counts all ACTIVE offers inside a community within a tenant.
+     *
+     * Useful for:
+     * - D1 pagination metadata
+     */
+    Mono<Long> countByTenantIdAndCommunityIdAndStatusCode(
+            String tenantId,
+            String communityId,
+            String statusCode
+    );
+
 }

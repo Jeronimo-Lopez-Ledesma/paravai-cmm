@@ -110,4 +110,23 @@ public interface OfferRepository {
      * Used together with search(...) for pagination metadata.
      */
     Mono<Long> count(SearchQueryValue query);
+
+    /**
+     * Returns a paginated slice of ACTIVE offers visible inside a community.
+     *
+     * Useful for:
+     * - D1 ListCommunityOffers
+     */
+    Flux<Offer> findActiveByTenantIdAndCommunityId(
+            IdValue tenantId,
+            IdValue communityId,
+            int page,
+            int size
+    );
+
+    Mono<Long> countActiveByTenantIdAndCommunityId(
+            IdValue tenantId,
+            IdValue communityId
+    );
+
 }

@@ -4,6 +4,7 @@ import com.paravai.communities.composition.offer.port.OfferQueryPort;
 import com.paravai.communities.composition.offer.port.OfferSummary;
 import com.paravai.communities.contracts.grpc.offer.v1.ListMyOffersRequest;
 import com.paravai.communities.contracts.grpc.offer.v1.OfferInternalQueryApiGrpc;
+import com.paravai.communities.contracts.grpc.offer.v1.ListCommunityOffersRequest;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import io.grpc.*;
 import org.slf4j.Logger;
@@ -96,6 +97,71 @@ public class GrpcOfferQueryAdapter implements OfferQueryPort {
                                             .setTenantId(tenantId)
                                             .setOwnerId(ownerId)
                                             .setStatusCode(statusCode == null ? "" : statusCode)
+                                            .setPage(1)
+                                            .setSize(1) // no importa, solo queremos total
+                                            .build()
+                            )
+                    )
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .map(response -> response.getTotal())
+                    .onErrorMap(this::mapToDomainException);
+        });
+    }
+
+    @Override
+    public Flux<OfferSummary> listCommunityOffers(
+            String tenantId,
+            String communityId,
+            int page,
+            int size
+    ) {
+        return Flux.deferContextual(ctx -> {
+
+            String traceId = RequestContext.getTraceId(ctx);
+            String userOid = RequestContext.getUserOid(ctx);
+            String sourceSystem = RequestContext.getSourceSystem(ctx);
+
+            ClientInterceptor interceptor = buildInterceptor(traceId, userOid, sourceSystem);
+
+            var stubWithHeaders = stub.withInterceptors(interceptor);
+
+            return Mono.fromCallable(() ->
+                            stubWithHeaders.listCommunityOffers(
+                                    ListCommunityOffersRequest.newBuilder()
+                                            .setTenantId(tenantId)
+                                            .setCommunityId(communityId)
+                                            .setPage(page)
+                                            .setSize(size)
+                                            .build()
+                            )
+                    )
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .flatMapMany(response -> Flux.fromIterable(response.getItemsList()))
+                    .map(this::toSummary)
+                    .onErrorMap(this::mapToDomainException);
+        });
+    }
+
+    @Override
+    public Mono<Long> countCommunityOffers(
+            String tenantId,
+            String communityId
+    ) {
+        return Mono.deferContextual(ctx -> {
+
+            String traceId = RequestContext.getTraceId(ctx);
+            String userOid = RequestContext.getUserOid(ctx);
+            String sourceSystem = RequestContext.getSourceSystem(ctx);
+
+            ClientInterceptor interceptor = buildInterceptor(traceId, userOid, sourceSystem);
+
+            var stubWithHeaders = stub.withInterceptors(interceptor);
+
+            return Mono.fromCallable(() ->
+                            stubWithHeaders.listCommunityOffers(
+                                    ListCommunityOffersRequest.newBuilder()
+                                            .setTenantId(tenantId)
+                                            .setCommunityId(communityId)
                                             .setPage(1)
                                             .setSize(1) // no importa, solo queremos total
                                             .build()
