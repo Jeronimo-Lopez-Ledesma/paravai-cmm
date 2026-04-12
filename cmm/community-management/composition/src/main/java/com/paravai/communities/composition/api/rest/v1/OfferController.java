@@ -7,6 +7,9 @@ import com.paravai.communities.composition.offer.application.pause.PauseOfferOrc
 import com.paravai.communities.composition.offer.application.publish.PublishOfferOrchestrator;
 import com.paravai.communities.composition.offer.application.updateavailability.UpdateOfferAvailabilityOrchestrator;
 import com.paravai.communities.composition.offer.application.withdraw.WithdrawOfferOrchestrator;
+import com.paravai.communities.composition.offer.application.listmy.ListMyOffersOrchestrator;
+import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiResponse;
+import com.paravai.foundation.viewjsonapi.pagination.PaginationRequest;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.securityutils.reactive.context.RequestContext;
 import com.paravai.foundation.viewjsonapi.jsonapi.JsonApiRequest;
@@ -25,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -41,16 +45,19 @@ public class OfferController {
     private final UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator;
     private final PauseOfferOrchestrator pauseOfferOrchestrator;
     private final WithdrawOfferOrchestrator withdrawOfferOrchestrator;
+    private final ListMyOffersOrchestrator listMyOffersOrchestrator;
 
     public OfferController(PublishOfferOrchestrator publishOfferOrchestrator,
                            UpdateOfferAvailabilityOrchestrator updateOfferAvailabilityOrchestrator,
                            PauseOfferOrchestrator pauseOfferOrchestrator,
-                           WithdrawOfferOrchestrator withdrawOfferOrchestrator) {
+                           WithdrawOfferOrchestrator withdrawOfferOrchestrator,
+                           ListMyOffersOrchestrator listMyOffersOrchestrator) {
 
         this.publishOfferOrchestrator = Objects.requireNonNull(publishOfferOrchestrator, "publishOfferOrchestrator");
         this.updateOfferAvailabilityOrchestrator = Objects.requireNonNull(updateOfferAvailabilityOrchestrator, "updateOfferAvailabilityOrchestrator");
         this.pauseOfferOrchestrator = Objects.requireNonNull(pauseOfferOrchestrator, "pauseOfferOrchestrator");
         this.withdrawOfferOrchestrator = Objects.requireNonNull(withdrawOfferOrchestrator, "withdrawOfferOrchestrator");
+        this.listMyOffersOrchestrator = Objects.requireNonNull(listMyOffersOrchestrator, "listMyOffersOrchestrator");
     }
 
     /**
@@ -346,6 +353,91 @@ public class OfferController {
         );
     }
 
+    /**
+     * EPIC C / C6 - List my offers
+     *
+     * REST surface:
+     * - GET /v1/offers/me?page=...&size=...&status=...
+     *
+     * Notes:
+     * - tenantId and owner userOid come from RequestContext
+     * - only offers owned by the authenticated user are returned
+     * - supports basic pagination
+     * - optional filtering by status
+     * - no events are emitted
+     */
+    @GetMapping("/me")
+    @Operation(summary = "List offers owned by the authenticated user")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Offers retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid pagination or status filter", content = @Content)
+    })
+    public Mono<ResponseEntity<JsonApiResponse<OfferResponse>>> listMyOffers(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestHeader(value = "traceId", required = false) String traceIdHeader,
+            @RequestHeader(value = "userOid", required = false) String userOidHeader,
+            @RequestHeader(value = "sourceSystem", required = false) String sourceSystemHeader,
+            ServerHttpRequest httpRequest
+    ) {
+        return withRequestContext(
+                Mono.deferContextual(ctx -> {
+                    final String traceId = RequestContext.getTraceId(ctx);
+                    final String userOid = RequestContext.getUserOid(ctx);
+                    final String tenantId = RequestContext.getTenantId(ctx);
+
+                    if ("anonymous".equals(userOid)) {
+                        return Mono.error(new IllegalArgumentException("User must be authenticated"));
+                    }
+
+                    final int effectivePage = (page == null ? 1 : page);
+                    final int effectiveSize = (size == null ? 20 : size);
+
+                    log.debug("[{}][{}] GET /v1/offers/me?page={}&size={}&status={} (tenantId={})",
+                            traceId, userOid, effectivePage, effectiveSize, status, tenantId);
+
+                    Flux<OfferResponse> dataFlux = listMyOffersOrchestrator.list(
+                                    tenantId,
+                                    userOid,
+                                    status,
+                                    effectivePage,
+                                    effectiveSize
+                            )
+                            .map(OfferResponse::fromSummary);
+
+                    Mono<Long> totalMono = listMyOffersOrchestrator.count(
+                            tenantId,
+                            userOid,
+                            status
+                    );
+
+                    PaginationRequest pagination = new PaginationRequest(effectivePage, effectiveSize);
+
+                    return JsonApiResponseBuilder.buildPaginated(
+                                    dataFlux,
+                                    totalMono,
+                                    pagination,
+                                    httpRequest,
+                                    "offers",
+                                    OfferResponse::getId
+                            )
+                            .map(body -> {
+                                log.info("[{}][{}] Retrieved paginated offers for owner {}",
+                                        traceId, userOid, userOid);
+
+                                return ResponseEntity
+                                        .ok()
+                                        .contentType(MediaType.valueOf("application/vnd.api+json"))
+                                        .body(body);
+                            });
+                }),
+                traceIdHeader,
+                userOidHeader,
+                sourceSystemHeader
+        );
+    }
 
     private static <T> T extractAttributes(JsonApiRequest<T> request) {
         if (request == null || request.getData() == null || request.getData().getAttributes() == null) {

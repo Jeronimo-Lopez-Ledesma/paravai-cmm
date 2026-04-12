@@ -31,10 +31,46 @@ public interface OfferSpringReactiveMongoRepository
      * Returns all offers owned by a user within a tenant.
      *
      * Useful for:
-     * - C6 ListMyOffers
+     * - legacy/simple owner-based listing
+     * - C6 ListMyOffers base query
      */
     Flux<OfferDocument> findByTenantIdAndOwnerId(
             String tenantId,
             String ownerId
+    );
+
+    /**
+     * Returns all offers owned by a user within a tenant filtered by status.
+     *
+     * Useful for:
+     * - C6 ListMyOffers with status filter
+     */
+    Flux<OfferDocument> findByTenantIdAndOwnerIdAndStatusCode(
+            String tenantId,
+            String ownerId,
+            String statusCode
+    );
+
+    /**
+     * Counts all offers owned by a user within a tenant.
+     *
+     * Useful for:
+     * - C6 pagination metadata
+     */
+    Mono<Long> countByTenantIdAndOwnerId(
+            String tenantId,
+            String ownerId
+    );
+
+    /**
+     * Counts all offers owned by a user within a tenant filtered by status.
+     *
+     * Useful for:
+     * - C6 pagination metadata with status filter
+     */
+    Mono<Long> countByTenantIdAndOwnerIdAndStatusCode(
+            String tenantId,
+            String ownerId,
+            String statusCode
     );
 }

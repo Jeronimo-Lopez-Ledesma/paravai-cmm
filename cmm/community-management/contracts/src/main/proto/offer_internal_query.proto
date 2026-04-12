@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package paravai.communities.offer.v1;
+
+option java_multiple_files = true;
+option java_package = "com.paravai.communities.contracts.grpc.offer.v1";
+option java_outer_classname = "OfferInternalQueryApiProto";
+
+/**
+ * Internal gRPC query API for Offer module.
+ *
+ * Used by composition/orchestration layer to read offer data
+ * once authentication has already been resolved upstream.
+ */
+service OfferInternalQueryApi {
+
+  /**
+   * Returns a paginated slice of offers owned by a given user inside a tenant.
+   *
+   * Covered by Offer module:
+   * - owner-based isolation
+   * - optional status filtering
+   * - pagination
+   *
+   * NOT covered here:
+   * - external authorization concerns
+   */
+  rpc ListMyOffers(ListMyOffersRequest)
+      returns (ListMyOffersResponse);
+}
+
+message ListMyOffersRequest {
+  string tenant_id = 1;
+  string owner_id = 2;
+
+  /**
+   * Optional status filter.
+   * Supported values:
+   * - ACTIVE
+   * - PAUSED
+   * - WITHDRAWN
+   *
+   * If blank or omitted, no status filter is applied.
+   */
+  string status_code = 3;
+
+  /**
+   * 1-based page number.
+   * If omitted or invalid upstream, composition should normalize before calling.
+   */
+  int32 page = 4;
+
+  /**
+   * Page size.
+   * If omitted or invalid upstream, composition should normalize before calling.
+   */
+  int32 size = 5;
+}
+
+message OfferItem {
+  string offer_id = 1;
+  string tenant_id = 2;
+  string community_id = 3;
+  string resource_id = 4;
+  string owner_id = 5;
+  string exchange_type_code = 6;
+  string description = 7;
+  string status_code = 8;
+  string availability_status_code = 9;
+  bool locked = 10;
+  string created_at = 11;
+  string updated_at = 12;
+}
+
+message ListMyOffersResponse {
+  repeated OfferItem items = 1;
+  int64 total = 2;
+  int32 page = 3;
+  int32 size = 4;
+}

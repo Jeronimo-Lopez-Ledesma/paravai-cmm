@@ -1,6 +1,7 @@
 package com.paravai.communities.offer.domain.repository;
 
 import com.paravai.communities.offer.domain.model.Offer;
+import com.paravai.communities.offer.domain.value.OfferStatusValue;
 import com.paravai.foundation.domain.value.IdValue;
 import com.paravai.foundation.viewjsonapi.query.SearchQueryValue;
 import reactor.core.publisher.Flux;
@@ -36,11 +37,63 @@ public interface OfferRepository {
      * Returns all offers owned by a user inside a tenant.
      *
      * Useful for:
-     * - C6 ListMyOffers
+     * - legacy/simple owner-based listing
      */
     Flux<Offer> findByTenantIdAndOwnerId(
             IdValue tenantId,
             IdValue ownerId
+    );
+
+    /**
+     * Returns a paginated slice of offers owned by a user inside a tenant.
+     *
+     * Useful for:
+     * - C6 ListMyOffers
+     */
+    Flux<Offer> findByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId,
+            int page,
+            int size
+    );
+
+    /**
+     * Returns a paginated slice of offers owned by a user inside a tenant,
+     * filtered by status.
+     *
+     * Useful for:
+     * - C6 ListMyOffers with status filter
+     */
+    Flux<Offer> findByTenantIdAndOwnerIdAndStatus(
+            IdValue tenantId,
+            IdValue ownerId,
+            OfferStatusValue status,
+            int page,
+            int size
+    );
+
+    /**
+     * Counts all offers owned by a user inside a tenant.
+     *
+     * Useful for:
+     * - C6 pagination metadata
+     */
+    Mono<Long> countByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId
+    );
+
+    /**
+     * Counts all offers owned by a user inside a tenant
+     * filtered by status.
+     *
+     * Useful for:
+     * - C6 pagination metadata with status filter
+     */
+    Mono<Long> countByTenantIdAndOwnerIdAndStatus(
+            IdValue tenantId,
+            IdValue ownerId,
+            OfferStatusValue status
     );
 
     /**

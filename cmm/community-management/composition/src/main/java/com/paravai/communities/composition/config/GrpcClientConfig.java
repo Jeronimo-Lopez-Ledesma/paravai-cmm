@@ -4,6 +4,7 @@ import com.paravai.communities.contracts.grpc.community.v1.CommunityInternalQuer
 import com.paravai.communities.contracts.grpc.membership.v1.MembershipInternalQueryApiGrpc;
 import com.paravai.communities.contracts.grpc.offer.v1.OfferInternalCommandApiGrpc;
 import com.paravai.communities.contracts.grpc.resource.v1.ResourceInternalQueryApiGrpc;
+import com.paravai.communities.contracts.grpc.offer.v1.OfferInternalQueryApiGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -85,5 +86,12 @@ public class GrpcClientConfig {
             @Qualifier("offerManagedChannel") ManagedChannel managedChannel
     ) {
         return OfferInternalCommandApiGrpc.newBlockingStub(managedChannel);
+    }
+
+    @Bean
+    public OfferInternalQueryApiGrpc.OfferInternalQueryApiBlockingStub offerInternalQueryApiBlockingStub(
+            @Qualifier("offerManagedChannel") ManagedChannel managedChannel
+    ) {
+        return OfferInternalQueryApiGrpc.newBlockingStub(managedChannel);
     }
 }

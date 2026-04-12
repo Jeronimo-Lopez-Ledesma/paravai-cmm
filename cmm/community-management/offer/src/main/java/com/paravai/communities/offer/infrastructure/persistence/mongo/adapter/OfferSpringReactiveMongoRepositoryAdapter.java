@@ -3,6 +3,7 @@ package com.paravai.communities.offer.infrastructure.persistence.mongo.adapter;
 import com.paravai.communities.offer.application.common.OfferMetrics;
 import com.paravai.communities.offer.domain.model.Offer;
 import com.paravai.communities.offer.domain.repository.OfferRepository;
+import com.paravai.communities.offer.domain.value.OfferStatusValue;
 import com.paravai.communities.offer.infrastructure.persistence.mongo.document.OfferDocument;
 import com.paravai.communities.offer.infrastructure.persistence.mongo.springdata.OfferSpringReactiveMongoRepository;
 import com.paravai.foundation.domain.value.IdValue;
@@ -126,6 +127,130 @@ public class OfferSpringReactiveMongoRepositoryAdapter implements OfferRepositor
                                 ownerId.value()
                         )
                         .map(OfferDocument::toDomain)
+        );
+    }
+
+    @Override
+    public Flux<Offer> findByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId,
+            int page,
+            int size
+    ) {
+        if (tenantId == null) {
+            return Flux.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (ownerId == null) {
+            return Flux.error(new IllegalArgumentException("ownerId cannot be null"));
+        }
+        if (page < 1) {
+            return Flux.error(new IllegalArgumentException("page must be greater than or equal to 1"));
+        }
+        if (size <= 0) {
+            return Flux.error(new IllegalArgumentException("size must be greater than zero"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(ADAPTER_NAME, "findOffersByTenantIdAndOwnerIdPaged");
+
+        long skip = (long) (page - 1) * size;
+
+        return MetricsSupport.timedOutboundFlux(metrics, opCtx, () ->
+                springRepo.findByTenantIdAndOwnerId(
+                                tenantId.value(),
+                                ownerId.value()
+                        )
+                        .skip(skip)
+                        .take(size)
+                        .map(OfferDocument::toDomain)
+        );
+    }
+
+    @Override
+    public Flux<Offer> findByTenantIdAndOwnerIdAndStatus(
+            IdValue tenantId,
+            IdValue ownerId,
+            OfferStatusValue status,
+            int page,
+            int size
+    ) {
+        if (tenantId == null) {
+            return Flux.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (ownerId == null) {
+            return Flux.error(new IllegalArgumentException("ownerId cannot be null"));
+        }
+        if (status == null) {
+            return Flux.error(new IllegalArgumentException("status cannot be null"));
+        }
+        if (page < 1) {
+            return Flux.error(new IllegalArgumentException("page must be greater than or equal to 1"));
+        }
+        if (size <= 0) {
+            return Flux.error(new IllegalArgumentException("size must be greater than zero"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(ADAPTER_NAME, "findOffersByTenantIdAndOwnerIdAndStatusPaged");
+
+        long skip = (long) (page - 1) * size;
+
+        return MetricsSupport.timedOutboundFlux(metrics, opCtx, () ->
+                springRepo.findByTenantIdAndOwnerIdAndStatusCode(
+                                tenantId.value(),
+                                ownerId.value(),
+                                status.value()
+                        )
+                        .skip(skip)
+                        .take(size)
+                        .map(OfferDocument::toDomain)
+        );
+    }
+
+    @Override
+    public Mono<Long> countByTenantIdAndOwnerId(
+            IdValue tenantId,
+            IdValue ownerId
+    ) {
+        if (tenantId == null) {
+            return Mono.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (ownerId == null) {
+            return Mono.error(new IllegalArgumentException("ownerId cannot be null"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(ADAPTER_NAME, "countOffersByTenantIdAndOwnerId");
+
+        return MetricsSupport.timedOutboundMono(metrics, opCtx, () ->
+                springRepo.countByTenantIdAndOwnerId(
+                        tenantId.value(),
+                        ownerId.value()
+                )
+        );
+    }
+
+    @Override
+    public Mono<Long> countByTenantIdAndOwnerIdAndStatus(
+            IdValue tenantId,
+            IdValue ownerId,
+            OfferStatusValue status
+    ) {
+        if (tenantId == null) {
+            return Mono.error(new IllegalArgumentException("tenantId cannot be null"));
+        }
+        if (ownerId == null) {
+            return Mono.error(new IllegalArgumentException("ownerId cannot be null"));
+        }
+        if (status == null) {
+            return Mono.error(new IllegalArgumentException("status cannot be null"));
+        }
+
+        OperationCtx opCtx = OfferMetrics.ID.outbound(ADAPTER_NAME, "countOffersByTenantIdAndOwnerIdAndStatus");
+
+        return MetricsSupport.timedOutboundMono(metrics, opCtx, () ->
+                springRepo.countByTenantIdAndOwnerIdAndStatusCode(
+                        tenantId.value(),
+                        ownerId.value(),
+                        status.value()
+                )
         );
     }
 

@@ -5,6 +5,7 @@ import com.paravai.communities.contracts.grpc.offer.v1.PauseOfferResponse;
 import com.paravai.communities.contracts.grpc.offer.v1.UpdateOfferAvailabilityResponse;
 import com.paravai.communities.contracts.grpc.offer.v1.WithdrawOfferResponse;
 import com.paravai.communities.offer.domain.model.Offer;
+import com.paravai.communities.contracts.grpc.offer.v1.OfferItem;
 
 public final class OfferGrpcMapper {
 
@@ -78,6 +79,23 @@ public final class OfferGrpcMapper {
                 .setLocked(offer.locked())
                 .setCreatedAt(offer.createdAt().getInstant().toString())
                 .setUpdatedAt(offer.updatedAt().getInstant().toString())
+                .build();
+    }
+
+    public static OfferItem toOfferItem(Offer offer) {
+        return OfferItem.newBuilder()
+                .setOfferId(offer.id().value())
+                .setTenantId(offer.tenantId().value())
+                .setCommunityId(offer.communityId().value())
+                .setResourceId(offer.resourceId().value())
+                .setOwnerId(offer.ownerId().value())
+                .setExchangeTypeCode(offer.exchangeType().toString())
+                .setDescription(offer.description().orElse(""))
+                .setStatusCode(offer.status().value())
+                .setAvailabilityStatusCode(offer.availabilityStatus().code())
+                .setLocked(offer.isLocked())
+                .setCreatedAt(offer.createdAt().toString())
+                .setUpdatedAt(offer.updatedAt().toString())
                 .build();
     }
 }
